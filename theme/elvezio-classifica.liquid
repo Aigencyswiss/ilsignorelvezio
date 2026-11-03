@@ -110,7 +110,7 @@ function addForm(){
 if(over)new MutationObserver(addForm).observe(over,{childList:true,attributes:true,attributeFilter:['hidden']});
 // classifica nella pagina dei giochi
 var card=document.querySelector('.gx-card');
-if(card&&!document.getElementById('lb-giochi')){var sec=card.closest('section');if(sec)sec.insertAdjacentHTML('afterend','<section class="sec" style="padding-top:0"><div class="w"><div class="lb-card" style="max-width:640px;margin:0 auto;padding:24px"><h3>La classifica dell\'AutoPostale</h3><p>I migliori della settimana. Si riparte da zero ogni lunedì: la domenica ricondivido il primo nelle storie.</p><div id="lb-giochi"></div><a class="lb-btn" href="/pages/autopostale" style="text-align:center;text-decoration:none">Gioca e entra in classifica</a></div></div></section>')}
+if(card&&!document.getElementById('lb-giochi')){var sec=card.closest('section');if(sec)sec.insertAdjacentHTML('afterend','<section class="sec" style="padding-top:0"><div class="w"><div class="lb-card" style="max-width:640px;margin:0 auto;padding:24px"><h3>La classifica dell\'AutoPostale</h3><p>I migliori della settimana. Si riparte da zero ogni lunedì: la domenica ricondivido il primo nelle storie.</p><div id="lb-giochi"></div><a class="lb-btn" href="/pages/autopostale" style="text-align:center;text-decoration:none;color:#F1E6CF">Gioca e entra in classifica</a></div></div></section>')}
 var gb=document.getElementById('lb-giochi');if(gb)board(gb,{n:5});
 })();
 </script>
