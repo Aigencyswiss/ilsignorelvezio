@@ -31,6 +31,23 @@
 .lb-modal .lb-card{width:100%;max-width:440px;max-height:100%;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.45)}
 .lb-x{align-self:flex-end;appearance:none;border:0;background:#5C1F2B;color:#F1E6CF;width:36px;height:36px;border-radius:50%;font:900 18px Montserrat,sans-serif;cursor:pointer;margin-bottom:-36px}
 .lb-open{margin-top:2px}
+.lb-hot{position:relative;background:linear-gradient(160deg,#FFE7A3 0%,#E9B949 45%,#C9962E 100%);border:3px solid #FFF3C4;box-shadow:0 0 0 3px #C9962E,0 0 28px 6px rgba(255,214,102,.75);animation:lbGlow 1.6s ease-in-out infinite;padding:18px}
+.lb-hot h3{display:flex;align-items:center;gap:10px;font-size:22px;color:#3E1019}
+.lb-hot h3 span{background:#E83B2B;color:#fff;padding:4px 10px 2px;box-shadow:3px 3px 0 #3E1019;line-height:1.1}
+.lb-hot .lb-tro{width:44px;height:44px;flex:0 0 44px;animation:lbBob 1.2s ease-in-out infinite}
+.lb-hot p{color:#3E1019;font-weight:700}
+.lb-hot .lb-pos{font-size:17px;font-weight:900;color:#3E1019;background:rgba(255,255,255,.55);border-radius:12px;padding:8px 12px}
+.lb-hot .lb-in{border-color:#3E1019}
+.lb-hot .lb-btn{background:#E83B2B;color:#fff;box-shadow:0 5px 0 #8E1F14;font-size:18px;overflow:hidden;position:relative}
+.lb-hot .lb-btn:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);animation:lbShine 2.2s ease-in-out infinite}
+.lb-hot .lb-ck,.lb-hot .lb-ck span{color:#3E1019}
+.lb-badge{position:absolute;top:-14px;right:14px;background:#E83B2B;color:#fff;font:900 12px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:999px;box-shadow:0 3px 0 #8E1F14;animation:lbBob 1.2s ease-in-out infinite}
+.lb-open.gold{display:inline-flex;align-items:center;justify-content:center;gap:8px;animation:lbGlow 1.6s ease-in-out infinite}
+.lb-open svg{width:22px;height:22px}
+@keyframes lbGlow{0%,100%{box-shadow:0 0 0 3px #C9962E,0 0 14px 2px rgba(255,214,102,.45)}50%{box-shadow:0 0 0 3px #FFE08A,0 0 34px 10px rgba(255,214,102,.9)}}
+@keyframes lbBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
+@keyframes lbShine{0%{left:-60%}60%,100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.lb-hot,.lb-hot .lb-tro,.lb-badge,.lb-open.gold,.lb-hot .lb-btn:after{animation:none}}
 [hidden]{display:none!important}
 </style>
 <script>
@@ -41,6 +58,7 @@ var st={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}
 var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 var lvl=function(){var l=st.get('ap_lvl');return LV[l]?l:'medio'};
 var game={tk:null,l:null,sent:false};
+var TRO='<svg class="lb-tro" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28v14a14 14 0 0 1-28 0z" fill="#FFD24A" stroke="#3E1019" stroke-width="3"/><path d="M18 12H8v4a10 10 0 0 0 10 10M46 12h10v4a10 10 0 0 1-10 10" fill="none" stroke="#3E1019" stroke-width="3"/><path d="M28 36h8v10h-8z" fill="#FFD24A" stroke="#3E1019" stroke-width="3"/><path d="M20 46h24v8H20z" fill="#E83B2B" stroke="#3E1019" stroke-width="3"/><path d="M26 15l2 4 4 .5-3 3 .8 4.5-3.8-2-3.8 2 .8-4.5-3-3 4-.5z" fill="#fff"/></svg>';
 function post(path,data){return fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)}).then(function(r){return r.json().then(function(j){j.status=r.status;return j})})}
 function top(l,p,n){return fetch(API+'/top?g=autopostale&l='+l+'&p='+p+'&n='+(n||10)).then(function(r){return r.json()})}
 function listHtml(rows,me){if(!rows||!rows.length)return '<p class="lb-empty">Ancora nessuno in classifica. Il primo posto è tuo!</p>';return '<ol class="lb-list">'+rows.map(function(r){return '<li'+(me&&r.name===me?' class="me"':'')+'><b>@'+esc(r.name)+'</b><em>'+r.score+' m</em></li>'}).join('')+'</ol>'}
@@ -63,12 +81,12 @@ function modal(){
   var x=m.querySelector('.lb-x');x&&x.focus();
 }
 window.elvClassifica=modal;
-function openBtn(){var b=document.createElement('button');b.type='button';b.className='btn ghost lb-open';b.textContent='Classifica';b.addEventListener('click',modal);return b}
+function openBtn(hot){var b=document.createElement('button');b.type='button';b.className='btn lb-open'+(hot?' gold':' ghost');b.innerHTML=(hot?TRO:'')+'<span>Classifica</span>';b.addEventListener('click',modal);return b}
 // gettone all'inizio di ogni partita
 document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#ap-go,#ap-again');if(!t)return;var l=lvl();game={tk:null,l:l,sent:false};post('/start',{g:'autopostale',l:l}).then(function(j){if(j.tk)game.tk=j.tk}).catch(function(){})},true);
 // pulsante classifica nella schermata iniziale
 var start=document.getElementById('ap-start');
-function addStartBtn(){if(!start||start.hidden||start.querySelector('.lb-open'))return;var go=start.querySelector('#ap-go');if(go)go.insertAdjacentElement('afterend',openBtn())}
+function addStartBtn(){if(!start||start.hidden||start.querySelector('.lb-open'))return;var go=start.querySelector('#ap-go');if(go)go.insertAdjacentElement('afterend',openBtn(true))}
 if(start){new MutationObserver(addStartBtn).observe(start,{childList:true,attributes:true,attributeFilter:['hidden']});addStartBtn()}
 // modulo a fine partita
 var over=document.getElementById('ap-over');
@@ -78,16 +96,20 @@ function addForm(){
   var score=parseInt(big.textContent,10)||0,l=game.l||lvl();
   var mini=over.querySelector('.ap-mini');if(mini&&!mini.querySelector('.lb-open'))mini.appendChild(openBtn());
   var col=over.querySelector('.ap-col');if(!col)return;
+  over.scrollTop=0;
   var c=document.createElement('div');c.className='lb-card';
-  if(score<1||!game.tk){c.innerHTML='<h3>Classifica</h3><p>Questa volta niente classifica. Rigioca e prova a entrarci!</p>';col.appendChild(c);return}
+  function place(){big.insertAdjacentElement('afterend',c)}
+  if(score<1||!game.tk){c.innerHTML='<h3>Classifica</h3><p>Questa volta niente classifica. Rigioca e prova a entrarci!</p>';place();return}
+  c.className='lb-card lb-hot';
   var ig=st.get('elv_ig')||'';
-  c.innerHTML='<h3>Entra in classifica</h3><p>Livello '+LV[l]+' · <b>'+score+' metri</b>. Il primo della settimana lo ricondivido nelle storie.</p>'+
+  c.innerHTML='<span class="lb-badge">Nuovo!</span><h3>'+TRO+'<span>Entra in classifica!</span></h3><p class="lb-pos">Con <b>'+score+' metri</b> sei in gara nel livello '+LV[l]+'…</p><p>Scrivi il tuo nome Instagram: il primo della settimana lo ricondivido nelle storie.</p>'+
    '<form class="lb-f" novalidate><div class="lb-row"><label class="lb-at"><span aria-hidden="true">@</span><input class="lb-in" name="ig" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="31" placeholder="nome Instagram" aria-label="Il tuo nome Instagram" value="'+esc(ig)+'" required></label>'+
    '<input class="lb-in" name="em" type="email" autocomplete="email" placeholder="email (facoltativa)" aria-label="La tua email, facoltativa"></div>'+
    '<label class="lb-ck"><input type="checkbox" name="ok"><span>Voglio ricevere le novità di Elvezio via email: TG, giochi e caccia al tesoro. Mi posso cancellare quando voglio.</span></label>'+
-   '<p class="lb-err" hidden></p><button class="lb-btn" type="submit">Salva il punteggio</button>'+
-   '<p style="font-size:12px;color:#6B4A32">Il tuo nome Instagram sarà visibile in classifica. <a href="/pages/privacy" style="color:#5C1F2B">Privacy</a></p></form>';
-  col.appendChild(c);
+   '<p class="lb-err" hidden></p><button class="lb-btn" type="submit">Salvami in classifica</button>'+
+   '<p style="font-size:12px;color:#3E1019">Il tuo nome Instagram sarà visibile in classifica. <a href="/pages/privacy" style="color:#3E1019">Privacy</a></p></form>';
+  place();
+  top(l,'week',50).then(function(t){var r=1;(t.top||[]).forEach(function(x){if(x.score>score)r++});var pe=c.querySelector('.lb-pos');if(pe)pe.innerHTML='Con <b>'+score+' metri</b> saresti <b>'+(r===1?'PRIMO':r+'°')+'</b> questa settimana!'+(r===1?' Salvalo subito!':' Salva il punteggio!')}).catch(function(){});
   var f=c.querySelector('form'),err=c.querySelector('.lb-err'),btn=c.querySelector('.lb-btn');
   f.addEventListener('keydown',function(e){e.stopPropagation()});
   f.addEventListener('submit',function(e){e.preventDefault();if(game.sent)return;
@@ -98,13 +120,13 @@ function addForm(){
     if(em&&!ok)return bad('Per l\'email serve la spunta qui sopra. Se non vuoi email, lascia vuoto il campo.');
     err.hidden=true;btn.disabled=true;btn.textContent='Salvo…';
     post('/score',{tk:game.tk,name:name,score:score}).then(function(j){
-      if(!j.ok){btn.disabled=false;btn.textContent='Salva il punteggio';return bad(j.error==='nome'?'Questo nome non va bene, scegline un altro.':j.error==='gettone'?'Questa partita è già salvata. Rigioca per un nuovo punteggio!':'Non sono riuscito a salvare. Riprova.')}
+      if(!j.ok){btn.disabled=false;btn.textContent='Salvami in classifica';return bad(j.error==='nome'?'Questo nome non va bene, scegline un altro.':j.error==='gettone'?'Questa partita è già salvata. Rigioca per un nuovo punteggio!':'Non sono riuscito a salvare. Riprova.')}
       game.sent=true;st.set('elv_ig',name);
       if(em&&ok){var fd=new FormData();fd.append('form_type','customer');fd.append('utf8','✓');fd.append('contact[email]',em);fd.append('contact[first_name]','@'+name);fd.append('contact[tags]','newsletter,classifica,autopostale');fetch('/contact',{method:'POST',body:fd,credentials:'same-origin'}).catch(function(){});if(window.elvTrack)elvTrack('signup',{n:'classifica'})}
-      c.innerHTML='<p class="lb-ok">'+(j.rankWeek===1?'Sei primo questa settimana!':'Sei '+j.rankWeek+'° questa settimana!')+'</p><p>Livello '+LV[l]+' · '+score+' metri · '+(j.rankAll===1?'record assoluto!':j.rankAll+'° di sempre')+'</p><div class="lb-top"><p class="lb-empty">Carico la classifica…</p></div><button type="button" class="lb-link">Vedi tutta la classifica</button>';
+      c.className='lb-card';c.innerHTML='<p class="lb-ok">'+(j.rankWeek===1?'Sei primo questa settimana!':'Sei '+j.rankWeek+'° questa settimana!')+'</p><p>Livello '+LV[l]+' · '+score+' metri · '+(j.rankAll===1?'record assoluto!':j.rankAll+'° di sempre')+'</p><div class="lb-top"><p class="lb-empty">Carico la classifica…</p></div><button type="button" class="lb-link">Vedi tutta la classifica</button>';
       c.querySelector('.lb-link').addEventListener('click',modal);
       top(l,'week',5).then(function(t){c.querySelector('.lb-top').innerHTML=listHtml(t.top,name)}).catch(function(){});
-    }).catch(function(){btn.disabled=false;btn.textContent='Salva il punteggio';bad('Connessione assente. Riprova.')});
+    }).catch(function(){btn.disabled=false;btn.textContent='Salvami in classifica';bad('Connessione assente. Riprova.')});
   });
 }
 if(over)new MutationObserver(addForm).observe(over,{childList:true,attributes:true,attributeFilter:['hidden']});
