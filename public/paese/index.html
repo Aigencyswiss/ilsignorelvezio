@@ -9,49 +9,52 @@
 <link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--wine:#5C1F2B;--wine2:#3E1019;--gold:#C9962E;--gold2:#FFD24A;--cream:#FBF5E8;--cream2:#F1E6CF;--red:#E83B2B;--ink:#2A1A12}
+:root{--wine:#5C1F2B;--wine2:#3E1019;--gold:#C9962E;--gold2:#FFD24A;--cream:#FBF5E8;--cream2:#F1E6CF;--red:#E83B2B;--ink:#2A1A12;--line:#DCC9A4}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:#1a0a0e;color:var(--cream2);font:16px/1.5 'DM Sans',system-ui,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#1a0a0e;color:var(--cream2);font:16px/1.5 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{overflow:hidden}
 button{font:inherit}
-#world{position:fixed;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;display:flex;align-items:center}
+[hidden]{display:none!important}
+/* ---------- il paese ---------- */
+#world{position:fixed;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;display:flex;align-items:center;cursor:grab}
+#world.drag{cursor:grabbing}
 #world::-webkit-scrollbar{display:none}
-#scene{position:relative;flex:0 0 auto;width:max(100vw,177.78vh);aspect-ratio:16/9}
-.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.6s ease;user-select:none;-webkit-user-drag:none}
+#scene{position:relative;flex:0 0 auto;width:max(100vw,235.7vh);aspect-ratio:3168/1344;transform-origin:50% 50%;transition:transform .9s cubic-bezier(.6,0,.2,1),filter .9s}
+#scene.zoom{filter:blur(2px) brightness(.8)}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 1.6s ease;user-select:none;-webkit-user-drag:none;pointer-events:none}
 #night{opacity:0}
 body.n #night{opacity:1}
-/* atmosfera */
 .fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .leaf{position:absolute;top:-6%;width:14px;height:10px;border-radius:70% 0 70% 0;background:#D9822B;opacity:.85;animation:fall linear infinite}
 .fly{position:absolute;width:5px;height:5px;border-radius:50%;background:#FFE58A;box-shadow:0 0 10px 3px rgba(255,225,120,.8);opacity:0;animation:fly ease-in-out infinite}
 body:not(.n) .fly{display:none}body.n .leaf{display:none}
-@keyframes fall{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(-120px,115vh) rotate(720deg)}}
+@keyframes fall{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(-140px,115vh) rotate(720deg)}}
 @keyframes fly{0%,100%{opacity:0;transform:translate(0,0)}30%{opacity:1}50%{transform:translate(30px,-24px)}70%{opacity:.8}}
-/* hotspots */
-.hs{position:absolute;transform:translate(-50%,-50%);width:0;height:0;z-index:3}
-.hs button{position:absolute;left:0;top:0;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;border:0;padding:0;background:transparent;cursor:pointer}
-.hs button:before,.hs button:after{content:"";position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle,#FFE9A8 0%,#FFD24A 45%,rgba(255,210,74,0) 72%);}
+.hs{position:absolute;width:0;height:0;z-index:3}
+.hs button{position:absolute;left:0;top:0;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;border:0;padding:0;background:transparent;cursor:pointer}
+.hs button:before,.hs button:after{content:"";position:absolute;inset:15px;border-radius:50%;background:radial-gradient(circle,#FFE9A8 0%,#FFD24A 45%,rgba(255,210,74,0) 72%)}
 .hs button:after{inset:0;background:none;border:3px solid rgba(255,210,74,.9);animation:ping 2.2s ease-out infinite}
 .hs.done button:before{background:radial-gradient(circle,#fff 0%,#9FE3B0 45%,rgba(159,227,176,0) 72%)}
 .hs.done button:after{border-color:rgba(159,227,176,.9)}
 @keyframes ping{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.5);opacity:0}}
-.tag{position:absolute;left:0;top:-44px;transform:translateX(-50%);white-space:nowrap;background:linear-gradient(180deg,#8B5A2B,#6B3F1A);color:#FFF3D6;font:800 12px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:6px;border:2px solid #4A2A10;box-shadow:0 4px 0 rgba(0,0,0,.35);pointer-events:none;opacity:.95;transition:transform .2s}
+.tag{position:absolute;left:0;top:-46px;transform:translateX(-50%);white-space:nowrap;background:linear-gradient(180deg,#8B5A2B,#6B3F1A);color:#FFF3D6;font:800 12px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;border-radius:6px;border:2px solid #4A2A10;box-shadow:0 4px 0 rgba(0,0,0,.35);pointer-events:none;transition:transform .2s}
 .tag:after{content:"";position:absolute;left:50%;bottom:-10px;width:3px;height:10px;background:#4A2A10;transform:translateX(-50%)}
 .hs:hover .tag{transform:translateX(-50%) translateY(-3px) scale(1.06)}
-.sp .tag{background:linear-gradient(180deg,#E83B2B,#B82A1D);border-color:#7a1a10}
-/* bubbles */
-.bub{position:absolute;z-index:4;max-width:220px;background:var(--cream);color:var(--ink);font:700 14px/1.35 'DM Sans',sans-serif;padding:10px 14px;border-radius:16px 16px 16px 4px;box-shadow:0 10px 24px rgba(0,0,0,.35);transform:translate(-10%,-100%);opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
+.hs.soon .tag{background:linear-gradient(180deg,#6b6b6b,#4a4a4a);border-color:#333}
+.bub{position:absolute;z-index:4;max-width:230px;background:var(--cream);color:var(--ink);font:700 14px/1.35 'DM Sans',sans-serif;padding:10px 14px;border-radius:16px 16px 16px 4px;box-shadow:0 10px 24px rgba(0,0,0,.35);transform:translate(-10%,-100%);opacity:0;transition:opacity .4s,transform .4s;pointer-events:none}
 .bub.on{opacity:1;transform:translate(-10%,-112%)}
 .bub b{color:var(--wine)}
-/* goat */
-#goat{position:absolute;z-index:3;width:5%;height:9%;transform:translate(-50%,-60%);border:0;background:transparent;cursor:pointer}
+.egg{position:absolute;z-index:3;border:0;background:transparent;cursor:pointer;transform:translate(-50%,-50%)}
+#goat{width:4%;height:9%}
 #goat.jump{animation:gj .9s ease}
-@keyframes gj{0%,100%{transform:translate(-50%,-60%)}40%{transform:translate(-50%,-140%) rotate(-10deg)}}
+@keyframes gj{0%,100%{transform:translate(-50%,-50%)}40%{transform:translate(-50%,-140%) rotate(-10deg)}}
+#bus{width:14%;height:20%}
 /* HUD */
 .hud{position:fixed;left:0;right:0;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:max(12px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 12px max(14px,env(safe-area-inset-left));background:linear-gradient(180deg,rgba(26,10,14,.75),rgba(26,10,14,0));pointer-events:none}
 .hud>*{pointer-events:auto}
-.brand{display:flex;align-items:center;gap:10px}
-.brand b{font:900 clamp(16px,2.4vw,22px) Montserrat,sans-serif;text-transform:uppercase;background:var(--red);color:#fff;padding:5px 10px 3px;box-shadow:3px 3px 0 var(--gold)}
-.live{display:inline-flex;align-items:center;gap:7px;font:700 13px 'DM Sans',sans-serif;background:rgba(26,10,14,.55);border:1px solid rgba(241,230,207,.25);padding:6px 11px;border-radius:999px;backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand b{font:900 clamp(14px,2.2vw,22px) Montserrat,sans-serif;text-transform:uppercase;background:var(--red);color:#fff;padding:5px 10px 3px;box-shadow:3px 3px 0 var(--gold);white-space:nowrap}
+.live{display:inline-flex;align-items:center;gap:7px;font:700 13px 'DM Sans',sans-serif;background:rgba(26,10,14,.55);border:1px solid rgba(241,230,207,.25);padding:6px 11px;border-radius:999px;backdrop-filter:blur(6px);white-space:nowrap}
 .live i{width:8px;height:8px;border-radius:50%;background:#4ADE80;box-shadow:0 0 8px #4ADE80;animation:bl 1.6s infinite}
 @keyframes bl{50%{opacity:.35}}
 .tools{display:flex;gap:8px}
@@ -59,53 +62,97 @@ body:not(.n) .fly{display:none}body.n .leaf{display:none}
 .ic.pass{background:linear-gradient(180deg,#FFE08A,#C9962E);color:var(--wine2);border:0;box-shadow:0 3px 0 #8f6a1c}
 .ic svg{width:20px;height:20px}
 .hint{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9;background:rgba(26,10,14,.7);border:1px solid rgba(241,230,207,.25);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;backdrop-filter:blur(6px);transition:opacity .6s;white-space:nowrap}
-/* sheet */
-.sheet{position:fixed;left:50%;bottom:0;z-index:20;width:min(560px,100%);transform:translate(-50%,105%);transition:transform .45s cubic-bezier(.2,1,.3,1);background:var(--cream);color:var(--ink);border-radius:24px 24px 0 0;padding:22px max(20px,env(safe-area-inset-left)) max(22px,env(safe-area-inset-bottom));box-shadow:0 -20px 50px rgba(0,0,0,.5);border-top:4px solid var(--gold);max-height:82vh;overflow:auto}
-.sheet.on{transform:translate(-50%,0)}
-.sheet .x{position:absolute;right:14px;top:14px;width:38px;height:38px;border-radius:50%;border:0;background:var(--wine);color:var(--cream2);font:900 18px Montserrat,sans-serif;cursor:pointer}
-.sheet .k{font:800 12px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
-.sheet h2{margin:4px 0 8px;font:800 clamp(26px,5vw,32px)/1.05 Fraunces,Georgia,serif;color:var(--wine)}
-.sheet .q{font-style:italic;color:#3B2A20;border-left:4px solid var(--red);padding:2px 0 2px 12px;margin:0 0 12px}
-.sheet ul{margin:0 0 16px;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
-.sheet li{display:flex;gap:10px;align-items:flex-start;background:var(--cream2);border-radius:12px;padding:10px 12px;font-weight:600;font-size:15px}
-.sheet li span{flex:0 0 24px;height:24px;border-radius:50%;background:var(--wine);color:var(--cream2);display:grid;place-items:center;font:900 12px Montserrat,sans-serif}
-.go{display:flex;justify-content:center;align-items:center;min-height:54px;border-radius:14px;background:var(--red);color:#fff;text-decoration:none;font:900 17px Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 5px 0 #8E1F14;border:0;width:100%;cursor:pointer}
-.go.alt{background:linear-gradient(180deg,#FFE08A,#C9962E);color:var(--wine2);box-shadow:0 5px 0 #8f6a1c}
-.spon{display:flex;gap:10px;align-items:center;border:2px dashed var(--gold);border-radius:14px;padding:12px;margin-bottom:14px;font-size:14px;background:#FFF8E3}
-.spon b{display:block;color:var(--wine)}
-/* stamp toast */
-.stamp{position:fixed;left:50%;top:42%;z-index:30;transform:translate(-50%,-50%) scale(.3) rotate(-20deg);opacity:0;pointer-events:none;width:170px;height:170px;border-radius:50%;border:6px double var(--red);color:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(251,245,232,.96);font:900 15px/1.1 Montserrat,sans-serif;text-transform:uppercase;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.arrows{position:fixed;top:50%;z-index:9;width:46px;height:46px;border-radius:50%;border:1px solid rgba(241,230,207,.3);background:rgba(26,10,14,.55);color:var(--cream2);font:900 20px Montserrat;cursor:pointer;transform:translateY(-50%);backdrop-filter:blur(6px)}
+#al{left:max(10px,env(safe-area-inset-left))}#ar{right:max(10px,env(safe-area-inset-right))}
+.demo{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:8;font:800 11px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--wine2);padding:5px 9px;border-radius:6px}
+/* ---------- la stanza (pagina grande) ---------- */
+#room{position:fixed;inset:0;z-index:20;overflow-y:auto;background:var(--cream2);color:var(--ink);opacity:0;pointer-events:none;transition:opacity .5s ease}
+#room.on{opacity:1;pointer-events:auto}
+.r-hero{position:relative;min-height:min(78vh,720px);display:flex;align-items:flex-end;padding:120px max(20px,env(safe-area-inset-right)) 48px max(20px,env(safe-area-inset-left));background-color:#2a0a12;background-repeat:no-repeat;overflow:hidden}
+.r-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,10,14,.35) 0%,rgba(26,10,14,.15) 35%,rgba(26,10,14,.88) 100%)}
+.r-hero .in{position:relative;z-index:1;max-width:1100px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px;color:#fff}
+.r-k{font:800 13px Montserrat,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+.r-t{margin:0;font:900 clamp(40px,7.5vw,86px)/.95 Montserrat,sans-serif;text-transform:uppercase}
+.r-t span{display:inline-block;background:var(--red);padding:6px 14px 2px;box-shadow:5px 5px 0 var(--gold)}
+.r-q{max-width:640px;margin:0;font:600 clamp(17px,2.2vw,21px)/1.5 'DM Sans',sans-serif;color:#F7EBD3}
+.r-back{position:fixed;left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));z-index:25;display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px;border-radius:999px;border:0;background:var(--cream);color:var(--wine);font:900 14px Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 8px 20px rgba(0,0,0,.35);cursor:pointer}
+.r-body{max-width:1100px;margin:0 auto;padding:44px max(20px,env(safe-area-inset-right)) 90px max(20px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:44px}
+.r-sec h2{margin:0 0 6px;font:800 clamp(28px,4vw,40px)/1.1 Fraunces,Georgia,serif;color:var(--wine)}
+.r-sec .lead{margin:0 0 18px;color:#3B2A20;font-size:17px;max-width:680px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--cream);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 26px rgba(62,16,25,.10)}
+.card .ph{aspect-ratio:4/3;background:#43121C center/cover no-repeat;position:relative}
+.card .ph em{position:absolute;left:12px;top:12px;font-style:normal;background:var(--cream2);color:var(--wine);font:800 11px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px}
+.card .bd{padding:16px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{margin:0;font:800 21px/1.15 Fraunces,Georgia,serif;color:var(--wine)}
+.card p{margin:0;font-size:15px;color:#3B2A20}
+.card .meta{font-weight:700;font-size:14px;color:#6B4A32}
+.casc{display:flex;gap:3px;align-items:center;font:800 11px Montserrat;letter-spacing:.08em;color:var(--gold);text-transform:uppercase}
+.casc i{display:inline-block;width:20px;height:16px;border-radius:50% 50% 30% 30%;background:linear-gradient(180deg,#C0392B,#8E2318)}
+.casc i.off{opacity:.2}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:14px;background:var(--red);color:#fff;text-decoration:none;font:900 15px Montserrat,sans-serif;text-transform:uppercase;letter-spacing:.04em;box-shadow:0 5px 0 #8E1F14;border:0;cursor:pointer}
+.btn.gold{background:linear-gradient(180deg,#FFE08A,#C9962E);color:var(--wine2);box-shadow:0 5px 0 #8f6a1c}
+.btn.ghost{background:transparent;color:var(--wine);box-shadow:none;border:2px solid var(--wine)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.tv{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:28px;align-items:center}
+.tv .scr{aspect-ratio:9/16;border-radius:24px;overflow:hidden;background:#111;box-shadow:0 0 0 6px #2A1A12,0 0 0 9px var(--gold),0 30px 60px rgba(0,0,0,.35);position:relative}
+.tv video{width:100%;height:100%;object-fit:cover;display:block}
+.onair{position:absolute;left:12px;top:12px;z-index:2;background:var(--red);color:#fff;font:900 12px Montserrat;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:5px}
+.list{display:flex;flex-direction:column;gap:10px}
+.li{display:flex;gap:16px;align-items:center;background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.li .d{flex:0 0 64px;height:68px;border-radius:12px;background:var(--wine);color:var(--cream2);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.li .d b{font:800 26px Fraunces,serif}.li .d small{font:800 11px Montserrat;letter-spacing:.1em;color:var(--gold2);margin-top:3px}
+.li h3{margin:0;font:800 19px/1.2 Fraunces,serif;color:var(--wine)}
+.li p{margin:2px 0 0;font-size:14px;color:#6B4A32}
+.soonbox{border:2px dashed var(--gold);border-radius:20px;padding:24px;background:#FFF8E3;display:flex;flex-direction:column;gap:12px}
+.soonbox b{font:900 13px Montserrat;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.cab{background:linear-gradient(180deg,#2a1440,#120820);color:#fff;border-radius:22px;padding:18px;border:3px solid #7b4dff;box-shadow:0 0 30px rgba(123,77,255,.45),inset 0 0 30px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:12px}
+.cab .sc{aspect-ratio:4/3;border-radius:12px;background:#000 center/cover;border:4px solid #111;box-shadow:inset 0 0 40px rgba(0,255,200,.25)}
+.cab h3{margin:0;font:900 22px Montserrat;text-transform:uppercase;color:#FFE08A;text-shadow:0 0 12px rgba(255,210,74,.7)}
+.cab p{margin:0;color:#E9DDFF;font-size:15px}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:10px;max-width:520px}
+.pd{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.pd .av{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font:900 22px Montserrat;color:var(--wine2);background:#fff;border:4px solid var(--m)}
+.pd .n{max-width:100%;font-weight:800;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd .s{font-weight:900;color:var(--gold)}
+.pd .b{width:100%;border-radius:12px 12px 4px 4px;display:grid;place-items:start center;padding-top:6px;font:900 24px Montserrat;color:var(--wine2);background:linear-gradient(180deg,var(--m),var(--dd))}
+.pd.p1{--m:#FFD24A;--dd:#C9962E}.pd.p2{--m:#E4E4EE;--dd:#A7A7B8}.pd.p3{--m:#E3A066;--dd:#A9642E}
+.pd.p1 .b{height:90px}.pd.p2 .b{height:66px}.pd.p3 .b{height:50px}
+.r-next{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:28px}
+.r-next button{appearance:none;border:0;background:none;cursor:pointer;font:800 15px Montserrat;color:var(--wine);text-transform:uppercase;letter-spacing:.04em}
+/* timbro */
+.stamp{position:fixed;left:50%;top:42%;z-index:40;transform:translate(-50%,-50%) scale(.3) rotate(-20deg);opacity:0;pointer-events:none;width:170px;height:170px;border-radius:50%;border:6px double var(--red);color:var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(251,245,232,.97);font:900 15px/1.1 Montserrat,sans-serif;text-transform:uppercase;box-shadow:0 20px 50px rgba(0,0,0,.45)}
 .stamp small{font-size:11px;letter-spacing:.1em;color:var(--wine)}
 .stamp.on{animation:st 1.8s cubic-bezier(.2,1.6,.4,1) forwards}
 @keyframes st{0%{opacity:0;transform:translate(-50%,-50%) scale(2.2) rotate(-30deg)}18%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-12deg)}80%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(-12deg)}100%{opacity:0;transform:translate(-50%,-50%) scale(.9) rotate(-12deg)}}
-/* passport */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 16px}
-.st{aspect-ratio:1;border-radius:50%;border:3px dashed #CDB98E;display:flex;align-items:center;justify-content:center;text-align:center;font:900 10px/1.1 Montserrat,sans-serif;text-transform:uppercase;color:#B8A27A;padding:6px}
+/* passaporto */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
+.st{aspect-ratio:1;border-radius:50%;border:3px dashed #CDB98E;display:flex;align-items:center;justify-content:center;text-align:center;font:900 10px/1.1 Montserrat,sans-serif;text-transform:uppercase;color:#B8A27A;padding:8px}
 .st.ok{border:4px double var(--red);color:var(--red);transform:rotate(-8deg);background:#FFF3EC}
-.bar{height:12px;border-radius:12px;background:var(--cream2);overflow:hidden;border:1px solid #DCC9A4}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:12px;transition:width .6s}
-.grade{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#6B4A32;margin-top:6px}
+.bar{height:14px;border-radius:12px;background:var(--cream);overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red))}
 /* intro */
-#intro{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,rgba(92,31,43,.85),rgba(26,10,14,.96));transition:opacity .9s}
+#intro{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;background:radial-gradient(circle at 50% 40%,rgba(92,31,43,.82),rgba(26,10,14,.96));transition:opacity .9s}
 #intro h1{margin:0;font:900 clamp(34px,7vw,64px)/1 Montserrat,sans-serif;text-transform:uppercase}
 #intro h1 span{display:inline-block;background:var(--red);color:#fff;padding:6px 14px 2px;box-shadow:5px 5px 0 var(--gold);margin:4px}
-#intro p{max-width:460px;margin:0;color:#E8D7B4;font-size:17px}
-#intro .go{width:auto;padding:0 34px;animation:pulse 1.8s ease-in-out infinite}
+#intro p{max-width:480px;margin:0;color:#E8D7B4;font-size:17px}
+#intro .btn{animation:pulse 1.8s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.05)}}
-.demo{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:8;font:800 11px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--wine2);padding:5px 9px;border-radius:6px}
-@media (max-width:640px){.live span{display:none}.brand b{font-size:14px}.ic .lbl{display:none}}
+@media (max-width:760px){.tv{grid-template-columns:1fr}.tv .scr{max-width:300px;margin:0 auto}.live span{display:none}.ic .lbl{display:none}.arrows{display:none}.r-hero{min-height:70vh}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="world"><div id="scene">
-  <img class="bg" id="day" alt="Il paese di Elvezio di giorno: piazza con il cinema, AutoPostale, grotto, casa della nonna, ufficio postale, bottega, cantina e campanile" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/415b8149-807c-4a05-944a-0c9b70624d74.webp">
-  <img class="bg" id="night" alt="" aria-hidden="true" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/695a1ffb-22da-4237-ae5d-5adce15391fa.webp">
+  <img class="bg" id="day" alt="Il paese di Elvezio: la via principale con la sala giochi, l'ufficio turistico, la posta, il cinema in piazza, il campanile, la casa della nonna, il laboratorio, la bottega, la via delle botteghe, il grotto, la casa di Elvezio e la cantina" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/a18a0bad-4dd5-471a-b867-ae3ca390bf31.webp">
+  <img class="bg" id="night" alt="" aria-hidden="true" src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/eecc0fb4-ba7d-4043-8bff-17a4e5d737f0.webp">
   <div class="fx" id="fx"></div>
   <div id="spots"></div>
-  <button id="goat" aria-label="La capra Carmela" style="left:61.3%;top:43.5%"></button>
-  <div class="bub" id="b-elv" style="left:44.5%;top:55%"></div>
-  <div class="bub" id="b-nonna" style="left:88%;top:27%"></div>
+  <button class="egg" id="goat" aria-label="La capra Carmela" style="left:28%;top:27%"></button>
+  <button class="egg" id="bus" aria-label="L'AutoPostale" style="left:8%;top:74%"></button>
+  <div class="bub" id="b-elv" style="left:47%;top:66%"></div>
+  <div class="bub" id="b-nonna" style="left:61%;top:36%"></div>
+  <div class="bub" id="b-bus" style="left:9%;top:62%"></div>
 </div></div>
 
 <header class="hud">
@@ -113,102 +160,124 @@ body:not(.n) .fly{display:none}body.n .leaf{display:none}
   <div class="tools">
     <button class="ic" id="snd" aria-pressed="false" aria-label="Suoni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="snd-w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" opacity=".35"/></svg></button>
     <button class="ic" id="dn" aria-label="Giorno o notte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-    <button class="ic pass" id="pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/></svg><span class="lbl">Passaporto</span> <span id="pc">0/9</span></button>
+    <button class="ic pass" id="pass"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/></svg><span class="lbl">Passaporto</span> <span id="pc">0</span></button>
   </div>
 </header>
-<div class="hint" id="hint">Tocca i cartelli per entrare · trascina per esplorare</div>
+<button class="arrows" id="al" aria-label="Vai a sinistra">‹</button><button class="arrows" id="ar" aria-label="Vai a destra">›</button>
+<div class="hint" id="hint">Tocca un cartello per entrare · trascina per passeggiare</div>
 <span class="demo">Bozza</span>
 
-<aside class="sheet" id="sheet" role="dialog" aria-modal="false" aria-labelledby="sh-t"><button class="x" id="sh-x" aria-label="Chiudi">×</button><div id="sh-b"></div></aside>
+<div id="room" role="dialog" aria-modal="true" aria-label="Edificio"><button class="r-back" id="back">← Torna in piazza</button><div id="r-in"></div></div>
 <div class="stamp" id="stamp" aria-live="polite"></div>
 
 <div id="intro">
   <h1><span>Benvenuto</span><br><span>in paese!</span></h1>
-  <p>Qui vive il Signor Elvezio. Ci sono il TG, i giochi, la nonna, una capra che scappa e una cantina chiusa a chiave. Raccogli tutti i timbri del passaporto.</p>
-  <button class="go" id="enter">Entra in paese</button>
+  <p>Qui vive il Signor Elvezio. Entra negli edifici: il cinema con il TG, la sala giochi, l'ufficio turistico, la cucina della nonna e una cantina chiusa a chiave. Raccogli tutti i timbri del passaporto.</p>
+  <button class="btn" id="enter">Entra in paese</button>
 </div>
 
 <script>
 (function(){
-var S=[
- {id:'piazza',x:42,y:38,t:'Il cinema in piazza',k:'Il TG di Elvezio',q:'Ogni mercoledì alle 12 accendo lo schermo. Portate la sedia, i pop-corn no: qui si mangiano castagne.',li:['Il TG della settimana: cosa fare nel weekend','Tutti i video di Elvezio','Il voto in caschetti di ogni evento'],cta:'Guarda il TG',href:'https://ilsignorelvezio.com/pages/cosa-fare-in-ticino'},
- {id:'bus',x:27,y:33,t:'Fermata AutoPostale',k:'I giochi',q:'L\'AutoPostale per Locarno è già partito. Di nuovo. Prova tu a prenderlo.',li:['Prendi l\'AutoPostale: 3 livelli','Quanto sei ticinese? Il quiz','La classifica della settimana'],cta:'Gioca adesso',href:'https://ilsignorelvezio.com/pages/giochi'},
- {id:'grotto',x:24,y:80,t:'Il grotto',k:'È stato Elveziato',q:'Qui do i voti ai posti del Ticino. Da 1 a 5 caschetti. Il boccalino è incluso nel giudizio.',li:['I posti votati da Elvezio','Il grotto del mese','Proponi un posto da Elveziare'],cta:'Vedi i posti Elveziati',href:'https://ilsignorelvezio.com/#caschetti'},
- {id:'nonna',x:84,y:44,t:'Casa della nonna',k:'Il detto della nonna',q:'La nonna dice: chi va piano va sano e va lontano. Io intanto ho perso l\'AutoPostale.',li:['Ogni lunedì un detto nuovo','Il consiglio del giorno','Le ricette della nonna (presto)'],cta:'Ascolta la nonna',href:'https://instagram.com/ilsignorelvezio'},
- {id:'posta',x:67,y:31,t:'Ufficio postale',k:'Il Club dei nipoti',q:'Lascia l\'indirizzo email: ogni mercoledì ti mando il TG. Il francobollo lo pago io.',li:['Il TG nella tua email','Gli indizi della caccia prima degli altri','Lo sconto dei nipoti sul merch'],cta:'Entra nel club',href:'https://ilsignorelvezio.com/pages/cosa-fare-in-ticino#weekend'},
- {id:'cantina',x:85,y:80,t:'La cantina',k:'Caccia al tesoro',q:'Questa porta si apre solo quando c\'è la caccia al tesoro. La chiave ce l\'ha Gianni. Credo.',li:['Un buono vero nascosto in Ticino','Gli indizi arrivano in un reel','Il prossimo: sabato 14 novembre'],cta:'Scopri la caccia',href:'https://ilsignorelvezio.com/pages/caccia-di-elvezio'},
- {id:'bottega',x:60,y:62,t:'La bottega',k:'Spazio sponsor',sp:1,q:'Qui ci può stare la tua bottega. Insegna, vetrina, offerta: e io passo a trovarti con il caschetto.',li:['La tua insegna dentro il paese','La scheda con il video Elveziato','Un\'offerta per i nipoti di Elvezio'],cta:'Metti qui la tua bottega',href:'mailto:ilsignorelvezio@gmail.com?subject=Una%20bottega%20nel%20Paese%20di%20Elvezio'},
- {id:'campanile',x:58,y:10,t:'Il campanile',k:'Il calendario',q:'Suona a mezzogiorno. E a dicembre ogni giorno apre una casella dell\'Avvento.',li:['Gli appuntamenti del paese','Il calendario dell\'Avvento (dicembre)','Tocca le campane: suonano!'],cta:'Fai suonare le campane',bell:1}
+var CF='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var SHOP='https://ilsignorelvezio.com';
+var TG={video:CF+'fee6ca28-779e-4e15-b78f-667245fb5a29.mp4',poster:CF+'f0cd94e9-c7dc-49ce-9156-fece40777a79.jpg',week:'Weekend 7–8 novembre',title:'Ultimo weekend prima dell\'inverno',
+ ev:[{t:'Autunno alle Isole',w:'Fino a dom 8.11',p:'Isole di Brissago',v:4,c:'Per famiglie',img:CF+'16aa88b4-e699-420a-8bf0-584bb71e072d.webp'},{t:'Carne di capra',w:'Fino a dom 8.11',p:'Vallemaggia e Locarnese',v:3,c:'Gastronomia',img:CF+'f137f5e3-8efc-4985-80eb-219e5a2868af.webp'},{t:'Ivo Soldini a Castelgrande',w:'Fino a dom 8.11',p:'Bellinzona',v:5,c:'Cultura',img:CF+'777c2276-eeef-4dd7-95ad-aab0b507d44e.webp'},{t:'Festival delle Marionette',w:'Dom 8.11',p:'Teatro Foce, Lugano',v:4,c:'Per famiglie',img:CF+'3e18eeaf-27fa-48cd-985c-a6c2731d656c.webp'}],
+ next:[['11','NOV','Fiera di San Martino','Mendrisio, 11–15 novembre'],['14','NOV','Castellinaria','Giubiasco, 14–21 novembre'],['19','NOV','Winterland','Locarno e Ascona, fino al 6 gennaio'],['20','NOV','Vini in Villa','Villa Ciani, Lugano'],['26','NOV','Natale in Piazza','Lugano, fino al 10 gennaio']]};
+function casc(n){var h='<span class="casc">Voto ';for(var i=1;i<=5;i++)h+='<i'+(i>n?' class="off"':'')+'></i>';return h+'</span>'}
+var P=[
+ {id:'giochi',x:17,y:58,t:'Sala giochi',k:'I giochi di Elvezio',q:'Gettoni no, qui si gioca gratis. Ma se perdi contro la nonna, offri tu la polenta.',body:function(){return '<section class="r-sec"><h2>Scegli il cabinato</h2><p class="lead">Ogni gioco finisce con il verdetto in caschetti. I migliori della settimana salgono sul podio.</p><div class="grid">'+
+   '<div class="cab"><div class="sc" style="background-image:url('+CF+'16aa88b4-e699-420a-8bf0-584bb71e072d.webp)"></div><h3>Prendi l\'AutoPostale!</h3><p>Corri tra capre, gerani e turisti. Tre livelli, dal facile a "guida la nonna".</p><a class="btn gold" href="'+SHOP+'/pages/autopostale" target="_top">Gioca</a></div>'+
+   '<div class="cab"><div class="sc" style="background-image:url('+CF+'777c2276-eeef-4dd7-95ad-aab0b507d44e.webp)"></div><h3>Quanto sei ticinese?</h3><p>Dieci domande su dialetto, grotti e tradizioni. Turista o nipote ufficiale?</p><a class="btn gold" href="'+SHOP+'/pages/quiz-ticinese" target="_top">Gioca</a></div>'+
+   '<div class="cab" style="opacity:.75"><div class="sc" style="display:grid;place-items:center;font:900 64px Montserrat;color:#FFE08A">?</div><h3>Il prossimo gioco</h3><p>Acchiappa le castagne, la tombola della nonna o il memory dei grotti? Votate voi.</p><a class="btn ghost" style="color:#FFE08A;border-color:#FFE08A" href="https://instagram.com/ilsignorelvezio" target="_blank" rel="noopener">Vota su Instagram</a></div>'+
+   '</div></section><section class="r-sec"><h2>Il podio della settimana</h2><p class="lead">AutoPostale, livello Medio. Si riparte da zero ogni lunedì.</p><div id="pod"><p class="lead">Carico il podio…</p></div></section>'},after:function(){fetch('/api/top?g=autopostale&l=medio&p=week&n=3').then(function(r){return r.json()}).then(function(j){var t=j.top||[],o=[1,0,2],h='<div class="podium">';o.forEach(function(k){var r=t[k];h+='<div class="pd p'+(k+1)+'"><div class="av">'+(r?esc(r.name.charAt(0)).toUpperCase():'?')+'</div><div class="n">'+(r?'@'+esc(r.name):'Libero')+'</div><div class="s">'+(r?r.score+' m':'–')+'</div><div class="b">'+(k+1)+'</div></div>'});$('pod').innerHTML=h+'</div>'}).catch(function(){})}},
+ {id:'turistico',x:25,y:58,t:'Ufficio turistico',k:'I posti di Elvezio',q:'Paesi, hotel, grotti ed esperienze: tutti i posti dove sono stato, con il mio voto. La cartina la tengo io, girata giusta (quasi sempre).',body:function(){return '<section class="r-sec"><h2>La mappa del Ticino di Elvezio</h2><p class="lead">Ogni video diventa una puntina sulla mappa. Scegli cosa cerchi:</p><div class="row" style="margin-bottom:18px"><span class="btn ghost">Paesi</span><span class="btn ghost">Mangiare</span><span class="btn ghost">Dormire</span><span class="btn ghost">Da fare</span></div><div class="grid">'+TG.ev.map(function(e){return '<article class="card"><div class="ph" style="background-image:url('+e.img+')"><em>'+e.c+'</em></div><div class="bd"><h3>'+e.t+'</h3><p class="meta">'+e.p+'</p>'+casc(e.v)+'</div></article>'}).join('')+'</div></section><section class="soonbox"><b>In costruzione</b><p style="margin:0">Qui arriva la mappa interattiva con tutti i posti Elveziati: paesi, hotel, ristoranti ed esperienze, ognuno con il suo video e il Sigillo.</p></section>'}},
+ {id:'posta',x:33,y:58,t:'Posta',k:'Unboxing e Club dei nipoti',q:'Arrivano pacchi per Elvezio! Li apro davanti a voi, in vero stile influencer. Il cartone lo tengo, non si sa mai.',body:function(){return '<section class="r-sec"><h2>I pacchi di Elvezio</h2><p class="lead">Ogni pacco aperto ha la sua pagina: il video, il prodotto, il voto in caschetti e, se c\'è, il codice sconto per i nipoti.</p><div class="soonbox"><b>Il primo pacco è in arrivo</b><p style="margin:0">Hai un prodotto da far aprire a Elvezio? Scrivi a ilsignorelvezio@gmail.com.</p></div></section><section class="r-sec"><h2>La buca delle lettere</h2><p class="lead">Lascia la tua email: ogni mercoledì il TG, prima degli altri gli indizi della caccia al tesoro.</p><a class="btn" href="'+SHOP+'/pages/cosa-fare-in-ticino" target="_top">Diventa un nipote di Elvezio</a></section>'}},
+ {id:'cinema',x:42,y:43,t:'Cinema in piazza',k:'Il TG di Elvezio · ogni mercoledì',q:'Ogni mercoledì accendo lo schermo e vi dico cosa fare nel weekend in Ticino. Portate la sedia: i pop-corn no, qui si mangiano castagne.',body:function(){return '<section class="r-sec"><div class="tv"><div class="scr"><span class="onair">In onda</span><video src="'+TG.video+'" poster="'+TG.poster+'" controls playsinline preload="none"></video></div><div><p class="r-k" style="color:var(--red)">'+TG.week+'</p><h2>'+TG.title+'</h2><p class="lead">Quattro cose da fare, scelte e votate da Elvezio. Il prossimo TG esce mercoledì alle 12.</p><div class="row"><a class="btn" href="'+SHOP+'/pages/cosa-fare-in-ticino" target="_top">Tutti gli eventi</a><a class="btn ghost" href="https://instagram.com/ilsignorelvezio" target="_blank" rel="noopener">Su Instagram</a></div></div></div></section><section class="r-sec"><h2>I manifesti di questo weekend</h2><div class="grid">'+TG.ev.map(function(e){return '<article class="card"><div class="ph" style="background-image:url('+e.img+')"><em>'+e.c+'</em></div><div class="bd"><h3>'+e.t+'</h3><p class="meta">'+e.w+' · '+e.p+'</p>'+casc(e.v)+'</div></article>'}).join('')+'</div></section><section class="r-sec"><h2>Prossimamente in Ticino</h2><div class="list">'+TG.next.map(function(n){return '<div class="li"><div class="d"><b>'+n[0]+'</b><small>'+n[1]+'</small></div><div><h3>'+n[2]+'</h3><p>'+n[3]+'</p></div></div>'}).join('')+'</div></section>'}},
+ {id:'campanile',x:48,y:12,t:'Campanile',k:'Il calendario del paese',q:'Le campane suonano a mezzogiorno. E a dicembre, ogni giorno, si apre una casella del mio calendario dell\'Avvento.',bell:1,body:function(){return '<section class="r-sec"><h2>Gli appuntamenti</h2><div class="list"><div class="li"><div class="d"><b>MER</b><small>12:00</small></div><div><h3>Il TG di Elvezio</h3><p>Ogni mercoledì: cosa fare nel weekend</p></div></div><div class="li"><div class="d"><b>LUN</b><small>SETT.</small></div><div><h3>Il detto della nonna</h3><p>Ogni lunedì, in cucina dalla nonna</p></div></div><div class="li"><div class="d"><b>14</b><small>NOV</small></div><div><h3>Caccia al tesoro</h3><p>Il buono nascosto in Ticino. Indizi in un reel.</p></div></div><div class="li"><div class="d"><b>1</b><small>DIC</small></div><div><h3>Calendario dell\'Avvento</h3><p>Una sorpresa al giorno fino a Natale</p></div></div></div></section><section class="r-sec"><button class="btn gold" id="bellbtn">Fai suonare le campane</button></section>'},after:function(){$('bellbtn').addEventListener('click',function(){sfx('bell')})}},
+ {id:'nonna',x:58,y:44,t:'Casa della nonna',k:'Il detto della nonna · ogni lunedì',q:'Siediti, che ti preparo qualcosa. E ascolta la nonna, che di AutoPostale ne ha perse meno di te.',body:function(){var D=[['Chi va pian, va sano e va lontano.','E Elvezio va così piano che l\'AutoPostale non lo vede nemmeno.'],['Rosso di sera, bel tempo si spera.','Rosso di mattina, la nonna è già in cucina.'],['Chi dorme non piglia pesci.','Ma Elvezio dorme e piglia l\'AutoPostale dopo.']];var d=D[new Date().getDate()%D.length];return '<section class="r-sec"><h2>Il detto di oggi</h2><div class="soonbox" style="background:#FBF5E8;border-style:solid"><p style="margin:0;font:800 clamp(24px,3.6vw,36px)/1.2 Fraunces,serif;color:var(--wine)">«'+d[0]+'»</p><p style="margin:0;font-size:17px">'+d[1]+'</p></div></section><section class="r-sec"><h2>Le ricette della nonna</h2><p class="lead">Polenta, risotto, torta di pane, castagne. Le ricette vere del Ticino, spiegate dalla nonna e rovinate da Elvezio.</p><div class="soonbox"><b>In arrivo</b><p style="margin:0">La prima ricetta esce con il prossimo detto del lunedì.</p></div></section>'}},
+ {id:'laboratorio',x:68,y:49,t:'Laboratorio',k:'Elvezio al lavoro',q:'Entro nelle aziende del Ticino e vi faccio vedere come lavorano davvero. Se c\'è un grembiule, me lo metto.',body:function(){return '<section class="r-sec"><h2>Le aziende di Elvezio</h2><p class="lead">Dalla falegnameria al panettiere: ogni visita è un video e una pagina con la storia dell\'azienda.</p><div class="soonbox"><b>Vuoi Elvezio nella tua azienda?</b><p style="margin:0">Scrivi a ilsignorelvezio@gmail.com: arriva con il caschetto e un sacco di domande.</p></div></section>'}},
+ {id:'bottega',x:57,y:66,t:'Bottega',k:'Il merch di Elvezio',q:'Caschetti, tazze, calendari. Tutto quello che serve per diventare ticinese doc, senza passare da Corippo.',body:function(){return '<section class="r-sec"><h2>La vetrina</h2><p class="lead">La bottega apre presto. I nipoti di Elvezio avranno lo sconto e lo sapranno per primi.</p><a class="btn" href="'+SHOP+'/pages/cosa-fare-in-ticino" target="_top">Avvisami quando apre</a></section>'}},
+ {id:'botteghe',x:73,y:70,t:'Via delle botteghe',k:'Le botteghe del paese',soon:1,q:'Queste vetrine aspettano le botteghe vere del Ticino: ristoranti, negozi, hotel. Con un\'offerta per i nipoti di Elvezio.',body:function(){return '<section class="r-sec"><h2>Una vetrina nel paese</h2><p class="lead">Ogni bottega avrà la sua insegna nel paese, la sua pagina con il video Elveziato e un\'offerta per chi arriva da qui.</p><div class="soonbox"><b>Vetrine libere</b><p style="margin:0">Hai un\'attività in Ticino? Scrivi a ilsignorelvezio@gmail.com.</p></div></section>'}},
+ {id:'grotto',x:85,y:44,t:'Il grotto',k:'È stato Elveziato',q:'Qui do i voti ai posti del Ticino, da 1 a 5 caschetti. Il boccalino è incluso nel giudizio.',body:function(){return '<section class="r-sec"><h2>Come voto io</h2><div class="grid"><article class="card"><div class="bd"><h3>5 caschetti</h3><p>Ci torno domani. E porto la nonna.</p>'+casc(5)+'</div></article><article class="card"><div class="bd"><h3>3 caschetti</h3><p>Buono, ma la capra mi guardava male.</p>'+casc(3)+'</div></article><article class="card"><div class="bd"><h3>1 caschetto</h3><p>Al grotto della nonna si mangia meglio.</p>'+casc(1)+'</div></article></div></section><section class="r-sec"><a class="btn" href="'+SHOP+'/#caschetti" target="_top">Vedi i posti Elveziati</a></section>'}},
+ {id:'casa',x:93,y:42,t:'Casa di Elvezio',k:'Elvezio scopre il moderno',q:'Per cinquant\'anni a Corippo senza telefonino. Adesso ho un\'antenna, un telefono e tante domande.',body:function(){return '<section class="r-sec"><h2>Da Corippo al mondo</h2><p class="lead">Monopattini, sushi, app: Elvezio prova tutto. Il moderno un po\' meno. Qui trovi i suoi esperimenti e il diario dei suoi viaggi.</p><div class="soonbox"><b>Il diario di Elvezio</b><p style="margin:0">Le prime pagine arrivano con il prossimo video "Elvezio scopre il moderno".</p></div></section>'}},
+ {id:'cantina',x:91,y:80,t:'La cantina',k:'Caccia al tesoro',q:'Questa porta si apre solo quando c\'è la caccia. Dentro c\'è un buono vero, nascosto da qualche parte in Ticino. La chiave ce l\'ha Gianni. Credo.',body:function(){var d=Math.max(0,Math.ceil((new Date('2026-11-14T09:00:00+01:00')-new Date())/864e5));return '<section class="r-sec"><div class="soonbox" style="background:#2A1A12;color:#F1E6CF;border-color:var(--gold)"><b style="color:var(--gold2)">Prossima caccia</b><p style="margin:0;font:900 clamp(40px,8vw,72px)/1 Montserrat">'+(d>0?'−'+d+' giorni':'Oggi!')+'</p><p style="margin:0">Sabato 14 novembre. Gli indizi arrivano in un reel: guardalo bene, poi corri.</p></div></section><section class="r-sec"><a class="btn" href="'+SHOP+'/pages/caccia-di-elvezio" target="_top">Le regole della caccia</a></section>'}}
 ];
-var STAMPS=S.map(function(s){return s.id}).concat(['carmela']);
-var NAMES={piazza:'Cinema',bus:'AutoPostale',grotto:'Grotto',nonna:'Nonna',posta:'Posta',cantina:'Cantina',bottega:'Bottega',campanile:'Campanile',carmela:'Carmela'};
-var GR=[[0,'Turista con i sandali'],[3,'Ticinese'],[6,'Ticinese doc'],[9,'Nipote ufficiale']];
+var STAMPS=P.map(function(s){return s.id}).concat(['carmela','autopostale']);
+var NAMES={carmela:'Carmela',autopostale:'AutoPostale'};P.forEach(function(s){NAMES[s.id]=s.t});
+var GR=[[0,'Turista con i sandali'],[4,'Ticinese'],[8,'Ticinese doc'],[STAMPS.length,'Nipote ufficiale']];
 var ls={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-var got=ls.get('paese_timbri')||{};
+var got=ls.get('paese_timbri2')||{};
 var $=function(i){return document.getElementById(i)};
-// night image
-var nightSrc=$('night').getAttribute('src');if(nightSrc.indexOf('__')===0)$('night').remove();
-// hotspots
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+['day','night'].forEach(function(k){var im=$(k);if(im.getAttribute('src').indexOf('__')===0)im.remove()});
 var spots=$('spots');
-S.forEach(function(s){var d=document.createElement('div');d.className='hs'+(s.sp?' sp':'')+(got[s.id]?' done':'');d.style.left=s.x+'%';d.style.top=s.y+'%';d.innerHTML='<span class="tag">'+s.t+'</span><button aria-label="'+s.t+'"></button>';d.querySelector('button').addEventListener('click',function(){open(s)});spots.appendChild(d);s.el=d});
+P.forEach(function(s){var d=document.createElement('div');d.className='hs'+(s.soon?' soon':'')+(got[s.id]?' done':'');d.style.left=s.x+'%';d.style.top=s.y+'%';d.innerHTML='<span class="tag">'+s.t+'</span><button aria-label="Entra: '+s.t+'"></button>';d.querySelector('button').addEventListener('click',function(e){e.stopPropagation();enter(s)});spots.appendChild(d);s.el=d});
 function pc(){var n=STAMPS.filter(function(k){return got[k]}).length;$('pc').textContent=n+'/'+STAMPS.length;return n}
 pc();
-function stamp(id,label){if(got[id])return false;got[id]=Date.now();ls.set('paese_timbri',got);pc();var s=$('stamp');s.innerHTML='<small>Timbro</small>'+label+'<small>Paese di Elvezio</small>';s.classList.remove('on');void s.offsetWidth;s.classList.add('on');sfx('stamp');return true}
-// sheet
-var sheet=$('sheet');
-function open(s){
-  var b='<p class="k">'+s.k+'</p><h2 id="sh-t">'+s.t+'</h2><p class="q">«'+s.q+'»</p>';
-  if(s.sp)b+='<div class="spon"><div><b>Esempio per gli sponsor</b>Qui al posto di questo testo ci sarebbero l\'insegna, le foto e l\'offerta della tua attività.</div></div>';
-  b+='<ul>'+s.li.map(function(x,i){return '<li><span>'+(i+1)+'</span>'+x+'</li>'}).join('')+'</ul>';
-  b+=s.bell?'<button class="go alt" id="bellbtn">'+s.cta+'</button>':'<a class="go" href="'+s.href+'" target="_top">'+s.cta+'</a>';
-  $('sh-b').innerHTML=b;sheet.classList.add('on');
-  if(s.bell){$('bellbtn').addEventListener('click',function(){sfx('bell')})}
-  if(stamp(s.id,NAMES[s.id]))s.el.classList.add('done');
-  $('hint').style.opacity=0;
+function stamp(id){if(got[id])return false;got[id]=Date.now();ls.set('paese_timbri2',got);pc();var s=$('stamp');s.innerHTML='<small>Timbro</small>'+NAMES[id]+'<small>Paese di Elvezio</small>';s.classList.remove('on');void s.offsetWidth;s.classList.add('on');sfx('stamp');return true}
+// entrare in un edificio: zoom e poi la pagina grande
+var scene=$('scene'),world=$('world'),room=$('room'),cur=null;
+function heroBg(s){var src=(document.body.classList.contains('n')&&$('night'))?$('night').src:($('day')?$('day').src:'');return 'background-image:url('+src+');background-size:520% auto;background-position:'+s.x+'% '+Math.min(100,Math.max(0,s.y+4))+'%'}
+function render(s){var i=P.indexOf(s),pv=P[(i-1+P.length)%P.length],nx=P[(i+1)%P.length];
+  $('r-in').innerHTML='<header class="r-hero" style="'+heroBg(s)+'"><div class="in"><p class="r-k">'+s.k+'</p><h1 class="r-t"><span>'+s.t+'</span></h1><p class="r-q">«'+s.q+'»</p></div></header><main class="r-body">'+s.body()+'<nav class="r-next"><button data-go="'+pv.id+'">← '+pv.t+'</button><button data-go="'+nx.id+'">'+nx.t+' →</button></nav></main>';
+  room.scrollTop=0;if(s.after)s.after();
+  room.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){var t=P.filter(function(p){return p.id===b.dataset.go})[0];room.classList.remove('on');setTimeout(function(){render(t);room.classList.add('on');stamp(t.id)&&t.el.classList.add('done');history.replaceState(null,'','#'+t.id)},350)})});
 }
-$('sh-x').addEventListener('click',function(){sheet.classList.remove('on')});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')sheet.classList.remove('on')});
-// passport
-$('pass').addEventListener('click',function(){var n=pc(),g=GR[0][1],nx=null;GR.forEach(function(r,i){if(n>=r[0]){g=r[1];nx=GR[i+1]||null}});
-  var b='<p class="k">Il tuo passaporto</p><h2 id="sh-t">'+g+'</h2><p class="q">«'+(n===STAMPS.length?'Tutti i timbri! Sei ufficialmente mio nipote. La nonna è commossa.':'Gira per il paese e raccogli i timbri. Uno è nascosto bene: cerca chi scappa sempre.')+'»</p>';
-  b+='<div class="grid">'+STAMPS.map(function(k){return '<div class="st'+(got[k]?' ok':'')+'">'+(got[k]?NAMES[k]:(k==='carmela'?'???':NAMES[k]))+'</div>'}).join('')+'</div>';
-  b+='<div class="bar"><i style="width:'+Math.round(n/STAMPS.length*100)+'%"></i></div><div class="grade"><span>'+n+' timbri su '+STAMPS.length+'</span><span>'+(nx?'Prossimo grado: '+nx[1]+' ('+nx[0]+')':'Grado massimo!')+'</span></div>';
-  $('sh-b').innerHTML=b;sheet.classList.add('on')});
-// goat
-$('goat').addEventListener('click',function(){var g=$('goat');g.classList.remove('jump');void g.offsetWidth;g.classList.add('jump');sfx('beee');if(!stamp('carmela','Carmela'))say('b-elv','Carmela! Scendi dal tetto, che poi la Pina si arrabbia!',3500)});
-// bubbles
+function enter(s){cur=s;sfx('door');$('hint').style.opacity=0;
+  var r=scene.getBoundingClientRect(),cx=r.left+r.width*s.x/100,cy=r.top+r.height*s.y/100;
+  scene.style.transformOrigin=(s.x)+'% '+(s.y)+'%';scene.style.transform='scale(3.2)';scene.classList.add('zoom');
+  setTimeout(function(){render(s);room.classList.add('on');document.body.style.overflow='hidden';if(stamp(s.id))s.el.classList.add('done');history.replaceState(null,'','#'+s.id)},650);
+}
+function leave(){room.classList.remove('on');scene.style.transform='';scene.classList.remove('zoom');sfx('door');history.replaceState(null,'',location.pathname);var v=room.querySelector('video');if(v)v.pause()}
+$('back').addEventListener('click',leave);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&room.classList.contains('on'))leave()});
+// passaporto
+$('pass').addEventListener('click',function(){var n=pc(),g=GR[0][1];GR.forEach(function(r){if(n>=r[0])g=r[1]});
+  $('r-in').innerHTML='<header class="r-hero" style="background:radial-gradient(circle at 50% 30%,#7A2A3A,#2A0A12)"><div class="in"><p class="r-k">Il tuo passaporto</p><h1 class="r-t"><span>'+g+'</span></h1><p class="r-q">«'+(n===STAMPS.length?'Tutti i timbri! Sei ufficialmente mio nipote. La nonna piange.':'Entra in tutti gli edifici. Due timbri sono nascosti: uno scappa sempre, l\'altro parte sempre senza di me.')+'»</p></div></header><main class="r-body"><section class="r-sec"><h2>'+n+' timbri su '+STAMPS.length+'</h2><div class="bar" style="margin-bottom:20px"><i style="width:'+Math.round(n/STAMPS.length*100)+'%"></i></div><div class="pgrid">'+STAMPS.map(function(k){return '<div class="st'+(got[k]?' ok':'')+'">'+(got[k]||P.some(function(p){return p.id===k})?NAMES[k]:'???')+'</div>'}).join('')+'</div></section><section class="r-sec"><h2>I gradi</h2><div class="list">'+GR.map(function(r){return '<div class="li"><div class="d"><b>'+r[0]+'</b><small>TIMBRI</small></div><div><h3>'+r[1]+'</h3></div></div>'}).join('')+'</div></section></main>';
+  room.scrollTop=0;room.classList.add('on')});
+// sorprese
 function say(id,t,ms){var b=$(id);b.innerHTML=t;b.classList.add('on');clearTimeout(b._t);b._t=setTimeout(function(){b.classList.remove('on')},ms||4000)}
-var NON=['<b>La nonna:</b> «Mangia, che sei magro!»','<b>La nonna:</b> «Prendi la giacca, che a Corippo fa freddo.»','<b>La nonna:</b> «Chi dorme non piglia pesci. Ma Elvezio dorme e piglia l\'AutoPostale dopo.»','<b>La nonna:</b> «Hai visto la capra? Era sul tetto della Pina.»'];
-// day / night
+$('goat').addEventListener('click',function(){var g=$('goat');g.classList.remove('jump');void g.offsetWidth;g.classList.add('jump');sfx('beee');if(!stamp('carmela'))say('b-elv','Carmela! Scendi dal tetto, che poi la Pina si arrabbia!',3500)});
+$('bus').addEventListener('click',function(){sfx('horn');say('b-bus','<b>Autista:</b> «Si parte! Elvezio? Ah, l\'abbiamo perso di nuovo.»',4000);stamp('autopostale')});
+var NON=['<b>La nonna:</b> «Mangia, che sei magro!»','<b>La nonna:</b> «Prendi la giacca, che fa freddo.»','<b>La nonna:</b> «Hai visto la capra? Era sul tetto dell\'ufficio turistico.»','<b>La nonna:</b> «Il TG è mercoledì. Io lo guardo dalla finestra.»'];
+// giorno e notte
 function hourCH(){try{return +new Intl.DateTimeFormat('it-CH',{hour:'numeric',hour12:false,timeZone:'Europe/Zurich'}).format(new Date())}catch(e){return new Date().getHours()}}
 var night=hourCH()>=18||hourCH()<7;function setN(v){night=v;document.body.classList.toggle('n',v&&!!$('night'))}
-setN(night);
-$('dn').addEventListener('click',function(){setN(!night);sfx(night?'owl':'bird')});
-// fx
-var fx=$('fx');for(var i=0;i<14;i++){var l=document.createElement('span');l.className='leaf';l.style.left=(Math.random()*110)+'%';l.style.animationDuration=(7+Math.random()*7)+'s';l.style.animationDelay=(-Math.random()*12)+'s';l.style.background=['#D9822B','#C4561E','#E0A13A','#B8452A'][i%4];fx.appendChild(l)}
-for(var j=0;j<22;j++){var f=document.createElement('span');f.className='fly';f.style.left=(Math.random()*100)+'%';f.style.top=(40+Math.random()*55)+'%';f.style.animationDuration=(3+Math.random()*4)+'s';f.style.animationDelay=(-Math.random()*5)+'s';fx.appendChild(f)}
-// live
+setN(night);$('dn').addEventListener('click',function(){setN(!night);sfx(night?'owl':'bird')});
+// atmosfera
+var fx=$('fx');for(var i=0;i<18;i++){var l=document.createElement('span');l.className='leaf';l.style.left=(Math.random()*110)+'%';l.style.animationDuration=(7+Math.random()*7)+'s';l.style.animationDelay=(-Math.random()*12)+'s';l.style.background=['#D9822B','#C4561E','#E0A13A','#B8452A'][i%4];fx.appendChild(l)}
+for(var j=0;j<30;j++){var f=document.createElement('span');f.className='fly';f.style.left=(Math.random()*100)+'%';f.style.top=(35+Math.random()*60)+'%';f.style.animationDuration=(3+Math.random()*4)+'s';f.style.animationDelay=(-Math.random()*5)+'s';fx.appendChild(f)}
+// persone in paese
 function live(){fetch('/api/live').then(function(r){return r.json()}).then(function(j){var n=j.n||0;$('live').textContent=n<=1?'In paese adesso: tu e la capra':'In paese adesso: '+n+' persone'}).catch(function(){$('live').textContent='In paese adesso: tu e la capra'})}
 live();setInterval(live,30000);
-// sound (sintetizzato, niente file)
+// trascinare e frecce
+var dn=false,sx=0,sl=0,moved=false;world.addEventListener('mousedown',function(e){dn=true;moved=false;sx=e.pageX;sl=world.scrollLeft;world.classList.add('drag')});
+addEventListener('mouseup',function(){dn=false;world.classList.remove('drag')});
+world.addEventListener('mousemove',function(e){if(!dn)return;var dx=e.pageX-sx;if(Math.abs(dx)>4)moved=true;world.scrollLeft=sl-dx});
+world.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){world.scrollLeft+=e.deltaY;e.preventDefault()}},{passive:false});
+$('al').addEventListener('click',function(){world.scrollBy({left:-world.clientWidth*.6,behavior:'smooth'})});
+$('ar').addEventListener('click',function(){world.scrollBy({left:world.clientWidth*.6,behavior:'smooth'})});
+// suoni sintetizzati
 var ac=null,on=false;
 function sfx(k){if(!on||!ac)return;var t=ac.currentTime;function tone(f,d,type,v,at){var o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t+(at||0));g.gain.setValueAtTime(0,t+(at||0));g.gain.linearRampToValueAtTime(v||.2,t+(at||0)+.01);g.gain.exponentialRampToValueAtTime(.0001,t+(at||0)+d);o.connect(g);g.connect(ac.destination);o.start(t+(at||0));o.stop(t+(at||0)+d+.05)}
  if(k==='bell'){[0,.9,1.8].forEach(function(a,i){tone([392,330,262][i],2.4,'sine',.25,a);tone([392,330,262][i]*2.76,1.6,'sine',.06,a)})}
  else if(k==='stamp'){tone(140,.18,'square',.12);tone(90,.25,'sine',.25,.02)}
+ else if(k==='door'){tone(180,.25,'triangle',.12);tone(120,.35,'sine',.1,.08)}
+ else if(k==='horn'){[0,.35].forEach(function(a){tone(277,.3,'sawtooth',.08,a);tone(370,.3,'sawtooth',.07,a);tone(466,.3,'sawtooth',.06,a)})}
  else if(k==='beee'){var o=ac.createOscillator(),g=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();o.type='sawtooth';o.frequency.value=480;l.frequency.value=28;lg.gain.value=40;l.connect(lg);lg.connect(o.frequency);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.0001,t+.9);o.connect(g);g.connect(ac.destination);o.start(t);l.start(t);o.stop(t+1);l.stop(t+1)}
  else if(k==='bird'){tone(2400,.12,'sine',.08);tone(2900,.1,'sine',.08,.15);tone(2600,.14,'sine',.08,.3)}
  else if(k==='owl'){tone(420,.5,'sine',.15);tone(380,.8,'sine',.15,.6)}
 }
-$('snd').addEventListener('click',function(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}}on=!on;$('snd').setAttribute('aria-pressed',on);$('snd-w').setAttribute('opacity',on?'1':'.35');if(on)sfx('bell')});
-// intro
-$('enter').addEventListener('click',function(){var i=$('intro');i.style.opacity=0;setTimeout(function(){i.remove()},900);
-  try{ac=new (window.AudioContext||window.webkitAudioContext)();on=true;$('snd').setAttribute('aria-pressed','true');$('snd-w').setAttribute('opacity','1');sfx('bell')}catch(e){}
-  var w=$('world');w.scrollLeft=(w.scrollWidth-w.clientWidth)*0.42;
+function soundOn(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}}on=true;$('snd').setAttribute('aria-pressed','true');$('snd-w').setAttribute('opacity','1')}
+$('snd').addEventListener('click',function(){if(on){on=false;$('snd').setAttribute('aria-pressed','false');$('snd-w').setAttribute('opacity','.35')}else{soundOn();sfx('bell')}});
+// ingresso
+$('enter').addEventListener('click',function(){var i=$('intro');i.style.opacity=0;setTimeout(function(){i.remove()},900);soundOn();sfx('bell');
+  world.scrollLeft=(world.scrollWidth-world.clientWidth)*0.4;
   setTimeout(function(){say('b-elv',night?'Ah, sei arrivato! Fai piano, che la nonna dorme già.':'Ah, sei arrivato! Entra, entra… ma pulisciti le scarpe.',5000)},900);
   setTimeout(function(){say('b-nonna',NON[new Date().getDate()%NON.length],5000)},6500);
   setTimeout(function(){var g=$('goat');g.classList.add('jump');sfx('beee')},12000);
+  var h=location.hash.slice(1);if(h){var t=P.filter(function(p){return p.id===h})[0];if(t)setTimeout(function(){enter(t)},700)}
 });
-// campane a mezzogiorno
 setInterval(function(){var d=new Date();if(hourCH()===12&&d.getMinutes()===0&&d.getSeconds()<2)sfx('bell')},1000);
 })();
 </script>
