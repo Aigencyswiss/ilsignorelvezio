@@ -1,0 +1,116 @@
+{%- comment -%} Classifica dei giochi di Elvezio (AutoPostale). Dati su ilsignorelvezio.vercel.app {%- endcomment -%}
+<style>
+.lb-card{background:#FBF5E8;color:#2A1A12;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;font-family:Montserrat,'DM Sans',system-ui,sans-serif}
+.lb-card h3{margin:0;font-size:19px;font-weight:900;color:#5C1F2B;text-transform:uppercase;letter-spacing:.02em}
+.lb-card p{margin:0;font-size:14px;line-height:1.45;color:#3B2A20}
+.lb-row{display:flex;gap:8px;flex-wrap:wrap}
+.lb-in{flex:1 1 160px;min-width:0;min-height:46px;border-radius:12px;border:2px solid #C9962E;background:#fff;padding:0 12px;font:600 16px Montserrat,'DM Sans',sans-serif;color:#2A1A12}
+.lb-at{position:relative;flex:1 1 160px;min-width:0;display:flex}
+.lb-at span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:800;color:#6B4A32}
+.lb-at .lb-in{padding-left:28px;width:100%}
+.lb-ck{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.4;color:#3B2A20;cursor:pointer}
+.lb-ck input{width:20px;height:20px;flex:0 0 20px;accent-color:#5C1F2B;margin:0}
+.lb-btn{appearance:none;border:0;cursor:pointer;font:900 16px Montserrat,'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.04em;padding:14px 18px;border-radius:14px;background:#5C1F2B;color:#F1E6CF;box-shadow:0 4px 0 #3E1019}
+.lb-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #3E1019}
+.lb-btn[disabled]{opacity:.6;cursor:wait}
+.lb-link{appearance:none;background:none;border:0;padding:0;font:800 14px Montserrat,'DM Sans',sans-serif;color:#5C1F2B;text-decoration:underline;cursor:pointer;align-self:flex-start}
+.lb-err{color:#B82A1D;font-weight:800;font-size:13px}
+.lb-ok{font-size:17px;font-weight:900;color:#5C1F2B}
+.lb-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;counter-reset:lb}
+.lb-list li{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:#F1E6CF;font-size:15px;font-weight:700;color:#2A1A12;counter-increment:lb}
+.lb-list li:before{content:counter(lb);flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#5C1F2B;color:#F1E6CF;font-size:13px;font-weight:900}
+.lb-list li:nth-child(1):before{background:#C9962E;color:#3E1019}
+.lb-list li.me{outline:2px solid #E83B2B}
+.lb-list li b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-list li em{font-style:normal;font-variant-numeric:tabular-nums;color:#5C1F2B}
+.lb-empty{font-size:14px;font-style:italic;color:#6B4A32}
+.lb-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.lb-tab{appearance:none;cursor:pointer;min-height:38px;padding:0 12px;border-radius:999px;border:2px solid #5C1F2B;background:transparent;color:#5C1F2B;font:800 13px Montserrat,'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.03em}
+.lb-tab[aria-pressed="true"]{background:#5C1F2B;color:#F1E6CF}
+.lb-modal{position:fixed;inset:0;z-index:9999;background:rgba(36,9,15,.72);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
+.lb-modal .lb-card{width:100%;max-width:440px;max-height:100%;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+.lb-x{align-self:flex-end;appearance:none;border:0;background:#5C1F2B;color:#F1E6CF;width:36px;height:36px;border-radius:50%;font:900 18px Montserrat,sans-serif;cursor:pointer;margin-bottom:-36px}
+.lb-open{margin-top:2px}
+[hidden]{display:none!important}
+</style>
+<script>
+(function(){
+var API='https://ilsignorelvezio.vercel.app/api';
+var LV={facile:'Facile',medio:'Medio',difficile:'Difficile'};
+var st={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var lvl=function(){var l=st.get('ap_lvl');return LV[l]?l:'medio'};
+var game={tk:null,l:null,sent:false};
+function post(path,data){return fetch(API+path,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)}).then(function(r){return r.json().then(function(j){j.status=r.status;return j})})}
+function top(l,p,n){return fetch(API+'/top?g=autopostale&l='+l+'&p='+p+'&n='+(n||10)).then(function(r){return r.json()})}
+function listHtml(rows,me){if(!rows||!rows.length)return '<p class="lb-empty">Ancora nessuno in classifica. Il primo posto è tuo!</p>';return '<ol class="lb-list">'+rows.map(function(r){return '<li'+(me&&r.name===me?' class="me"':'')+'><b>@'+esc(r.name)+'</b><em>'+r.score+' m</em></li>'}).join('')+'</ol>'}
+function board(box,opts){
+  opts=opts||{};var s={l:opts.l||lvl(),p:opts.p||'week'};
+  box.innerHTML='<div class="lb-tabs" role="group" aria-label="Livello">'+Object.keys(LV).map(function(k){return '<button type="button" class="lb-tab" data-l="'+k+'" aria-pressed="'+(k===s.l)+'">'+LV[k]+'</button>'}).join('')+'</div>'+
+   '<div class="lb-tabs" role="group" aria-label="Periodo"><button type="button" class="lb-tab" data-p="week" aria-pressed="'+(s.p==='week')+'">Questa settimana</button><button type="button" class="lb-tab" data-p="all" aria-pressed="'+(s.p==='all')+'">Di sempre</button></div><div class="lb-res"><p class="lb-empty">Carico la classifica…</p></div>';
+  function load(){var res=box.querySelector('.lb-res');top(s.l,s.p,opts.n||10).then(function(j){res.innerHTML=listHtml(j.top,st.get('elv_ig'))}).catch(function(){res.innerHTML='<p class="lb-empty">La classifica non si carica, riprova tra poco.</p>'})}
+  box.querySelectorAll('.lb-tab').forEach(function(b){b.addEventListener('click',function(){if(b.dataset.l){s.l=b.dataset.l;box.querySelectorAll('[data-l]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}else{s.p=b.dataset.p;box.querySelectorAll('[data-p]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}load()})});
+  load();
+}
+function modal(){
+  var m=document.createElement('div');m.className='lb-modal';m.setAttribute('role','dialog');m.setAttribute('aria-modal','true');m.setAttribute('aria-label','Classifica AutoPostale');
+  m.innerHTML='<div class="lb-card"><button type="button" class="lb-x" aria-label="Chiudi">×</button><h3>La classifica di Elvezio</h3><p>Prendi l\'AutoPostale: i migliori della settimana. Si riparte da zero ogni lunedì, e la domenica ricondivido il primo nelle storie.</p><div class="lb-b"></div></div>';
+  document.body.appendChild(m);board(m.querySelector('.lb-b'));
+  function close(){m.remove();document.removeEventListener('keydown',k)}
+  function k(e){if(e.key==='Escape')close()}
+  document.addEventListener('keydown',k);
+  m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.lb-x'))close()});
+  var x=m.querySelector('.lb-x');x&&x.focus();
+}
+window.elvClassifica=modal;
+function openBtn(){var b=document.createElement('button');b.type='button';b.className='btn ghost lb-open';b.textContent='Classifica';b.addEventListener('click',modal);return b}
+// gettone all'inizio di ogni partita
+document.addEventListener('click',function(e){var t=e.target&&e.target.closest&&e.target.closest('#ap-go,#ap-again');if(!t)return;var l=lvl();game={tk:null,l:l,sent:false};post('/start',{g:'autopostale',l:l}).then(function(j){if(j.tk)game.tk=j.tk}).catch(function(){})},true);
+// pulsante classifica nella schermata iniziale
+var start=document.getElementById('ap-start');
+function addStartBtn(){if(!start||start.hidden||start.querySelector('.lb-open'))return;var go=start.querySelector('#ap-go');if(go)go.insertAdjacentElement('afterend',openBtn())}
+if(start){new MutationObserver(addStartBtn).observe(start,{childList:true,attributes:true,attributeFilter:['hidden']});addStartBtn()}
+// modulo a fine partita
+var over=document.getElementById('ap-over');
+function addForm(){
+  if(!over||over.hidden||over.querySelector('.lb-card'))return;
+  var big=over.querySelector('.ap-big');if(!big)return;
+  var score=parseInt(big.textContent,10)||0,l=game.l||lvl();
+  var mini=over.querySelector('.ap-mini');if(mini&&!mini.querySelector('.lb-open'))mini.appendChild(openBtn());
+  var col=over.querySelector('.ap-col');if(!col)return;
+  var c=document.createElement('div');c.className='lb-card';
+  if(score<1||!game.tk){c.innerHTML='<h3>Classifica</h3><p>Questa volta niente classifica. Rigioca e prova a entrarci!</p>';col.appendChild(c);return}
+  var ig=st.get('elv_ig')||'';
+  c.innerHTML='<h3>Entra in classifica</h3><p>Livello '+LV[l]+' · <b>'+score+' metri</b>. Il primo della settimana lo ricondivido nelle storie.</p>'+
+   '<form class="lb-f" novalidate><div class="lb-row"><label class="lb-at"><span aria-hidden="true">@</span><input class="lb-in" name="ig" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="31" placeholder="nome Instagram" aria-label="Il tuo nome Instagram" value="'+esc(ig)+'" required></label>'+
+   '<input class="lb-in" name="em" type="email" autocomplete="email" placeholder="email (facoltativa)" aria-label="La tua email, facoltativa"></div>'+
+   '<label class="lb-ck"><input type="checkbox" name="ok"><span>Voglio ricevere le novità di Elvezio via email: TG, giochi e caccia al tesoro. Mi posso cancellare quando voglio.</span></label>'+
+   '<p class="lb-err" hidden></p><button class="lb-btn" type="submit">Salva il punteggio</button>'+
+   '<p style="font-size:12px;color:#6B4A32">Il tuo nome Instagram sarà visibile in classifica. <a href="/pages/privacy" style="color:#5C1F2B">Privacy</a></p></form>';
+  col.appendChild(c);
+  var f=c.querySelector('form'),err=c.querySelector('.lb-err'),btn=c.querySelector('.lb-btn');
+  f.addEventListener('keydown',function(e){e.stopPropagation()});
+  f.addEventListener('submit',function(e){e.preventDefault();if(game.sent)return;
+    var name=f.ig.value.trim().replace(/^@+/,'').toLowerCase(),em=f.em.value.trim(),ok=f.ok.checked;
+    function bad(t){err.textContent=t;err.hidden=false}
+    if(!/^[a-z0-9._]{1,30}$/.test(name))return bad('Scrivi il tuo nome Instagram, senza spazi (lettere, numeri, punto e trattino basso).');
+    if(em&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return bad('Questa email non mi sembra giusta.');
+    if(em&&!ok)return bad('Per l\'email serve la spunta qui sopra. Se non vuoi email, lascia vuoto il campo.');
+    err.hidden=true;btn.disabled=true;btn.textContent='Salvo…';
+    post('/score',{tk:game.tk,name:name,score:score}).then(function(j){
+      if(!j.ok){btn.disabled=false;btn.textContent='Salva il punteggio';return bad(j.error==='nome'?'Questo nome non va bene, scegline un altro.':j.error==='gettone'?'Questa partita è già salvata. Rigioca per un nuovo punteggio!':'Non sono riuscito a salvare. Riprova.')}
+      game.sent=true;st.set('elv_ig',name);
+      if(em&&ok){var fd=new FormData();fd.append('form_type','customer');fd.append('utf8','✓');fd.append('contact[email]',em);fd.append('contact[first_name]','@'+name);fd.append('contact[tags]','newsletter,classifica,autopostale');fetch('/contact',{method:'POST',body:fd,credentials:'same-origin'}).catch(function(){});if(window.elvTrack)elvTrack('signup',{n:'classifica'})}
+      c.innerHTML='<p class="lb-ok">'+(j.rankWeek===1?'Sei primo questa settimana!':'Sei '+j.rankWeek+'° questa settimana!')+'</p><p>Livello '+LV[l]+' · '+score+' metri · '+(j.rankAll===1?'record assoluto!':j.rankAll+'° di sempre')+'</p><div class="lb-top"><p class="lb-empty">Carico la classifica…</p></div><button type="button" class="lb-link">Vedi tutta la classifica</button>';
+      c.querySelector('.lb-link').addEventListener('click',modal);
+      top(l,'week',5).then(function(t){c.querySelector('.lb-top').innerHTML=listHtml(t.top,name)}).catch(function(){});
+    }).catch(function(){btn.disabled=false;btn.textContent='Salva il punteggio';bad('Connessione assente. Riprova.')});
+  });
+}
+if(over)new MutationObserver(addForm).observe(over,{childList:true,attributes:true,attributeFilter:['hidden']});
+// classifica nella pagina dei giochi
+var card=document.querySelector('.gx-card');
+if(card&&!document.getElementById('lb-giochi')){var sec=card.closest('section');if(sec)sec.insertAdjacentHTML('afterend','<section class="sec" style="padding-top:0"><div class="w"><div class="lb-card" style="max-width:640px;margin:0 auto;padding:24px"><h3>La classifica dell\'AutoPostale</h3><p>I migliori della settimana. Si riparte da zero ogni lunedì: la domenica ricondivido il primo nelle storie.</p><div id="lb-giochi"></div><a class="lb-btn" href="/pages/autopostale" style="text-align:center;text-decoration:none">Gioca e entra in classifica</a></div></div></section>')}
+var gb=document.getElementById('lb-giochi');if(gb)board(gb,{n:5});
+})();
+</script>
