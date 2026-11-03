@@ -168,9 +168,9 @@ function addForm(){
       if(!j.ok){btn.disabled=false;btn.textContent='Salvami in classifica';return bad(j.error==='nome'?'Questo nome non va bene, scegline un altro.':j.error==='gettone'?'Questa partita è già salvata. Rigioca per un nuovo punteggio!':'Non sono riuscito a salvare. Riprova.')}
       game.sent=true;st.set('elv_ig',name);
       if(em&&ok){var fd=new FormData();fd.append('form_type','customer');fd.append('utf8','✓');fd.append('contact[email]',em);fd.append('contact[first_name]','@'+name);fd.append('contact[tags]','newsletter,classifica,autopostale');fetch('/contact',{method:'POST',body:fd,credentials:'same-origin'}).catch(function(){});if(window.elvTrack)elvTrack('signup',{n:'classifica'})}
-      c.className='lb-card';c.innerHTML='<p class="lb-ok">'+(j.rankWeek===1?'Sei primo questa settimana!':'Sei '+j.rankWeek+'° questa settimana!')+'</p><p>Livello '+LV[l]+' · '+score+' metri · '+(j.rankAll===1?'record assoluto!':j.rankAll+'° di sempre')+'</p><div class="lb-top"><p class="lb-empty">Carico la classifica…</p></div><button type="button" class="lb-link">Vedi tutta la classifica</button>';
-      c.querySelector('.lb-link').addEventListener('click',modal);
-      top(l,'week',5).then(function(t){c.querySelector('.lb-top').innerHTML=listHtml(t.top,name)}).catch(function(){});
+      var rk=j.rankWeek;c.className='lbx';c.innerHTML='<div class="lbx-h">'+TRO+'<span class="lbx-t">'+(rk===1?'Sei primo!':'Sei '+rk+'°!')+'</span><span class="lbx-s">Questa settimana · livello '+LV[l]+' · <b>'+score+' m</b> · '+(j.rankAll===1?'record assoluto!':j.rankAll+'° di sempre')+'</span></div><div class="lbx-res"><p class="lbx-load">Carico la classifica…</p></div><div class="lbx-f"><button type="button" class="lbx-go lbx-all">Vedi tutta la classifica</button></div>';
+      c.querySelector('.lbx-all').addEventListener('click',modal);
+      top(l,'week',5).then(function(t){var rows=t.top||[];c.querySelector('.lbx-res').innerHTML=podium(rows,name)+rest(rows,name)+(rk>rows.length?'<ol class="lbx-l"><li class="me"><i>'+rk+'</i><b>@'+esc(name)+'<span class="lbx-tu">Tu</span></b><em>'+score+' m</em></li></ol>':'')}).catch(function(){});
     }).catch(function(){btn.disabled=false;btn.textContent='Salvami in classifica';bad('Connessione assente. Riprova.')});
   });
 }
