@@ -17,6 +17,9 @@
 <script>
 (function(){
 var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var EL=new Image();EL.crossOrigin='anonymous';EL.src='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/b5b15721-a220-412f-b7c3-e9cf01bd8702.webp';
+// Elvezio: pronto, tira la leva, esulta, si dispera
+var ER=[[99,0,121,320],[403,0,153,320],[727,0,146,320],[1062,0,116,320]];
 var BG=CDN+'76854d6b-fb41-4a0e-8063-037157844d61.webp',SP=CDN+'136fd92f-c6c2-467d-b292-ecfe50ce4559.webp';
 // ritagli nel foglio dei personaggi (x, y, larghezza, altezza)
 var R={selfie:[21,0,214,256],mappa:[298,0,172,256],foto:[537,0,205,256],guida:[795,0,201,256],scooter:[49,256,157,256],castagna:[256,266,256,235],riccio:[512,257,255,253],puff:[768,264,255,240]};
@@ -32,7 +35,7 @@ var img=new Image();img.crossOrigin='anonymous';img.src=SP;var bg=new Image();bg
 
 Telaio.start({
   id:'catapulta',n:4,title:'La catapulta di Castelgrande',zone:'Bellinzona',
-  preload:[BG,SP],
+  preload:[BG,SP,'https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/b5b15721-a220-412f-b7c3-e9cf01bd8702.webp'],
   intro:'I turisti vogliono fare il selfie sulle mura di Castelgrande, ma oggi il castello è chiuso per la festa della castagna. Difendilo tu: <b>niente sassi, solo castagne</b>. E mira bene, che costano.',
   how:[['🎯','<b>Trascina indietro</b> come una fionda: vedi dove cade la castagna. <b>Lascia</b> per lanciare.'],['🧳','Colpisci i turisti prima che arrivino alle mura. Se ne colpisci più di uno insieme, prendi il <b>bonus</b>.'],['❤️','Hai 3 vite: ogni turista che arriva alle mura te ne toglie una.'],['🚩','La guida turistica va colpita due volte. Al livello Difficile c\'è anche il vento.']],
   levels:{
@@ -44,7 +47,7 @@ Telaio.start({
   verdict:function(st){return ['I turisti hanno conquistato il castello. Domani riapre la biglietteria.','Qualcuno è passato, ma il castello resiste. Come la nonna.','Bravo! Castelgrande è salvo e le castagne pure.','Perfetto! Ti nomino castellano onorario di Bellinzona.'][st]},
   game:function(T,L){
     var W=T.W,H=T.H,CX=270,CY=842,WALL=772,MINY=150;
-    var men=[],shots=[],puffs=[],t=0,next=.6,aim=null,reload=0,shotsN=0;
+    var men=[],shots=[],puffs=[],mood=0,moodT=0,t=0,next=.6,aim=null,reload=0,shotsN=0;
     T.state.wind=0;var windT=0;
     function spawn(){var k=L.types[Math.floor(Math.random()*L.types.length)],ty=TYPES[k],x=60+Math.random()*(W-120);
       men.push({k:k,x:x,y:MINY-30,hp:ty.hp,v:ty.v*L.speed*(0.85+Math.random()*.3),ph:Math.random()*6,stop:0,dead:0,vy:0,rot:0,a:1,zx:x,flash:0})}
@@ -52,10 +55,11 @@ Telaio.start({
     function target(p){var dx=p.x-aim.x,dy=p.y-aim.y;var tx=CX-dx*2.6,ty=CY-dy*2.6;tx=Math.max(30,Math.min(W-30,tx));ty=Math.max(MINY-20,Math.min(WALL-30,ty));return {x:tx,y:ty,len:Math.hypot(dx,dy)}}
     function land(s){var R0=s.riccio?74:48,hits=0;T.sfx('hit');T.buzz(25);puffs.push({x:s.tx,y:s.ty,t:0});
       men.forEach(function(m){if(m.dead)return;var r=R0*(0.7+sc(m.y)*.5);if(Math.hypot(m.x-s.tx,(m.y-28*sc(m.y))-s.ty)<r+26*sc(m.y)){m.hp--;m.flash=.25;if(m.hp<=0){m.dead=1;m.vy=-420;hits++;T.add(TYPES[m.k].pts*(1+Math.max(0,(m.y-MINY)/(WALL-MINY))*.0),m.x,m.y-80*sc(m.y))}else{T.float('Ahi!',m.x,m.y-90*sc(m.y),'#fff',24)}}});
+      if(hits){mood=2;moodT=.9}
       if(hits>=2){var b=hits*15;T.add(b,s.tx,s.ty-40,'#FF8A3B');T.pop(hits>=3?'TRIPLA!':'DOPPIA!',700);T.sfx('coin')}
       if(!hits)T.state.combo=0;else{T.state.combo+=hits;if(T.state.combo>=6&&T.state.combo%6<hits){T.add(50,W/2,300,'#7CFFB2');T.pop('Serie da 6!',800)}}}
     return {
-      update:function(dt){t+=dt;reload-=dt;next-=dt;
+      update:function(dt){t+=dt;reload-=dt;next-=dt;moodT-=dt;if(moodT<=0)mood=0;
         if(next<=0){spawn();var k=Math.max(.45,L.every-t*.004);next=k*(.7+Math.random()*.6)}
         if(L.wind){windT-=dt;if(windT<=0){T.state.wind=Math.round((Math.random()*2-1)*55);windT=12}}
         men.forEach(function(m){m.ph+=dt*8;m.flash-=dt;
@@ -64,7 +68,7 @@ Telaio.start({
           if(ty.stop){m.stop-=dt;if(m.stop<-2.2-Math.random()*2){m.stop=1}if(m.stop>0)return}
           m.y+=m.v*dt*(.6+.6*sc(m.y));
           if(ty.zig){m.x=m.zx+Math.sin(m.y/40)*40}
-          if(m.y>=WALL){m.dead=2;T.lose(1);T.float('Selfie sulle mura!',m.x,WALL-60,'#FFD0D0',22);T.shake()}});
+          if(m.y>=WALL){m.dead=2;mood=3;moodT=1.1;T.lose(1);T.float('Selfie sulle mura!',m.x,WALL-60,'#FFD0D0',22);T.shake()}});
         men=men.filter(function(m){return !(m.dead===1&&m.a<=0)&&m.dead!==2});
         shots.forEach(function(s){s.t+=dt/s.d;if(s.t>=1&&!s.done){s.done=1;land(s)}});shots=shots.filter(function(s){return !s.done});
         puffs.forEach(function(p){p.t+=dt});puffs=puffs.filter(function(p){return p.t<.6});
@@ -92,6 +96,7 @@ Telaio.start({
         c.fillRect(-46,8,92,18);c.strokeRect(-46,8,92,18);c.beginPath();c.arc(-34,30,12,0,7);c.arc(34,30,12,0,7);c.fillStyle='#4A2A10';c.fill();
         c.rotate(-.5+pull*.9);c.fillStyle='#8B5A2B';c.fillRect(-7,-70,14,80);c.strokeRect(-7,-70,14,80);c.beginPath();c.arc(0,-74,16,0,7);c.fillStyle='#5e3a1f';c.fill();
         if(ready){var r=R.castagna;ok()&&c.drawImage(img,r[0],r[1],r[2],r[3],-15,-90,30,28)}c.restore();
+        var pose=mood||(aim&&aim.cur?1:0),er=ER[pose],eh=pose>1?150:158,ew=eh*er[2]/er[3];if(EL.complete&&EL.naturalWidth){c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(CX+88,CY+62,30,8,0,0,7);c.fill();c.drawImage(EL,er[0],er[1],er[2],er[3],CX+88-ew/2,CY+64-eh,ew,eh)}
         if(!aim&&T.state.score===0&&t<6){c.save();c.globalAlpha=.85+.15*Math.sin(t*5);c.font='800 22px Montserrat';c.textAlign='center';c.fillStyle='#fff';c.strokeStyle='#3E1019';c.lineWidth=6;var y=700-Math.abs(Math.sin(t*2))*12;c.strokeText('Trascina giù e lascia!',W/2,y);c.fillText('Trascina giù e lascia!',W/2,y);c.restore()}
       },
       down:function(p){aim={x:p.x,y:p.y,cur:p}},
