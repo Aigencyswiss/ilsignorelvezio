@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il salto dalla diga – Il parco giochi di Elvezio</title>
+<meta name="description" content="Elvezio salta con l'elastico dalla diga della Verzasca: fai più capriole che puoi prima che la corda si tenda. Gioco del parco del Signor Elvezio, 3 livelli e classifica.">
+<meta property="og:title" content="Il salto dalla diga">
+<meta property="og:description" content="Capriole dalla diga della Verzasca, con le capre come giudici. Riesci a battermi?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'f3e03669-f322-4886-a9cb-c58aa0ecd2a1.webp',SP=CDN+'63e8ee14-7a3d-4059-8e05-3fc481d0de99.webp';
+var R={stand:[68,0,164,300],dive:[300,30,300,239],tuck:[600,35,300,230],hang:[917,0,266,300],goat:[0,302,300,295]};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+
+Telaio.start({
+  id:'diga',n:5,title:'Il salto dalla diga',zone:'Valle Verzasca',
+  preload:[BG,SP],
+  intro:'Dalla diga della Verzasca la gente salta con l\'elastico, come nei film. Io ho 220 metri di vuoto sotto i piedi e tre capre come giudici. <b>Più capriole fai, più punti prendi</b>, ma quando la corda si tende devi avere la testa in giù, se no è una spanciata.',
+  how:[['👆','<b>Tocca</b> per saltare dalla piattaforma.'],['🔄','Mentre cadi, <b>ogni tocco è una capriola</b>. Una capriola dura un attimo: non toccare troppo tardi!'],['🪢','Quando la corda si tende devi aver finito la capriola. Se sei a metà è una <b>spanciata</b> e perdi una vita.'],['🐐','Finire una capriola proprio prima della corda vale il bonus <b>Al pelo!</b>. Le capre danno i voti. 6 salti a partita.']],
+  lives:3,
+  levels:{
+    facile:{desc:'Corda lunga, capriole lente',lives:3,T:2.6,flip:.55,jumps:6,stars:[1300,2600,3600]},
+    medio:{desc:'Corda più corta: meno tempo per le capriole',lives:3,T:2.2,flip:.5,jumps:6,stars:[1200,2500,3400]},
+    difficile:{desc:'Corda corta e raffiche di vento',lives:3,T:1.9,flip:.45,gust:1,jumps:6,stars:[1100,2300,3200]}
+  },
+  hudExtra:function(st){return st&&st.jump?'<span>Salto <b>'+Math.min(st.jump,st.L.jumps)+'</b>/'+st.L.jumps+'</span>':''},
+  verdict:function(st){return ['Le capre hanno chiamato il soccorso alpino. Per ridere, eh.','Discreto! La capra Carmela ha alzato un 7, ed è severa.','Bravo! Sembravi un professionista, solo un po\' più spettinato.','Perfetto! Le capre si sono alzate in piedi. Anche quella col cartello al contrario.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,Z=1.6,BW=W*Z,BH=H*Z,OX=-(BW-W)/2,TOP=BH*.205,TIGHT=TOP+BH*.47,X=W/2;
+    var st='ready',t=0,y=TOP,vy=0,g=0,cam=0,rot=0,flip=null,queued=false,flips=0,lastEnd=-1,bt=0,judge=null,ft=0,gust=1,info='';
+    T.state.jump=1;
+    function reset(){st='ready';t=0;y=TOP;vy=0;rot=0;flip=null;queued=false;flips=0;lastEnd=-1;bt=0;judge=null;info=''}
+    function startFlip(){var d=L.flip;if(L.gust){gust=.8+Math.random()*.45;d*=gust;if(gust>1.12)info='Raffica!'}flip={t:0,d:d};T.sfx('whoosh')}
+    function tighten(){var r;if(flip){st='flop';T.lose(1);T.pop('Spanciata!',900);T.shake();r={pts:0,marks:[1,2,1],txt:'Spanciata'}}
+      else{var gap=ft-lastEnd,bonus=flips&&gap<.2?150:flips&&gap<.4?60:0;if(bonus===150){T.pop('Al pelo!',800);T.sfx('coin')}
+        var m=Math.max(1,Math.min(10,Math.round(2+flips*1.6+(bonus?bonus>100?2:1:0))));var marks=[m,Math.max(1,Math.min(10,m+(Math.random()<.5?-1:1)*(Math.random()<.4?1:0))),m];
+        r={pts:flips*100+bonus+(marks[0]+marks[1]+marks[2])*10,marks:marks,txt:flips?flips+(flips>1?' capriole':' capriola'):'Nessuna capriola'};st='bounce';T.sfx('boing');T.buzz(30)}
+      bt=0;judge=r}
+    return {
+      update:function(dt){t+=dt;
+        if(st==='fall'){ft+=dt;vy+=g*dt;y+=vy*dt;if(flip){flip.t+=dt;rot=flip.t/flip.d*Math.PI*2;if(flip.t>=flip.d){flip=null;rot=0;flips++;lastEnd=ft;T.float('Capriola '+flips+'!',X+70,y-cam-30,'#FFF3D6',22);if(queued){queued=false;startFlip()}}}
+          if(y>=TIGHT){y=TIGHT;tighten()}}
+        else if(st==='bounce'||st==='flop'){bt+=dt;y=TIGHT-Math.abs(Math.sin(bt*5))*Math.exp(-bt*1.6)*140;if(st==='flop')rot+=dt*4;
+          if(bt>1.1&&judge&&!judge.shown){judge.shown=1;T.add(judge.pts,W/2,H*.55,judge.pts?'#FFD24A':'#fff');if(judge.pts)T.sfx('pop')}
+          if(bt>2.6){if(T.state.jump>=L.jumps){T.end('fine');return}T.state.jump++;reset()}}
+        var target=Math.max(0,Math.min(BH-H,y-H*.38));cam+=(target-cam)*Math.min(1,dt*(st==='ready'?3:8));
+      },
+      draw:function(c){
+        if(ok(bg))c.drawImage(bg,OX,-cam,BW,BH);else{c.fillStyle='#8aa';c.fillRect(0,0,W,H)}
+        var sy=y-cam;
+        // la corda elastica
+        if(st!=='ready'){c.strokeStyle='#C0392B';c.lineWidth=4;c.beginPath();c.moveTo(X,TOP-cam+6);var mid=(TOP-cam+sy)/2;c.quadraticCurveTo(X+(st==='fall'?Math.sin(t*9)*18:0),mid,X,sy-(st==='fall'?0:40));c.stroke()}
+        // linea dove la corda si tende
+        if(st==='fall'||st==='ready'){var ly=TIGHT-cam;c.save();c.setLineDash([10,10]);c.strokeStyle='rgba(255,255,255,.75)';c.lineWidth=3;c.beginPath();c.moveTo(40,ly+40);c.lineTo(W-40,ly+40);c.stroke();c.setLineDash([]);c.font='800 15px Montserrat';c.fillStyle='#fff';c.textAlign='right';c.fillText('qui la corda si tende',W-44,ly+32);c.restore()}
+        // Elvezio
+        if(ok(img)){var k,s,w,h;c.save();c.translate(X,sy);
+          if(st==='ready'){k=R.stand;h=150;w=h*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h+12,w,h)}
+          else if(st==='fall'){if(flip){k=R.tuck;h=110;c.rotate(rot)}else{k=R.dive;h=120;c.rotate(1.1)}w=h*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h/2,w,h)}
+          else{k=R.hang;h=150;w=h*k[2]/k[3];if(st==='flop')c.rotate(Math.sin(rot)*.6);c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h*.25,w,h)}
+          c.restore()}
+        // barra del tempo prima della corda
+        if(st==='fall'){var p=Math.min(1,(y-TOP)/(TIGHT-TOP));c.fillStyle='rgba(42,26,18,.6)';c.fillRect(W-26,160,12,500);c.fillStyle=p>.8?'#E83B2B':'#FFD24A';c.fillRect(W-26,160,12,500*p);
+          if(info){c.font='900 26px Montserrat';c.textAlign='center';c.lineWidth=6;c.strokeStyle='#3E1019';c.fillStyle='#BFE8FF';c.strokeText(info,W/2,190);c.fillText(info,W/2,190)}}
+        // invito
+        if(st==='ready'){c.save();c.globalAlpha=.8+.2*Math.sin(t*5);c.font='800 24px Montserrat';c.textAlign='center';c.lineWidth=6;c.strokeStyle='#3E1019';c.fillStyle='#fff';var ty=sy+90;c.strokeText('Tocca per saltare!',W/2,ty);c.fillText('Tocca per saltare!',W/2,ty);c.restore()}
+        // le capre giudici
+        if(judge&&bt>.9&&ok(img)){var k=R.goat,gh=150,gw=gh*k[2]/k[3],base=H-40,up=Math.min(1,(bt-.9)/.3);
+          [0,1,2].forEach(function(i){var gx=W/2+(i-1)*165,gy=base+(1-up)*200;c.drawImage(img,k[0],k[1],k[2],k[3],gx-gw/2,gy-gh,gw,gh);
+            c.save();c.translate(gx+gw*.33,gy-gh*.78);c.rotate(-.12);c.font='900 34px Montserrat';c.textAlign='center';c.fillStyle=judge.marks[i]>=7?'#1F6B45':judge.marks[i]<=3?'#C0392B':'#3E1019';c.fillText(judge.marks[i],0,10);c.restore()});
+          c.save();c.font='900 26px Montserrat';c.textAlign='center';c.lineWidth=7;c.strokeStyle='#3E1019';c.fillStyle='#FFD24A';var ty=base-gh-24+(1-up)*200;c.strokeText(judge.txt,W/2,ty);c.fillText(judge.txt,W/2,ty);c.restore()}
+      },
+      down:function(){ac();
+        if(st==='ready'){st='fall';ft=0;g=2*(TIGHT-TOP)/(L.T*L.T);vy=-40;T.sfx('go');return}
+        if(st==='fall'){if(!flip)startFlip();else queued=true}}
+    };
+    function ac(){}
+  }
+});
+})();
+</script>
+</body>
+</html>
