@@ -247,6 +247,8 @@ body.home{overflow:hidden}
 .clouds i:nth-child(3){top:72%;animation-duration:95s;animation-delay:-35s}
 @keyframes cl{from{transform:translateX(-400px)}to{transform:translateX(calc(100vw + 400px))}}
 .pins{z-index:2}
+.brand,.side{z-index:3}
+@media (max-width:520px){.dock .w{gap:8px}.dk{padding:8px 10px;gap:8px}.dk b{font-size:14px}.dk small{font-size:9px;letter-spacing:.04em}}
 .pop .pi{background:none!important;width:72px!important;height:72px!important;filter:drop-shadow(0 6px 8px rgba(62,16,25,.3))}
 .pop .lv{grid-column:2;font:700 13px Montserrat;color:var(--brown)}
 .side .sg .i{width:42px!important;height:42px!important;background:none!important;padding:0;flex:0 0 42px}
@@ -405,8 +407,8 @@ var GAMES=[
  {id:'diga',n:5,ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga',f:[39,40]},
  {id:'pardo',n:6,ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l',f:[42,62]},
  {id:'piode',n:7,ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio',f:[17,37]},
- {id:'vendemmia',n:8,ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia',f:[82,90]},
- {id:'scale',n:9,ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l',f:[66,87]},
+ {id:'vendemmia',n:8,ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia',f:[86,93]},
+ {id:'scale',n:9,ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l',f:[63,86]},
  {id:'slitta',n:10,ic:'🛷',t:'Discesa in slitta',d:'Porte, gobbe e mucche distratte',where:'Leventina',s:'Slitta',f:[72,13]},
  {id:'pedalo',n:11,ic:'🦢',t:'Pedalò sul Verbano',d:'Schiva battelli e cigni sul lago',where:'Lago Maggiore',s:'Pedalò',f:[31,79]}
 ];
