@@ -269,7 +269,7 @@ function baseSvg(opts){
   s.innerHTML='<defs><linearGradient id="landG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9C98F"/><stop offset=".55" stop-color="#C9D6A3"/><stop offset="1" stop-color="#D8DFAE"/></linearGradient>'+
    '<linearGradient id="lakeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CC0DC"/><stop offset="1" stop-color="#5E9CC2"/></linearGradient>'+
    '<filter id="sh" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#3E1019" flood-opacity=".25"/></filter></defs>'+
-   '<rect width="'+D.W+'" height="'+D.H+'" fill="#EADFC2"/>'+
+   '<rect x="-3000" y="-3000" width="8000" height="8000" fill="transparent"/>'+
    '<g filter="url(#sh)"><path class="ti-land" d="'+D.ti+'"/></g>'+
    '<g id="muns">'+D.m.map(function(m,i){return '<path class="ti-mun" data-i="'+i+'" d="'+m.d+'"/>'}).join('')+'</g>'+
    D.lakes.map(function(l){return '<path class="ti-lake" d="'+l.d+'"/>'}).join('')+
@@ -291,7 +291,7 @@ var GAMES=[
  {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga'},
  {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l'},
  {id:'piode',ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio'},
- {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Castel San Pietro',s:'Vendemmia'},
+ {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia'},
  {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l'}
 ];
 function hub(){
@@ -329,7 +329,7 @@ function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</
 // mappa di gioco con zoom e spostamento
 function gameMap(el,onTap,opt){opt=opt||{};
   var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
-  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*1.6,w:D.W+2*P0,h:(D.W+2*P0)*D.H/D.W}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
+  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*2.4,w:D.W+2*P0,h:(D.W+2*P0)*D.H/D.W}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
   function clamp(){vb.w=Math.max(120,Math.min(D.W*1.2,vb.w));vb.h=vb.w*D.H/D.W;vb.x=Math.max(-vb.w*.2,Math.min(D.W-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(D.H-vb.h*.8,vb.y))}
   function zoomAt(f,cx,cy){var nx=cx-(cx-vb.x)*f,ny=cy-(cy-vb.y)*f;vb.w*=f;vb.h*=f;vb.x=nx;vb.y=ny;clamp();apply()}
   function pt(e){var r=s.getBoundingClientRect();var sc=Math.max(vb.w/r.width,vb.h/r.height);var ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;return {x:vb.x+(e.clientX-r.left)*sc-ox,y:vb.y+(e.clientY-r.top)*sc-oy,sc:sc}}
