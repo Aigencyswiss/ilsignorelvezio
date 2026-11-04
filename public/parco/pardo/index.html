@@ -49,7 +49,7 @@ Telaio.start({
     function free(){var f=[];SPOTS.forEach(function(s,i){if(!acts.some(function(a){return a.s===i}))f.push(i)});return f}
     function spawn(){var f=free();if(!f.length)return;var i=f[Math.floor(Math.random()*f.length)],r=Math.random(),k=r<L.oro?'oro':r<L.oro+L.tur?'turista':'pardo';
       var hurry=1-Math.min(.3,t/200);acts.push({s:i,k:k,t:0,life:(k==='oro'?L.up*.65:k==='turista'?L.up*1.3:L.up)*hurry,out:0,hit:0})}
-    function box(a){var s=SPOTS[a.s],k=R[a.k],h=s.h*(a.k==='turista'?1.2:1),w=h*k[2]/k[3],rise=h*a.out;return {x:s.x-w/2,y:s.y-rise,w:w,h:rise,k:k,fh:h,fw:w,s:s}}
+    function box(a){var s=SPOTS[a.s],k=R[a.k],h=s.h*(a.k==='turista'?1.2:1),w=h*k[2]/k[3],rise=h*a.out*(a.k==='turista'?.68:.92);return {x:s.x-w/2,y:s.y-rise,w:w,h:rise,k:k,fh:h,fw:w,s:s}}
     function act(p,k){pose=k;pt=k==='facepalm'?.9:k==='cheer'?.6:.28;etx=Math.max(90,Math.min(W-90,p))}
     return {
       update:function(dt){t+=dt;flash=Math.max(0,flash-dt*3);if(pt>0){pt-=dt;if(pt<=0)pose='ready'}ex+=(etx-ex)*Math.min(1,dt*9);
