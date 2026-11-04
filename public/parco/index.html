@@ -193,6 +193,33 @@ body.home{overflow:hidden}
 #lbRows{display:grid;gap:6px}
 @media (max-width:520px){.hide-s{display:none}.dk b{font-size:15px}.dk .dic{font-size:22px}.dk .dgo{display:none}.hp .hb{width:46px;height:46px}.hp .hb span{font-size:21px}}
 
+
+/* ---- accesso ---- */
+.gate{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(62,16,25,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:auto}
+.gcard{width:min(440px,100%);background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 30px 60px rgba(23,9,12,.4);display:grid;gap:14px;margin:auto}
+.gcard h2{font-size:34px;color:var(--wine);line-height:1}
+.gsub{margin:0;color:#4a3526}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--cream);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;border-radius:999px;padding:10px;font:800 14px Montserrat;color:var(--brown)}
+.tabs button.on{background:var(--wine);color:var(--cream)}
+.gf{display:grid;gap:12px}
+.gf label{display:grid;gap:6px;font-weight:700;font-size:14px;color:var(--ink)}
+.gf label small{font-weight:500;color:var(--brown)}
+.gf input:not([type=checkbox]){min-height:50px;border-radius:14px;border:2px solid #CDB894;padding:0 14px;font:500 17px 'DM Sans';background:#fff;color:var(--ink);width:100%}
+.gf input:focus{outline:3px solid var(--gold);outline-offset:1px;border-color:var(--brown)}
+.gf input.code{font:800 28px Montserrat;letter-spacing:.4em;text-align:center}
+.gf .btn{width:100%;margin:0}
+.chk{display:flex!important;grid-template-columns:none!important;gap:10px!important;align-items:flex-start;font-weight:500!important}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--wine);flex:0 0 auto}
+.lnk{background:none;border:0;color:var(--wine);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:4px;justify-self:center}
+.fine{margin:0;font-size:13px;color:var(--brown)}
+.gerr{margin:0;background:#FBEBEB;color:#8B1E14;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
+.free{display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;border-top:1px solid var(--line);padding-top:12px;font-size:14px;color:var(--brown)}
+.mestat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.mestat div{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 4px}
+.mestat b{display:block;font:900 22px Montserrat;color:#FFE08A}
+.mestat small{font-size:12px;color:#C9B8A0}
+
 @media (max-width:820px){.mapwrap{grid-template-columns:1fr}}
 @media (max-width:600px){.pin>text{display:none}}
 @media (max-width:480px){.hero{padding-block:26px 58px}.hero p{font-size:16px}.card h3{font-size:23px}.gr{grid-template-columns:minmax(0,1fr) auto auto}.gr>div:nth-child(4){display:none}.stats b{font-size:20px}}
@@ -206,6 +233,7 @@ body.home{overflow:hidden}
   <span class="ttl">Il parco giochi <span class="hide-s">di Elvezio</span></span>
   <span class="streak" id="streak" hidden title="Giorni di fila al paese del giorno">🔥 <span id="streakN">0</span></span>
   <button class="tb" id="lbBtn" type="button" aria-haspopup="dialog">🏆<span class="hide-s"> Classifica</span></button>
+  <button class="tb dark" id="meBtn" type="button" aria-haspopup="dialog" hidden>👤 <span id="meNick" class="hide-s"></span></button>
 </div></header>
 <main class="stage" id="hubMap" aria-label="Mappa del Ticino con i giochi">
   <div class="pins" id="pins"></div>
@@ -219,6 +247,54 @@ body.home{overflow:hidden}
   <button class="dk" id="openDove" type="button"><span class="dic">📍</span><span class="dtx"><small>Classifica della settimana</small><b>Dov'è?</b></span><span class="dgo">›</span></button>
 </div></nav>
 <span id="dDone" hidden></span>
+</div>
+<div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gT">
+  <div class="gcard">
+    <span class="lbl" style="color:var(--red)">Il parco giochi di Elvezio</span>
+    <h2 id="gT">Entra nel parco</h2>
+    <p class="gsub" id="gSub">Per giocare a tutto il parco, entrare in classifica e vincere i premi serve il tuo account. È gratis.</p>
+    <div class="tabs" id="gTabs" role="tablist"><button type="button" role="tab" data-v="login" class="on">Entra</button><button type="button" role="tab" data-v="register">Crea account</button></div>
+    <form id="fLogin" class="gf" novalidate>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button class="btn gold" type="submit">Entra</button>
+      <button class="lnk" type="button" id="toForgot">Hai dimenticato la password?</button>
+    </form>
+    <form id="fReg" class="gf" novalidate hidden>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password <small>(almeno 8 caratteri)</small><input name="password" type="password" autocomplete="new-password" required minlength="8"></label>
+      <label>Nome da giocatore <small>(si vede in classifica, per esempio il tuo nome Instagram)</small><input name="nick" autocomplete="nickname" required minlength="3" maxlength="25" autocapitalize="none" spellcheck="false" placeholder="es. mario.rossi"></label>
+      <label class="chk"><input name="news" type="checkbox" checked> Avvisami quando apre un gioco nuovo e delle novità di Elvezio</label>
+      <button class="btn gold" type="submit">Crea il mio account</button>
+      <p class="fine">Creando l'account accetti la <a href="https://ilsignorelvezio.com/pages/privacy" target="_blank" rel="noopener">privacy</a>. L'email non la vede nessuno, in classifica c'è solo il nome da giocatore.</p>
+    </form>
+    <form id="fCode" class="gf" novalidate hidden>
+      <p id="codeTxt">Ti ho mandato un codice di 6 cifre via email. Scrivilo qui.</p>
+      <label>Codice<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required class="code"></label>
+      <label id="newPwL" hidden>Nuova password <small>(almeno 8 caratteri)</small><input name="password" type="password" autocomplete="new-password" minlength="8"></label>
+      <button class="btn gold" type="submit">Conferma</button>
+      <button class="lnk" type="button" id="reCode">Non è arrivato? Mandalo di nuovo</button>
+    </form>
+    <form id="fForgot" class="gf" novalidate hidden>
+      <p>Scrivi la tua email: ti mando un codice per scegliere una nuova password.</p>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <button class="btn gold" type="submit">Mandami il codice</button>
+      <button class="lnk" type="button" id="backLogin">Torna all'accesso</button>
+    </form>
+    <p class="gerr" id="gErr" role="alert" hidden></p>
+    <div class="free"><span>Senza account:</span><button type="button" class="lnk" id="freeDaily">gioca al paese del giorno →</button></div>
+  </div>
+</div>
+<div class="sheet" id="me" role="dialog" aria-modal="true" aria-labelledby="meT" hidden>
+  <div class="sheet-in">
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><h3 id="meT">Il tuo profilo</h3><button class="tb dark" id="meClose" type="button">Chiudi</button></div>
+    <p style="margin:0;font:800 26px Montserrat;color:#fff" id="mePN"></p>
+    <p style="margin:0;color:#C9B8A0" id="mePE"></p>
+    <div class="mestat" id="meStats"></div>
+    <label class="chk" style="color:#F5EBD6"><input type="checkbox" id="meNews"> Avvisami dei giochi nuovi e delle novità di Elvezio</label>
+    <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn gold" id="meOut" type="button" style="margin:0">Esci</button><button class="btn ghost" id="meOutAll" type="button" style="margin:0;color:#F5EBD6">Esci da tutti i telefoni</button></div>
+    <p class="fine" style="color:#C9B8A0">Per cancellare l'account scrivi a ilsignorelvezio@gmail.com.</p>
+  </div>
 </div>
 <div class="sheet" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbT" hidden>
   <div class="sheet-in">
@@ -317,19 +393,19 @@ function closePop(){$('pop').hidden=true;[].forEach.call(document.querySelectorA
 function openGame(id){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
   if(!g.open){toast(g.t+': arriva presto! Lo annuncio su Instagram.');return}
   if(g.href){ev('click','parco_'+id);location.href=g.href;return}
-  if(g.fn==='dove')startDove();else if(g.fn==='daily')startDaily();
+  if(g.fn==='dove')need(startDove);else if(g.fn==='daily')startDaily();
 }
 
 // ---------- finestra ----------
 var lastFocus=null;
 function showGame(title){lastFocus=document.activeElement;$('gTitle').textContent=title;$('game').classList.add('on');$('gBody').scrollTop=0;setTimeout(function(){$('gClose').focus()},350)}
-function closeGame(){$('game').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus();refreshDailyCard();loadLb()}
+function closeGame(){$('game').classList.remove('on');if(!ME&&READY)setTimeout(function(){openGate('Ti è piaciuto? Con l\'account giochi a tutto il parco, entri in classifica e vinci i premi.')},400);if(lastFocus&&lastFocus.focus)lastFocus.focus();refreshDailyCard();loadLb()}
 $('gClose').addEventListener('click',closeGame);
-document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('game').classList.contains('on'))closeGame();else if(!$('lb').hidden)$('lb').hidden=true;else closePop()});
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('game').classList.contains('on'))closeGame();else if(!$('lb').hidden)$('lb').hidden=true;else if(!$('me').hidden)$('me').hidden=true;else closePop()});
 function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</span><p>'+t+'</p></div>'}
 
 // mappa di gioco con zoom e spostamento
-function gameMap(el,onTap,opt){opt=opt||{};var MW=opt.W||MW,MH=opt.H||MH;
+function gameMap(el,onTap,opt){opt=opt||{};var MW=opt.W||D.W,MH=opt.H||D.H;
   var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
   var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*2.4,w:MW+2*P0,h:(MW+2*P0)*MH/MW}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
   function clamp(){vb.w=Math.max(120,Math.min(MW*1.2,vb.w));vb.h=vb.w*MH/MW;vb.x=Math.max(-vb.w*.2,Math.min(MW-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(MH-vb.h*.8,vb.y))}
@@ -384,19 +460,19 @@ function casc(s){return s>=8500?5:s>=6500?4:s>=4500?3:s>=2500?2:1}
 var VERD=['','Turista con le calze nei sandali.','Ospite di passaggio. Torna presto.','Quasi nipote. La nonna ti dà un\'altra possibilità.','Nipote ufficiale. Conosci il Ticino meglio di me.','Ticinese doc. Ti nomino sindaco onorario.'];
 function dvEnd(){var s=DV.tot,c=casc(s);ev('game_end','dove',s);
   var best=LS.get('dove_best',0);if(s>best)LS.set('dove_best',s);
-  var name=LS.get('elv_ig','');
+  var name=ME?ME.nick:'';
   $('gIn').innerHTML='<div class="over"><span class="lbl" style="color:#FFD24A">Dov\'è? · risultato</span><h3>'+s+' punti</h3><p aria-label="'+c+' caschetti su 5" style="display:flex;gap:6px">'+[0,1,2,3,4].map(function(i){return cas(i<c)}).join('')+'</p><p><b style="color:#fff">'+VERD[c]+'</b></p><p>Il tuo record: '+Math.max(best,s)+' punti.</p>'+
-   '<div class="save" id="dvSave"><input id="dvName" placeholder="Il tuo nome Instagram" value="'+esc(name)+'" autocomplete="username" maxlength="31" aria-label="Il tuo nome Instagram"><button class="btn gold" id="dvSend" type="button" style="margin:0">Entra in classifica</button></div>'+
+   '<div id="dvSave"><p style="color:#FFD24A;font-weight:800">Salvo in classifica…</p></div>'+
    '<div class="row"><button class="btn ghost" id="dvAgain" type="button" style="color:#F1E6CF;margin:0">Gioca ancora</button><button class="btn ghost" id="dvShare" type="button" style="color:#F1E6CF;margin:0">Condividi</button></div></div>'+
    say(s>=6500?'Bravo! Adesso prova il paese del giorno, che quello è per veri esperti.':'Non preoccuparti: io a Corippo ho sbagliato strada per cinquant\'anni.');
   $('dvAgain').onclick=startDove;
   $('dvShare').onclick=function(){share('Ho fatto '+s+' punti a Dov\'è? nel parco giochi di Elvezio ('+c+'/5 caschetti)\nRiesci a battermi?')};
-  $('dvSend').onclick=function(){var n=$('dvName').value.trim().replace(/^@+/,'').toLowerCase();if(!/^[a-z0-9._]{1,30}$/.test(n)){toast('Scrivi il nome Instagram, senza spazi.');return}
-    if(!DV.tk){toast('Classifica non raggiungibile adesso. Riprova tra poco.');return}
-    $('dvSend').disabled=true;LS.set('elv_ig',n);
-    fetch('/api/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tk:DV.tk,name:n,score:s})}).then(function(x){return x.json()}).then(function(j){
-      if(j.ok){$('dvSave').innerHTML='<p style="color:#FFD24A;font-weight:800">Sei '+j.rankWeek+'° in classifica questa settimana!</p>';DV.tk=null;loadLb()}else{$('dvSend').disabled=false;toast(j.error==='nome'?'Questo nome non va bene.':'Non sono riuscito a salvare. Riprova.')}
-    }).catch(function(){$('dvSend').disabled=false;toast('Connessione assente. Riprova.')})};
+  (function save(){var el=$('dvSave');if(!DV.tk){el.innerHTML='<p>La classifica non è raggiungibile adesso.</p>';return}
+    fetch('/api/score',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({tk:DV.tk,g:'dove',score:s})}).then(function(x){return x.json()}).then(function(j){
+      if(j.ok){DV.tk=null;el.innerHTML='<p style="color:#FFD24A;font-weight:800">'+(j.rankWeek===1?'🏆 Sei PRIMO in classifica questa settimana!':'Sei '+j.rankWeek+'° in classifica questa settimana.')+'</p>';loadLb()}
+      else if(j.error==='login'&&!READY){el.innerHTML='<p>La classifica del parco apre tra pochi giorni, insieme agli account dei giocatori.</p>'}
+      else if(j.error==='login'){el.innerHTML='<button class="btn gold" id="dvLog" type="button" style="margin:0">Entra per salvare il punteggio</button>';$('dvLog').onclick=function(){window._after=null;openGate('Entra per salvare il punteggio in classifica.')}}
+      else el.innerHTML='<p>'+(j.error==='troppo'?'Troppo veloce per essere vero! Questo punteggio non va in classifica.':'Non sono riuscito a salvare il punteggio.')+'</p>'}).catch(function(){el.innerHTML='<p>Connessione assente: punteggio non salvato.</p>'})})();
 }
 
 // ---------- IL PAESE DEL GIORNO ----------
@@ -452,7 +528,7 @@ function drawOver(){var s=stats(),win=DAY.st.win,n=DAY.st.g.length,t=DAY.t;
    '<div class="stats"><div><b>'+s.p+'</b><small>giocati</small></div><div><b>'+(s.p?Math.round(s.w/s.p*100):0)+'%</b><small>vinti</small></div><div><b>'+s.cur+'</b><small>di fila</small></div><div><b>'+s.max+'</b><small>record</small></div></div>'+
    '<div class="row"><button class="btn gold" id="dShare" type="button" style="margin:0">Condividi il risultato</button><button class="btn ghost" id="dDove" type="button" style="color:#F1E6CF;margin:0">Gioca a Dov\'è?</button></div><p id="dNext"></p></div>';
   $('dShare').onclick=function(){share('Il paese del giorno di Elvezio n. '+DAY.n+' · '+(win?n:'X')+'/6\n'+grid())};
-  $('dDove').onclick=startDove;
+  $('dDove').onclick=function(){need(startDove)};
   (function tick(){var el=$('dNext');if(!el)return;var now=new Date(),z=new Date(now.toLocaleString('en-US',{timeZone:'Europe/Zurich'})),ms=(24*3600-(z.getHours()*3600+z.getMinutes()*60+z.getSeconds()))*1000;var h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);el.textContent='Il prossimo paese tra '+h+' h '+m+' min.';setTimeout(tick,30000)})();
 }
 function share(text){var url=location.origin+'/parco/';var full=text+'\n'+url;ev('share','parco');
@@ -463,12 +539,58 @@ function loadLb(){fetch('/api/top?g=dove&l=normale&p=week&n=10').then(function(r
   $('lbRows').innerHTML=t.length?t.map(function(r,i){return '<div class="lbrow"'+(r.name===me?' style="outline:2px solid #FFD24A"':'')+'><span class="r">'+(i+1)+'</span><span class="n">@'+esc(r.name)+(r.name===me?' · tu':'')+'</span><span class="s">'+r.score+'</span></div>'}).join(''):'<p class="lbempty">Nessuno in classifica questa settimana. Il primo posto è tuo: gioca a Dov\'è?</p>'}).catch(function(){$('lbRows').innerHTML='<p class="lbempty">Classifica non raggiungibile adesso.</p>'})}
 (function(){function t(){var z=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Zurich'})),d=(8-z.getDay())%7||7,h=24-z.getHours();$('lbReset').textContent='Si azzera tra '+(d-1)+' g '+h+' h'}t();setInterval(t,60000)})();
 
+
+// ---------- ACCOUNT ----------
+var ME=null,PEND=null,READY=false;// PEND = {email, kind:'verify'|'reset'}
+var ERR={email:'Controlla l\'email.',password:'La password deve avere almeno 8 caratteri.',nick:'Nome da giocatore: da 3 a 24 caratteri, solo lettere minuscole, numeri, punto e trattino basso.',nick_preso:'Questo nome da giocatore è già preso. Provane un altro.',esiste:'Con questa email c\'è già un account. Entra con la tua password.',credenziali:'Email o password sbagliate.',bloccato:'Troppi tentativi. Riprova tra 15 minuti.',troppi:'Ti ho già mandato troppi codici. Riprova tra un\'ora.',sbagliato:'Codice sbagliato. Controlla l\'email.',scaduto:'Codice scaduto. Chiedine uno nuovo.',mail:'In questo momento non riesco a mandare email. Riprova più tardi.',db:'Qualcosa non ha funzionato. Riprova.',dati:'Scrivi email e password.'};
+function api(b){return fetch('/api/auth',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().catch(function(){return {error:'db'}})}).catch(function(){return {error:'db'}})}
+function gErr(t){var e=$('gErr');if(!t){e.hidden=true;return}e.textContent=t;e.hidden=false}
+function view(v){['fLogin','fReg','fCode','fForgot'].forEach(function(id){$(id).hidden=true});gErr('');
+  $('gTabs').hidden=!(v==='login'||v==='register');
+  [].forEach.call($('gTabs').children,function(b){b.classList.toggle('on',b.dataset.v===v)});
+  var f={login:'fLogin',register:'fReg',code:'fCode',forgot:'fForgot'}[v];$(f).hidden=false;var i=$(f).querySelector('input');if(i)setTimeout(function(){i.focus()},50)}
+function openGate(msg){$('gSub').textContent=msg||'Per giocare a tutto il parco, entrare in classifica e vincere i premi serve il tuo account. È gratis.';$('gate').hidden=false;view(PEND?'code':'login')}
+function closeGate(){$('gate').hidden=true}
+function setMe(u){ME=u;$('meBtn').hidden=!u;if(u){$('meNick').textContent=u.nick;closeGate()}}
+function busy(f,on){var b=f.querySelector('button[type=submit]');if(b){b.disabled=on;b.style.opacity=on?.6:1}}
+[].forEach.call($('gTabs').children,function(b){b.addEventListener('click',function(){PEND=null;view(b.dataset.v)})});
+$('toForgot').onclick=function(){view('forgot');$('fForgot').email.value=$('fLogin').email.value};
+$('backLogin').onclick=function(){view('login')};
+$('freeDaily').onclick=function(){closeGate();startDaily()};
+function done(j){if(j.user){PEND=null;setMe(j.user);toast('Benvenuto nel parco, '+j.user.nick+'!');ev('signup','parco_login');loadLb();if(window._after){var f=window._after;window._after=null;f()}}}
+$('fLogin').addEventListener('submit',function(e){e.preventDefault();var f=this;busy(f,true);
+  api({a:'login',email:f.email.value,password:f.password.value}).then(function(j){busy(f,false);
+    if(j.step==='verify'){PEND={email:f.email.value.trim().toLowerCase(),kind:'verify'};$('codeTxt').textContent='Prima conferma la tua email: ti ho mandato un codice di 6 cifre a '+PEND.email+'.';$('newPwL').hidden=true;view('code');return}
+    if(j.error){gErr(ERR[j.error]||ERR.db);return}done(j)})});
+$('fReg').addEventListener('submit',function(e){e.preventDefault();var f=this;
+  if(f.password.value.length<8){gErr(ERR.password);return}
+  busy(f,true);api({a:'register',email:f.email.value,password:f.password.value,nick:f.nick.value,news:f.news.checked}).then(function(j){busy(f,false);
+    if(j.error){gErr(ERR[j.error]||ERR.db);return}
+    PEND={email:f.email.value.trim().toLowerCase(),kind:'verify'};$('codeTxt').textContent='Ti ho mandato un codice di 6 cifre a '+PEND.email+'. Scrivilo qui (guarda anche nello spam).';$('newPwL').hidden=true;view('code')})});
+$('fForgot').addEventListener('submit',function(e){e.preventDefault();var f=this;busy(f,true);
+  api({a:'forgot',email:f.email.value}).then(function(j){busy(f,false);if(j.error){gErr(ERR[j.error]||ERR.db);return}
+    PEND={email:f.email.value.trim().toLowerCase(),kind:'reset'};$('codeTxt').textContent='Se c\'è un account con '+PEND.email+', ti è arrivato un codice di 6 cifre. Scrivilo e scegli la nuova password.';$('newPwL').hidden=false;view('code')})});
+$('fCode').addEventListener('submit',function(e){e.preventDefault();var f=this;if(!PEND){view('login');return}
+  var b=PEND.kind==='reset'?{a:'reset',email:PEND.email,code:f.code.value,password:f.password.value}:{a:'verify',email:PEND.email,code:f.code.value};
+  if(PEND.kind==='reset'&&f.password.value.length<8){gErr(ERR.password);return}
+  busy(f,true);api(b).then(function(j){busy(f,false);if(j.error){gErr(ERR[j.error]||ERR.db);return}f.reset();done(j)})});
+$('reCode').onclick=function(){if(!PEND)return;api(PEND.kind==='reset'?{a:'forgot',email:PEND.email}:{a:'resend',email:PEND.email}).then(function(j){if(j.error)gErr(ERR[j.error]||ERR.db);else toast('Codice mandato di nuovo.')})};
+// profilo
+$('meBtn').onclick=function(){if(!ME)return;$('mePN').textContent=ME.nick;$('mePE').textContent=ME.email;$('meNews').checked=!!ME.news;
+  var s=stats();$('meStats').innerHTML='<div><b>'+LS.get('dove_best',0)+'</b><small>record Dov\'è?</small></div><div><b>'+s.w+'</b><small>paesi trovati</small></div><div><b>'+s.max+'</b><small>giorni di fila</small></div>';$('me').hidden=false};
+$('meClose').onclick=function(){$('me').hidden=true};
+$('me').addEventListener('click',function(e){if(e.target===$('me'))$('me').hidden=true});
+$('meNews').onchange=function(){api({a:'news',news:this.checked}).then(function(j){if(j.ok){ME.news=j.news;toast(j.news?'Ok, ti avviso io!':'Va bene, niente email di novità.')}})};
+function out(all){api({a:all?'logout_all':'logout'}).then(function(){setMe(null);$('me').hidden=true;openGate('Sei uscito. A presto nel parco!')})}
+$('meOut').onclick=function(){out(false)};$('meOutAll').onclick=function(){out(true)};
+function need(f){if(ME||!READY)return f();window._after=f;openGate('Per questo gioco serve il tuo account: così il punteggio va in classifica col tuo nome.')}
 $('openDaily').addEventListener('click',startDaily);
 $('lbBtn').addEventListener('click',function(){$('lb').hidden=false;loadLb();$('lbClose').focus()});
 $('lbClose').addEventListener('click',function(){$('lb').hidden=true});
 $('lb').addEventListener('click',function(e){if(e.target===$('lb'))$('lb').hidden=true});
-$('lbPlay').addEventListener('click',function(){$('lb').hidden=true;startDove()});
-$('openDove').addEventListener('click',startDove);
+$('lbPlay').addEventListener('click',function(){$('lb').hidden=true;need(startDove)});
+$('openDove').addEventListener('click',function(){need(startDove)});
+fetch('/api/auth',{credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){READY=!!j.ready;setMe(j.user);if(READY&&!j.user&&location.hash!=='#paese-del-giorno')openGate()}).catch(function(){});
 fetch('ticino.json').then(function(r){return r.json()}).then(function(j){D=j;hub();refreshDailyCard();if(location.hash==='#paese-del-giorno')startDaily();else if(location.hash==='#dove')startDove()}).catch(function(){$('hubMap').innerHTML='<p style="padding:20px">La mappa non si è caricata. Ricarica la pagina.</p>'});
 loadLb();
 })();
