@@ -145,7 +145,7 @@ body.home{overflow:hidden}
 .top{position:relative}
 .tb{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--wine2);border:0;border-radius:999px;padding:8px 14px;font:800 14px Montserrat}
 .tb.dark{background:rgba(255,255,255,.1);color:var(--cream)}
-.stage{position:relative;flex:1;min-height:0;overflow:hidden;background:#E3D6B5 radial-gradient(circle at 20% 20%,rgba(255,255,255,.35),transparent 40%),repeating-radial-gradient(circle at 80% 70%,transparent 0 22px,rgba(107,74,50,.06) 22px 23px);touch-action:none}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden;background:#F2E7D1;touch-action:none}
 .stage>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .stage .zoom{top:auto;bottom:14px;right:max(12px,env(safe-area-inset-right,0px))}
 .pins{position:absolute;inset:0;pointer-events:none}
@@ -212,7 +212,6 @@ body.home{overflow:hidden}
   <div class="hint" id="hint">Tocca una puntina · trascina e ingrandisci</div>
   <div class="brand" aria-hidden="true"><span class="lbl">Gratis · tutto il Ticino</span><b>Il parco giochi<br>di Elvezio</b><span>Ho messo il Ticino su una mappa e ci ho nascosto dentro i giochi. Io non vinco mai, ma organizzo benissimo.</span></div>
   <div class="side" id="side"></div>
-  <span class="src">Confini: UST/swisstopo</span>
   <div class="pop" id="pop" hidden role="dialog" aria-live="polite"></div>
 </main>
 <nav class="dock" aria-label="I giochi di oggi"><div class="w">
@@ -266,6 +265,7 @@ function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.i
 var NS='http://www.w3.org/2000/svg';
 function baseSvg(opts){
   var s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 '+D.W+' '+D.H);s.setAttribute('role','img');
+  if(opts&&opts.img){s.setAttribute('viewBox','0 0 '+opts.W+' '+opts.H);s.innerHTML='<image href="'+opts.img+'" x="0" y="0" width="'+opts.W+'" height="'+opts.H+'" preserveAspectRatio="none"/><g id="over"></g>';return s}
   s.innerHTML='<defs><linearGradient id="landG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9C98F"/><stop offset=".55" stop-color="#C9D6A3"/><stop offset="1" stop-color="#D8DFAE"/></linearGradient>'+
    '<linearGradient id="lakeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CC0DC"/><stop offset="1" stop-color="#5E9CC2"/></linearGradient>'+
    '<filter id="sh" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#3E1019" flood-opacity=".25"/></filter></defs>'+
@@ -282,26 +282,28 @@ function xy(lon,lat){return [(lon-D.bbox[0])*D.k[0],(D.bbox[3]-lat)*D.k[1]]}
 function ll(x,y){return {lon:x/D.k[0]+D.bbox[0],lat:D.bbox[3]-y/D.k[1]}}
 
 // ---------- i giochi della mappa ----------
+var HUBIMG='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/7fb020ce-eb16-44e6-90df-c820972fd88e.webp';
+// f = posizione della puntina sul disegno del parco (in % di larghezza e altezza)
 var GAMES=[
- {id:'autopostale',ic:'🚌',t:'Prendi l\'AutoPostale!',d:'Corri dietro all\'AutoPostale tra capre e turisti',where:'Airolo',s:'AutoPostale',href:SHOP+'/pages/autopostale',open:1},
- {id:'quiz',ic:'❓',t:'Quanto sei ticinese?',d:'Dieci domande, il verdetto in caschetti',where:'Lugano',s:'Quiz ticinese',href:SHOP+'/pages/quiz-ticinese',open:1},
+ {id:'autopostale',ic:'🚌',t:'Prendi l\'AutoPostale!',d:'Corri dietro all\'AutoPostale tra capre e turisti',where:'Airolo',s:'AutoPostale',f:[27,13],href:SHOP+'/pages/autopostale',open:1},
+ {id:'quiz',ic:'❓',t:'Quanto sei ticinese?',d:'Dieci domande, il verdetto in caschetti',where:'Lugano',s:'Quiz ticinese',f:[71,74],href:SHOP+'/pages/quiz-ticinese',open:1},
  {id:'dove',ic:'📍',t:'Dov\'è?',d:'Trova dieci comuni sulla mappa',where:'Monteceneri',fn:'dove',open:1},
  {id:'paese',ic:'🗓️',t:'Il paese del giorno',d:'Un comune al giorno, 6 tentativi',where:'Verzasca',fn:'daily',open:1},
- {id:'catapulta',ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona',s:'Catapulta',side:'r'},
- {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga'},
- {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l'},
- {id:'piode',ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio'},
- {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia'},
- {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l'}
+ {id:'catapulta',ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona',s:'Catapulta',side:'r',f:[56,46]},
+ {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga',f:[39,40]},
+ {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l',f:[44,58]},
+ {id:'piode',ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio',f:[17,37]},
+ {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia',f:[82,90]},
+ {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l',f:[66,87]}
 ];
 function hub(){
   var box=$('hubMap'),pins=$('pins');
-  pins.innerHTML=GAMES.filter(function(g){return !g.fn&&byName(g.where)}).map(function(g){return '<button type="button" class="hp '+(g.open?'open':'lock')+'" data-g="'+g.id+'" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'"><span class="hb"><span>'+(g.open?g.ic:'🔒')+'</span></span><span class="hl">'+esc(g.s||g.t)+'</span></button>'}).join('');
+  pins.innerHTML=GAMES.filter(function(g){return !g.fn&&g.f}).map(function(g){return '<button type="button" class="hp '+(g.open?'open':'lock')+'" data-g="'+g.id+'" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'"><span class="hb"><span>'+(g.open?g.ic:'🔒')+'</span></span><span class="hl">'+esc(g.s||g.t)+'</span></button>'}).join('');
   var els=[].slice.call(pins.querySelectorAll('.hp'));
   function place(vb,s){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height),ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;
-    box.classList.toggle('small',r.width<600&&vb.w>D.W*.7);
-    els.forEach(function(e){var m=byName(GAMES.filter(function(g){return g.id===e.dataset.g})[0].where);e.style.left=((m.x-vb.x+ox)/sc)+'px';e.style.top=((m.y-vb.y+oy)/sc)+'px'})}
-  var map=gameMap(box,function(){closePop()},{labels:1,pan:1,pad:70,onView:place});
+    box.classList.toggle('small',r.width<600&&vb.w>700);
+    els.forEach(function(e){var f=GAMES.filter(function(g){return g.id===e.dataset.g})[0].f,mx=f[0]*10,my=f[1]*14.9;e.style.left=((mx-vb.x+ox)/sc)+'px';e.style.top=((my-vb.y+oy)/sc)+'px'})}
+  var map=gameMap(box,function(){closePop()},{img:HUBIMG,W:1000,H:1490,pan:1,pad:40,onView:place});
   els.forEach(function(e){e.addEventListener('pointerdown',function(ev){ev.stopPropagation()});e.addEventListener('click',function(){showPop(e.dataset.g,e)})});
   $('side').innerHTML='<span class="lbl">I giochi del parco</span>'+GAMES.map(function(g){return '<button type="button" class="sg'+(g.open?'':' lock')+'" data-g="'+g.id+'"><span class="i">'+(g.open?g.ic:'🔒')+'</span><span><b>'+esc(g.t)+'</b><small>'+(g.open?'Si gioca':'Presto')+' · '+esc(g.where)+'</small></span></button>'}).join('');
   [].forEach.call($('side').querySelectorAll('.sg'),function(b){b.addEventListener('click',function(){var g=GAMES.filter(function(x){return x.id===b.dataset.g})[0];if(g.fn)openGame(g.id);else showPop(g.id,pins.querySelector('.hp[data-g="'+g.id+'"]'))})});
@@ -327,24 +329,24 @@ document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($(
 function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</span><p>'+t+'</p></div>'}
 
 // mappa di gioco con zoom e spostamento
-function gameMap(el,onTap,opt){opt=opt||{};
+function gameMap(el,onTap,opt){opt=opt||{};var MW=opt.W||MW,MH=opt.H||MH;
   var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
-  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*2.4,w:D.W+2*P0,h:(D.W+2*P0)*D.H/D.W}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
-  function clamp(){vb.w=Math.max(120,Math.min(D.W*1.2,vb.w));vb.h=vb.w*D.H/D.W;vb.x=Math.max(-vb.w*.2,Math.min(D.W-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(D.H-vb.h*.8,vb.y))}
+  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*2.4,w:MW+2*P0,h:(MW+2*P0)*MH/MW}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
+  function clamp(){vb.w=Math.max(120,Math.min(MW*1.2,vb.w));vb.h=vb.w*MH/MW;vb.x=Math.max(-vb.w*.2,Math.min(MW-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(MH-vb.h*.8,vb.y))}
   function zoomAt(f,cx,cy){var nx=cx-(cx-vb.x)*f,ny=cy-(cy-vb.y)*f;vb.w*=f;vb.h*=f;vb.x=nx;vb.y=ny;clamp();apply()}
   function pt(e){var r=s.getBoundingClientRect();var sc=Math.max(vb.w/r.width,vb.h/r.height);var ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;return {x:vb.x+(e.clientX-r.left)*sc-ox,y:vb.y+(e.clientY-r.top)*sc-oy,sc:sc}}
   var ptrs={},start=null,moved=false,pinch=null;
   s.addEventListener('pointerdown',function(e){s.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);if(k.length===1){start={x:e.clientX,y:e.clientY,vx:vb.x,vy:vb.y};moved=false}else if(k.length===2){var a=ptrs[k[0]],b=ptrs[k[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};moved=true}});
   s.addEventListener('pointermove',function(e){if(!ptrs[e.pointerId])return;ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);
     if(k.length===2&&pinch){var a=ptrs[k[0]],b=ptrs[k[1]],d=Math.hypot(a.x-b.x,a.y-b.y),c=pt({clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2});var f=(pinch.w*pinch.d/d)/vb.w;zoomAt(f,c.x,c.y);return}
-    if(start){var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(moved&&(vb.w<D.W*1.01||opt.pan)){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height);vb.x=start.vx-dx*sc;vb.y=start.vy-dy*sc;clamp();apply()}}});
+    if(start){var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(moved&&(vb.w<MW*1.01||opt.pan)){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height);vb.x=start.vx-dx*sc;vb.y=start.vy-dy*sc;clamp();apply()}}});
   function up(e){var had=!!ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch=null;if(had&&!moved&&Object.keys(ptrs).length===0&&e.type==='pointerup'){var p=pt(e);onTap(p.x,p.y)}if(!Object.keys(ptrs).length)start=null}
   s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);
   s.addEventListener('wheel',function(e){e.preventDefault();var p=pt(e);zoomAt(e.deltaY>0?1.15:1/1.15,p.x,p.y)},{passive:false});
   var z=document.createElement('div');z.className='zoom';z.innerHTML='<button type="button" aria-label="Ingrandisci">+</button><button type="button" aria-label="Riduci">−</button><button type="button" aria-label="Tutta la mappa" style="font-size:14px">⤢</button>';el.appendChild(z);
   var bs=z.querySelectorAll('button');bs[0].onclick=function(){zoomAt(1/1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[1].onclick=function(){zoomAt(1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[2].onclick=function(){vb=V0();apply()};
   setTimeout(apply,0);addEventListener('resize',apply);
-  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*D.H/D.W;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb=V0();apply()},sc:function(){return vb.w/D.W}};
+  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*MH/MW;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb=V0();apply()},sc:function(){return vb.w/MW}};
 }
 
 // ---------- DOV'È? ----------
