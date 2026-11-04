@@ -1,9 +1,8 @@
 // Salva il punteggio in classifica. Controlla gettone, tempo di gioco e nome Instagram.
 import { sql, init } from '../lib/db.js';
-import { cors, body } from '../lib/http.js';
+import { cors, body, MAXSCORE } from '../lib/http.js';
 
 const BAD = /(cazz|stronz|vaffan|puttan|merda|troia|coglion|fuck|shit|bitch|nazi|hitler|porco.?dio|negr)/i;
-const MPS = 35; // metri al secondo massimi credibili (velocità massima + bonus)
 
 export default async function handler(req, res) {
   if (cors(req, res)) return;
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
       RETURNING g, l, EXTRACT(EPOCH FROM (now() - ts)) AS secs`;
     if (!rows.length) return res.status(400).json({ error: 'gettone' });
     const { g, l, secs } = rows[0];
-    if (score > Number(secs) * MPS + 120) return res.status(400).json({ error: 'troppo' });
+    if (score > (MAXSCORE[g] || MAXSCORE.autopostale)(Number(secs))) return res.status(400).json({ error: 'troppo' });
     await sql`INSERT INTO scores (g, l, name, score) VALUES (${g}, ${l}, ${name}, ${score})`;
     const [w] = await sql`SELECT COUNT(*)::int + 1 AS r FROM (
         SELECT name, MAX(score) AS s FROM scores WHERE g=${g} AND l=${l} AND NOT hidden

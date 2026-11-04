@@ -345,7 +345,7 @@ function casc(n){var h='<span class="casc">Voto ';for(var i=1;i<=5;i++)h+='<i'+(
 var P=[
  {id:'giochi',x:17,y:58,t:'Il parco giochi di Elvezio',k:'Insert coin · gratis',q:'Gettoni no, qui si gioca gratis. Ma se perdi contro la nonna, offri tu la polenta.',body:function(){
   function cab(ic,t,d,href,c){return '<div class="cab" style="--c:'+c+'"><div class="cab-top">'+t+'</div><div class="sc"><span>'+ic+'</span></div><p>'+d+'</p>'+(href?'<a class="ab" href="'+href+'" target="_top">▶ Gioca</a>':'<span class="ab off">Presto</span>')+'</div>'}
-  return '<section class="r-sec"><h2 class="neon">Scegli il cabinato</h2><div class="cabs">'+
+  return '<section class="r-sec"><a class="ab" href="/parco/" style="--c:#FFD24A;display:block;text-align:center;font-size:20px;padding:20px;margin-bottom:8px">🗺️ Entra nel parco giochi: tutto il Ticino</a><p style="margin:0;text-align:center;opacity:.8">Il paese del giorno, Dov\'è? e i giochi di tutte le valli</p></section><section class="r-sec"><h2 class="neon">Scegli il cabinato</h2><div class="cabs">'+
    cab('🚌','AutoPostale','Corri tra capre, gerani e turisti. Tre livelli.',SHOP+'/pages/autopostale','#FFD24A')+
    cab('❓','Quiz ticinese','Dieci domande: turista o nipote ufficiale?',SHOP+'/pages/quiz-ticinese','#4DE3FF')+
    cab('🌰','Castagne','Acchiappa le castagne che cadono. In arrivo.','', '#FF6BD6')+
