@@ -1,0 +1,77 @@
+/* Il telaio comune dei giochi del parco di Elvezio */
+:root{--wine:#5C1F2B;--wine2:#3E1019;--cream:#F1E6CF;--paper:#FBF5E8;--ink:#2A1A12;--brown:#6B4A32;--gold:#C9962E;--gold2:#FFD24A;--red:#E83B2B;--line:#DCC9A4;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--wine2);color:var(--ink);font:16px/1.45 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font:inherit;cursor:pointer}
+.t-app{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;background:radial-gradient(circle at 50% 0,#7A2A3A,var(--wine2) 70%)}
+.t-bar{display:flex;align-items:center;gap:8px;min-height:54px;padding:calc(6px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 6px max(12px,env(safe-area-inset-left,0px));color:var(--cream);position:relative;z-index:5}
+.t-bar .t-tt{flex:1;min-width:0;font:800 15px Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-ib{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:42px;height:42px;padding:0 12px;border-radius:999px;border:1.5px solid rgba(241,230,207,.35);background:rgba(255,255,255,.06);color:var(--cream);font-weight:700;font-size:14px;text-decoration:none}
+.t-ib.gold{background:var(--gold);border-color:var(--gold);color:var(--wine2)}
+.t-main{position:relative;flex:1;min-height:0}
+/* schermate */
+.t-scr{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;justify-content:center;padding:12px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.t-card{width:min(520px,100%);margin:auto;background:var(--paper);border-radius:28px;padding:22px;display:grid;gap:14px;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.t-hero{display:flex;gap:16px;align-items:center}
+.t-medal{flex:0 0 92px;height:92px;border-radius:50%;background-size:400% 300%;background-repeat:no-repeat;filter:drop-shadow(0 8px 10px rgba(62,16,25,.35));animation:t-bob 3s ease-in-out infinite}
+@keyframes t-bob{50%{transform:translateY(-5px)}}
+.t-hero h1{margin:0;font:800 clamp(26px,6vw,34px)/1.02 Fraunces,Georgia,serif;color:var(--wine)}
+.t-hero p{margin:4px 0 0;font:800 12px Montserrat;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.t-say{display:flex;gap:10px;align-items:flex-start}
+.t-say>b{flex:0 0 40px;height:40px;border-radius:50%;background:var(--wine);color:var(--gold2);display:grid;place-items:center;font:900 17px Fraunces,serif}
+.t-say>p{margin:0;background:#fff;border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:10px 14px;min-width:0}
+.t-how{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.t-how li{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.t-how li span{flex:0 0 28px;height:28px;border-radius:9px;background:var(--cream);display:grid;place-items:center;font-size:16px}
+.t-lv{display:grid;gap:10px}
+.t-lvb{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:2px solid var(--line);background:#fff;border-radius:18px;padding:12px 14px;color:var(--ink)}
+.t-lvb:hover{border-color:var(--gold)}
+.t-lvb .n{font:900 18px Montserrat;color:var(--wine)}
+.t-lvb small{display:block;color:var(--brown);font-size:13px}
+.t-lvb .st{margin-left:auto;white-space:nowrap}
+.t-lvb.lock{opacity:.55;cursor:not-allowed}
+.t-st i{font-style:normal;font-size:20px;color:#D9C9A8}.t-st i.on{color:#E8A20C;text-shadow:0 1px 0 #9a6a06}
+.t-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 24px;border-radius:999px;border:0;font-weight:800;font-size:16px;text-decoration:none}
+.t-btn.gold{background:var(--gold);color:var(--wine2);box-shadow:0 4px 0 #8f6a1c}
+.t-btn.wine{background:var(--wine);color:var(--cream);box-shadow:0 4px 0 var(--wine2)}
+.t-btn.ghost{background:transparent;border:2px solid var(--line);color:var(--wine)}
+.t-btn:active{transform:translateY(2px);box-shadow:none}
+.t-row{display:flex;flex-wrap:wrap;gap:10px}
+.t-row .t-btn{flex:1 1 140px}
+.t-lnk{background:none;border:0;color:var(--wine);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:6px;justify-self:center}
+/* gioco */
+.t-stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none}
+.t-stage canvas{display:block;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.45);background:#86A86A}
+.t-hud{position:absolute;left:0;right:0;top:8px;display:flex;justify-content:center;gap:8px;pointer-events:none;z-index:3;padding:0 12px}
+.t-hud span{background:rgba(42,26,18,.78);color:#fff;font:800 15px Montserrat;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.t-hud span b{color:var(--gold2)}
+.t-pop{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%) scale(.6);opacity:0;font:900 clamp(34px,8vw,56px) Montserrat;color:#fff;text-shadow:0 4px 0 var(--wine2),0 0 30px rgba(0,0,0,.4);pointer-events:none;transition:.25s;z-index:4;text-align:center;white-space:nowrap}
+.t-pop.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+/* risultato */
+.t-res h2{margin:0;font:800 34px/1 Fraunces,serif;color:var(--wine)}
+.t-big{font:900 clamp(48px,12vw,68px)/1 Montserrat;color:var(--wine2)}
+.t-res .t-st i{font-size:40px}
+.t-res .t-st i.on{animation:t-pop .5s cubic-bezier(.3,1.8,.5,1) both}
+.t-res .t-st i:nth-child(2){animation-delay:.25s}.t-res .t-st i:nth-child(3){animation-delay:.5s}
+@keyframes t-pop{from{transform:scale(0) rotate(-40deg)}}
+.t-cas{display:flex;gap:6px}
+.t-rank{background:var(--wine);color:var(--cream);border-radius:16px;padding:12px 14px;font-weight:700}
+.t-rank b{color:var(--gold2)}
+/* classifica */
+.t-sheet{position:fixed;inset:0;z-index:20;background:rgba(23,9,12,.6);display:flex;align-items:flex-end;justify-content:center}
+.t-sheet-in{width:min(560px,100%);max-height:85vh;overflow:auto;background:#17090c;color:#F5EBD6;border-radius:24px 24px 0 0;padding:20px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));display:grid;gap:12px}
+.t-sheet-in h3{margin:0;font:800 24px Fraunces,serif;color:#FFE08A}
+.t-tabs{display:flex;flex-wrap:wrap;gap:6px}
+.t-tabs button{border:1px solid rgba(255,255,255,.2);background:transparent;color:#F5EBD6;border-radius:999px;padding:7px 12px;font:800 13px Montserrat}
+.t-tabs button.on{background:var(--gold);border-color:var(--gold);color:var(--wine2)}
+.t-lbr{display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.05)}
+.t-lbr:nth-child(1){background:linear-gradient(90deg,rgba(255,210,74,.3),rgba(255,210,74,.05))}
+.t-lbr .r{font:900 18px Montserrat;width:28px;color:#FFD24A}
+.t-lbr .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.t-lbr .s{font:800 16px Montserrat;color:#FFE08A}
+.t-lbr.me{outline:2px solid #FFD24A}
+.t-toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;z-index:40;transition:.3s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.t-toast.on{opacity:1;transform:translate(-50%,0)}
+.t-rot{display:none}
+@media (prefers-reduced-motion:reduce){.t-medal,.t-res .t-st i.on{animation:none}}

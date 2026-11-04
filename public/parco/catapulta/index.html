@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La catapulta di Castelgrande – Il parco giochi di Elvezio</title>
+<meta name="description" content="Difendi Castelgrande dai turisti lanciando castagne con la catapulta. Un gioco del parco giochi del Signor Elvezio, con 3 livelli e la classifica.">
+<meta property="og:title" content="La catapulta di Castelgrande">
+<meta property="og:description" content="I turisti assaltano Castelgrande: difendilo a colpi di castagne. Riesci a battermi?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'76854d6b-fb41-4a0e-8063-037157844d61.webp',SP=CDN+'136fd92f-c6c2-467d-b292-ecfe50ce4559.webp';
+// ritagli nel foglio dei personaggi (x, y, larghezza, altezza)
+var R={selfie:[21,0,214,256],mappa:[298,0,172,256],foto:[537,0,205,256],guida:[795,0,201,256],scooter:[49,256,157,256],castagna:[256,266,256,235],riccio:[512,257,255,253],puff:[768,264,255,240]};
+var TYPES={
+  selfie:{pts:10,v:46,hp:1,say:['Un selfie!','Cheese!']},
+  mappa:{pts:10,v:34,hp:1,zig:1,say:['Dov\'è il castello?','Mi sono perso']},
+  foto:{pts:15,v:40,hp:1,stop:1,say:['Che bello!','Click!']},
+  guida:{pts:25,v:36,hp:2,say:['Seguitemi!','Gruppo, di qua!']},
+  scooter:{pts:20,v:92,hp:1,say:['Permesso!','Biiip!']}
+};
+function ok(){return img.complete&&img.naturalWidth>0}
+var img=new Image();img.crossOrigin='anonymous';img.src=SP;var bg=new Image();bg.crossOrigin='anonymous';bg.src=BG;
+
+Telaio.start({
+  id:'catapulta',n:4,title:'La catapulta di Castelgrande',zone:'Bellinzona',
+  preload:[BG,SP],
+  intro:'I turisti vogliono fare il selfie sulle mura di Castelgrande, ma oggi il castello è chiuso per la festa della castagna. Difendilo tu: <b>niente sassi, solo castagne</b>. E mira bene, che costano.',
+  how:[['🎯','<b>Trascina indietro</b> come una fionda: vedi dove cade la castagna. <b>Lascia</b> per lanciare.'],['🧳','Colpisci i turisti prima che arrivino alle mura. Se ne colpisci più di uno insieme, prendi il <b>bonus</b>.'],['❤️','Hai 3 vite: ogni turista che arriva alle mura te ne toglie una.'],['🚩','La guida turistica va colpita due volte. Al livello Difficile c\'è anche il vento.']],
+  levels:{
+    facile:{desc:'Turisti tranquilli, 75 secondi',time:75,lives:3,every:1.7,speed:.8,types:['selfie','mappa','foto'],stars:[250,600,1000]},
+    medio:{desc:'Arrivano le guide e i monopattini',time:75,lives:3,every:1.25,speed:1,types:['selfie','mappa','foto','guida','scooter'],stars:[450,1000,1600]},
+    difficile:{desc:'Più turisti e il vento che sposta le castagne',time:75,lives:3,every:.95,speed:1.2,types:['selfie','mappa','foto','guida','scooter','scooter'],wind:1,stars:[650,1400,2200]}
+  },
+  hudExtra:function(st){return st&&st.wind!=null&&st.L.wind?'<span>Vento '+(Math.abs(st.wind)<8?'·':st.wind>0?'→'.repeat(1+(Math.abs(st.wind)>35)):'←'.repeat(1+(Math.abs(st.wind)>35)))+'</span>':''},
+  verdict:function(st){return ['I turisti hanno conquistato il castello. Domani riapre la biglietteria.','Qualcuno è passato, ma il castello resiste. Come la nonna.','Bravo! Castelgrande è salvo e le castagne pure.','Perfetto! Ti nomino castellano onorario di Bellinzona.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,CX=270,CY=842,WALL=772,MINY=150;
+    var men=[],shots=[],puffs=[],t=0,next=.6,aim=null,reload=0,shotsN=0;
+    T.state.wind=0;var windT=0;
+    function spawn(){var k=L.types[Math.floor(Math.random()*L.types.length)],ty=TYPES[k],x=60+Math.random()*(W-120);
+      men.push({k:k,x:x,y:MINY-30,hp:ty.hp,v:ty.v*L.speed*(0.85+Math.random()*.3),ph:Math.random()*6,stop:0,dead:0,vy:0,rot:0,a:1,zx:x,flash:0})}
+    function sc(y){return .38+.62*Math.max(0,Math.min(1,(y-MINY)/(WALL-MINY)))}
+    function target(p){var dx=p.x-aim.x,dy=p.y-aim.y;var tx=CX-dx*2.6,ty=CY-dy*2.6;tx=Math.max(30,Math.min(W-30,tx));ty=Math.max(MINY-20,Math.min(WALL-30,ty));return {x:tx,y:ty,len:Math.hypot(dx,dy)}}
+    function land(s){var R0=s.riccio?74:48,hits=0;T.sfx('hit');T.buzz(25);puffs.push({x:s.tx,y:s.ty,t:0});
+      men.forEach(function(m){if(m.dead)return;var r=R0*(0.7+sc(m.y)*.5);if(Math.hypot(m.x-s.tx,(m.y-28*sc(m.y))-s.ty)<r+26*sc(m.y)){m.hp--;m.flash=.25;if(m.hp<=0){m.dead=1;m.vy=-420;hits++;T.add(TYPES[m.k].pts*(1+Math.max(0,(m.y-MINY)/(WALL-MINY))*.0),m.x,m.y-80*sc(m.y))}else{T.float('Ahi!',m.x,m.y-90*sc(m.y),'#fff',24)}}});
+      if(hits>=2){var b=hits*15;T.add(b,s.tx,s.ty-40,'#FF8A3B');T.pop(hits>=3?'TRIPLA!':'DOPPIA!',700);T.sfx('coin')}
+      if(!hits)T.state.combo=0;else{T.state.combo+=hits;if(T.state.combo>=6&&T.state.combo%6<hits){T.add(50,W/2,300,'#7CFFB2');T.pop('Serie da 6!',800)}}}
+    return {
+      update:function(dt){t+=dt;reload-=dt;next-=dt;
+        if(next<=0){spawn();var k=Math.max(.45,L.every-t*.004);next=k*(.7+Math.random()*.6)}
+        if(L.wind){windT-=dt;if(windT<=0){T.state.wind=Math.round((Math.random()*2-1)*55);windT=12}}
+        men.forEach(function(m){m.ph+=dt*8;m.flash-=dt;
+          if(m.dead){m.y+=m.vy*dt;m.vy+=900*dt;m.rot+=dt*9;m.a-=dt*1.4;return}
+          var ty=TYPES[m.k];
+          if(ty.stop){m.stop-=dt;if(m.stop<-2.2-Math.random()*2){m.stop=1}if(m.stop>0)return}
+          m.y+=m.v*dt*(.6+.6*sc(m.y));
+          if(ty.zig){m.x=m.zx+Math.sin(m.y/40)*40}
+          if(m.y>=WALL){m.dead=2;T.lose(1);T.float('Selfie sulle mura!',m.x,WALL-60,'#FFD0D0',22);T.shake()}});
+        men=men.filter(function(m){return !(m.dead===1&&m.a<=0)&&m.dead!==2});
+        shots.forEach(function(s){s.t+=dt/s.d;if(s.t>=1&&!s.done){s.done=1;land(s)}});shots=shots.filter(function(s){return !s.done});
+        puffs.forEach(function(p){p.t+=dt});puffs=puffs.filter(function(p){return p.t<.6});
+      },
+      draw:function(c){
+        if(bg.complete&&bg.naturalWidth)c.drawImage(bg,0,0,W,H);else{c.fillStyle='#86A86A';c.fillRect(0,0,W,H)}
+        // turisti, dal più lontano al più vicino
+        men.slice().sort(function(a,b){return a.y-b.y}).forEach(function(m){var s=sc(m.y),r=R[m.k],h=118*s,w=h*r[2]/r[3];
+          c.save();c.globalAlpha=Math.max(0,m.a);c.fillStyle='rgba(30,40,10,.28)';c.beginPath();c.ellipse(m.x,m.y,w*.38,8*s,0,0,7);c.fill();
+          c.translate(m.x,m.y);var bob=m.dead?0:Math.abs(Math.sin(m.ph))*5*s;c.rotate(m.dead?m.rot:Math.sin(m.ph)*.05);
+          if(m.flash>0)c.filter='brightness(2)';ok()&&c.drawImage(img,r[0],r[1],r[2],r[3],-w/2,-h-bob,w,h);c.filter='none';
+          if(TYPES[m.k].hp>1&&!m.dead){c.fillStyle='#3E1019';c.fillRect(-18,-h-16,36,6);c.fillStyle='#FFD24A';c.fillRect(-18,-h-16,36*m.hp/TYPES[m.k].hp,6)}
+          c.restore()});
+        puffs.forEach(function(p){var r=R.puff,k=p.t/.6,s=70+k*50;c.save();c.globalAlpha=1-k;ok()&&c.drawImage(img,r[0],r[1],r[2],r[3],p.x-s/2,p.y-s*.6,s,s*r[3]/r[2]);c.restore()});
+        // mira
+        if(aim&&aim.cur){var tg=target(aim.cur);if(tg.len>18){c.save();c.setLineDash([4,12]);c.lineCap='round';c.lineWidth=5;c.strokeStyle='rgba(255,243,214,.9)';c.beginPath();
+          for(var i=0;i<=20;i++){var k=i/20,x=CX+(tg.x-CX)*k,y=CY+(tg.y-CY)*k-Math.sin(k*Math.PI)*Math.hypot(tg.x-CX,tg.y-CY)*.35;i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke();c.setLineDash([]);
+          c.strokeStyle='#E83B2B';c.lineWidth=4;c.beginPath();c.ellipse(tg.x,tg.y,40,16,0,0,7);c.stroke();c.fillStyle='rgba(232,59,43,.2)';c.fill();c.restore()}}
+        // castagne in volo
+        shots.forEach(function(s){var k=s.t,x=CX+(s.tx-CX)*k,y=CY+(s.ty-CY)*k,hgt=Math.sin(k*Math.PI)*s.h,sz=34+Math.sin(k*Math.PI)*22,r=R[s.riccio?'riccio':'castagna'];
+          c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(x,y,14,5,0,0,7);c.fill();c.save();c.translate(x,y-hgt);c.rotate(k*12);ok()&&c.drawImage(img,r[0],r[1],r[2],r[3],-sz/2,-sz/2,sz,sz*r[3]/r[2]);c.restore()});
+        // la catapulta
+        var pull=aim&&aim.cur?Math.min(1,target(aim.cur).len/180):0,ready=reload<=0;
+        c.save();c.translate(CX,CY);c.fillStyle='#6B3F1A';c.strokeStyle='#3E2410';c.lineWidth=3;
+        c.fillRect(-46,8,92,18);c.strokeRect(-46,8,92,18);c.beginPath();c.arc(-34,30,12,0,7);c.arc(34,30,12,0,7);c.fillStyle='#4A2A10';c.fill();
+        c.rotate(-.5+pull*.9);c.fillStyle='#8B5A2B';c.fillRect(-7,-70,14,80);c.strokeRect(-7,-70,14,80);c.beginPath();c.arc(0,-74,16,0,7);c.fillStyle='#5e3a1f';c.fill();
+        if(ready){var r=R.castagna;ok()&&c.drawImage(img,r[0],r[1],r[2],r[3],-15,-90,30,28)}c.restore();
+        if(!aim&&T.state.score===0&&t<6){c.save();c.globalAlpha=.85+.15*Math.sin(t*5);c.font='800 22px Montserrat';c.textAlign='center';c.fillStyle='#fff';c.strokeStyle='#3E1019';c.lineWidth=6;var y=700-Math.abs(Math.sin(t*2))*12;c.strokeText('Trascina giù e lascia!',W/2,y);c.fillText('Trascina giù e lascia!',W/2,y);c.restore()}
+      },
+      down:function(p){aim={x:p.x,y:p.y,cur:p}},
+      move:function(p){if(aim)aim.cur=p},
+      up:function(p){if(!aim)return;var tg=target(p);aim=null;if(tg.len<18)return;if(reload>0){T.float('Ricarico…',CX,CY-110,'#fff',20);return}
+        shotsN++;var wind=L.wind?T.state.wind:0,tx=Math.max(20,Math.min(W-20,tg.x+wind)),d=Math.hypot(tx-CX,tg.y-CY);
+        shots.push({tx:tx,ty:tg.y,t:0,d:.45+d/1400,h:d*.35,riccio:shotsN%8===0});if(shotsN%8===0)T.float('Riccio!',CX,CY-120,'#B6FF6B',24);reload=.42;T.sfx('whoosh')}
+    };
+  }
+});
+})();
+</script>
+</body>
+</html>
