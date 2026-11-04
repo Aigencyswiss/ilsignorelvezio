@@ -164,7 +164,13 @@ body.home{overflow:hidden}
 .brand b{font:800 46px/1 Fraunces,serif;color:var(--wine)}
 .brand span:last-child{font-size:16px;color:#4a3526}
 .brand .lbl{color:var(--red)}
-@media (max-width:1100px){.brand{display:none}}
+@media (max-width:1100px){.brand,.side{display:none}}
+.side{position:absolute;right:max(24px,env(safe-area-inset-right,0px));top:24px;width:min(320px,calc(50% - 300px));display:flex;flex-direction:column;gap:8px;max-height:calc(100% - 48px);overflow:auto}
+.side .lbl{color:var(--brown);margin-bottom:2px}
+.sg{display:flex;gap:10px;align-items:center;text-align:left;background:rgba(251,245,232,.92);border:1px solid var(--line);border-radius:14px;padding:8px 10px;font:inherit;color:inherit}
+.sg .i{font-size:20px;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--cream)}
+.sg b{display:block;font-size:14px;color:var(--wine)}.sg small{font-size:12px;color:var(--brown)}
+.sg.lock{opacity:.6}
 .stage .src{position:absolute;left:12px;bottom:10px;font-size:10px;color:#7a6650}
 .pop{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 18px 40px rgba(62,16,25,.3);display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;z-index:5}
 .pop .pi{grid-row:span 2;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:var(--cream)}
@@ -205,6 +211,7 @@ body.home{overflow:hidden}
   <div class="pins" id="pins"></div>
   <div class="hint" id="hint">Tocca una puntina · trascina e ingrandisci</div>
   <div class="brand" aria-hidden="true"><span class="lbl">Gratis · tutto il Ticino</span><b>Il parco giochi<br>di Elvezio</b><span>Ho messo il Ticino su una mappa e ci ho nascosto dentro i giochi. Io non vinco mai, ma organizzo benissimo.</span></div>
+  <div class="side" id="side"></div>
   <span class="src">Confini: UST/swisstopo</span>
   <div class="pop" id="pop" hidden role="dialog" aria-live="polite"></div>
 </main>
@@ -281,10 +288,10 @@ var GAMES=[
  {id:'dove',ic:'📍',t:'Dov\'è?',d:'Trova dieci comuni sulla mappa',where:'Monteceneri',fn:'dove',open:1},
  {id:'paese',ic:'🗓️',t:'Il paese del giorno',d:'Un comune al giorno, 6 tentativi',where:'Verzasca',fn:'daily',open:1},
  {id:'catapulta',ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona',s:'Catapulta',side:'r'},
- {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Gordola',s:'Salto dalla diga',side:'l',dy:-44},
+ {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga'},
  {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l'},
  {id:'piode',ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio'},
- {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Mendrisio'},
+ {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Castel San Pietro',s:'Vendemmia'},
  {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l'}
 ];
 function hub(){
@@ -294,8 +301,10 @@ function hub(){
   function place(vb,s){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height),ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;
     box.classList.toggle('small',r.width<600&&vb.w>D.W*.7);
     els.forEach(function(e){var m=byName(GAMES.filter(function(g){return g.id===e.dataset.g})[0].where);e.style.left=((m.x-vb.x+ox)/sc)+'px';e.style.top=((m.y-vb.y+oy)/sc)+'px'})}
-  var map=gameMap(box,function(){closePop()},{labels:1,pan:1,onView:place});
+  var map=gameMap(box,function(){closePop()},{labels:1,pan:1,pad:70,onView:place});
   els.forEach(function(e){e.addEventListener('pointerdown',function(ev){ev.stopPropagation()});e.addEventListener('click',function(){showPop(e.dataset.g,e)})});
+  $('side').innerHTML='<span class="lbl">I giochi del parco</span>'+GAMES.map(function(g){return '<button type="button" class="sg'+(g.open?'':' lock')+'" data-g="'+g.id+'"><span class="i">'+(g.open?g.ic:'🔒')+'</span><span><b>'+esc(g.t)+'</b><small>'+(g.open?'Si gioca':'Presto')+' · '+esc(g.where)+'</small></span></button>'}).join('');
+  [].forEach.call($('side').querySelectorAll('.sg'),function(b){b.addEventListener('click',function(){var g=GAMES.filter(function(x){return x.id===b.dataset.g})[0];if(g.fn)openGame(g.id);else showPop(g.id,pins.querySelector('.hp[data-g="'+g.id+'"]'))})});
   setTimeout(function(){$('hint').style.opacity=0},4500);
 }
 function showPop(id,el){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
@@ -320,7 +329,7 @@ function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</
 // mappa di gioco con zoom e spostamento
 function gameMap(el,onTap,opt){opt=opt||{};
   var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
-  var vb={x:0,y:0,w:D.W,h:D.H};function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
+  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*1.6,w:D.W+2*P0,h:(D.W+2*P0)*D.H/D.W}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
   function clamp(){vb.w=Math.max(120,Math.min(D.W*1.2,vb.w));vb.h=vb.w*D.H/D.W;vb.x=Math.max(-vb.w*.2,Math.min(D.W-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(D.H-vb.h*.8,vb.y))}
   function zoomAt(f,cx,cy){var nx=cx-(cx-vb.x)*f,ny=cy-(cy-vb.y)*f;vb.w*=f;vb.h*=f;vb.x=nx;vb.y=ny;clamp();apply()}
   function pt(e){var r=s.getBoundingClientRect();var sc=Math.max(vb.w/r.width,vb.h/r.height);var ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;return {x:vb.x+(e.clientX-r.left)*sc-ox,y:vb.y+(e.clientY-r.top)*sc-oy,sc:sc}}
@@ -333,9 +342,9 @@ function gameMap(el,onTap,opt){opt=opt||{};
   s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);
   s.addEventListener('wheel',function(e){e.preventDefault();var p=pt(e);zoomAt(e.deltaY>0?1.15:1/1.15,p.x,p.y)},{passive:false});
   var z=document.createElement('div');z.className='zoom';z.innerHTML='<button type="button" aria-label="Ingrandisci">+</button><button type="button" aria-label="Riduci">−</button><button type="button" aria-label="Tutta la mappa" style="font-size:14px">⤢</button>';el.appendChild(z);
-  var bs=z.querySelectorAll('button');bs[0].onclick=function(){zoomAt(1/1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[1].onclick=function(){zoomAt(1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[2].onclick=function(){vb={x:0,y:0,w:D.W,h:D.H};apply()};
+  var bs=z.querySelectorAll('button');bs[0].onclick=function(){zoomAt(1/1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[1].onclick=function(){zoomAt(1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[2].onclick=function(){vb=V0();apply()};
   setTimeout(apply,0);addEventListener('resize',apply);
-  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*D.H/D.W;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb={x:0,y:0,w:D.W,h:D.H};apply()},sc:function(){return vb.w/D.W}};
+  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*D.H/D.W;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb=V0();apply()},sc:function(){return vb.w/D.W}};
 }
 
 // ---------- DOV'È? ----------
