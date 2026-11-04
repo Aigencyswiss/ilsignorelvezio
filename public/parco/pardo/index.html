@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acchiappa il pardo – Il parco giochi di Elvezio</title>
+<meta name="description" content="In Piazza Grande a Locarno il pardo è scappato tra le sedie gialle del cinema all'aperto. Aiuta il Signor Elvezio a prenderlo con il retino, ma lascia stare i turisti. 3 livelli e classifica.">
+<meta property="og:title" content="Acchiappa il pardo">
+<meta property="og:description" content="Il pardo scappa tra le sedie di Piazza Grande. Quanti ne prendi in 60 secondi?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'95f49785-0c49-4eeb-be24-97e9819c9aac.webp',SP=CDN+'f6701c92-51e6-4264-aad1-96814c7657aa.webp';
+var R={pardo:[84,58,160,252],run:[356,90,353,219],oro:[784,46,204,270],turista:[1113,19,153,337],
+  ready:[108,385,169,357],swing:[415,408,290,331],cheer:[793,330,219,412],facepalm:[1115,420,188,322]};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+var DEBUG=/debug/.test(location.search);
+// i nascondigli: x, linea dietro cui si nasconde, altezza del pardo
+var SPOTS=[
+  {x:205,y:560,h:100},{x:335,y:560,h:100},             // dietro le file di sedie in fondo
+  {x:130,y:622,h:140},{x:270,y:622,h:140},{x:410,y:622,h:140}, // dietro la prima fila
+  {x:62,y:700,h:130},{x:478,y:668,h:130},              // dietro gli oleandri
+  {x:60,y:540,h:95},{x:480,y:548,h:95}                 // sotto i portici
+];
+
+Telaio.start({
+  id:'pardo',n:6,title:'Acchiappa il pardo',zone:'Locarno',
+  preload:[BG,SP],
+  intro:'Stasera c\'è il cinema in Piazza Grande e un pardo è scappato. Si nasconde tra le sedie gialle e salta fuori quando vuole. Io ho il retino, tu hai il dito: <b>tocca il pardo prima che si nasconda</b>. Ma attento ai turisti, quelli non si acchiappano.',
+  how:[['🐆','<b>Tocca il pardo</b> quando salta fuori. Più ne prendi di fila, più vale.'],['😎','Il <b>pardo con gli occhiali</b> è una star: vale 300 punti, ma sparisce in fretta.'],['💨','Ogni tanto un pardo <b>attraversa la piazza di corsa</b>: prendilo al volo.'],['📸','<b>Non toccare i turisti!</b> Ogni turista nel retino è una vita persa.']],
+  time:60,
+  levels:{
+    facile:{desc:'Pardi tranquilli, pochi turisti',lives:3,time:60,up:1.35,every:.9,tur:.18,oro:.08,stars:[1800,3600,5400]},
+    medio:{desc:'Pardi più svelti, più turisti',lives:3,time:60,up:1.05,every:.72,tur:.24,oro:.09,stars:[2000,4000,6000]},
+    difficile:{desc:'Pardi lampo e piazza piena di turisti',lives:3,time:60,up:.8,every:.58,tur:.3,oro:.1,stars:[2200,4400,6600]}
+  },
+  hudExtra:function(st){return st&&st.combo>1?'<span>Di fila <b>×'+st.combo+'</b></span>':''},
+  verdict:function(st){return ['Il pardo ha visto tutto il film. Tu un po\' meno.','Niente male! Il pardo comincia a rispettarti.','Bravo! Il festival ti vuole come guardiano delle sedie.','Perfetto! Il pardo si è arreso e ha chiesto un autografo.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,acts=[],next=.6,run=null,runNext=8+Math.random()*6,ex=W/2,etx=W/2,pose='ready',pt=0,flash=0;
+    function free(){var f=[];SPOTS.forEach(function(s,i){if(!acts.some(function(a){return a.s===i}))f.push(i)});return f}
+    function spawn(){var f=free();if(!f.length)return;var i=f[Math.floor(Math.random()*f.length)],r=Math.random(),k=r<L.oro?'oro':r<L.oro+L.tur?'turista':'pardo';
+      var hurry=1-Math.min(.3,t/200);acts.push({s:i,k:k,t:0,life:(k==='oro'?L.up*.65:k==='turista'?L.up*1.3:L.up)*hurry,out:0,hit:0})}
+    function box(a){var s=SPOTS[a.s],k=R[a.k],h=s.h*(a.k==='turista'?1.2:1),w=h*k[2]/k[3],rise=h*a.out;return {x:s.x-w/2,y:s.y-rise,w:w,h:rise,k:k,fh:h,fw:w,s:s}}
+    function act(p,k){pose=k;pt=k==='facepalm'?.9:k==='cheer'?.6:.28;etx=Math.max(90,Math.min(W-90,p))}
+    return {
+      update:function(dt){t+=dt;flash=Math.max(0,flash-dt*3);if(pt>0){pt-=dt;if(pt<=0)pose='ready'}ex+=(etx-ex)*Math.min(1,dt*9);
+        next-=dt;if(next<=0){spawn();if(L.tur>.25&&Math.random()<.25)spawn();next=L.every*(1-Math.min(.3,t/200))*(.7+Math.random()*.6)}
+        for(var i=acts.length-1;i>=0;i--){var a=acts[i];a.t+=dt;
+          if(a.hit){a.out-=dt*6;if(a.out<=0)acts.splice(i,1);continue}
+          a.out=a.t<.15?a.t/.15:a.t>a.life?1-(a.t-a.life)/.15:1;
+          if(a.t>a.life+.15){if(a.k!=='turista'){T.state.combo=0}acts.splice(i,1)}}
+        runNext-=dt;if(!run&&runNext<=0){var d=Math.random()<.5?1:-1;run={x:d>0?-120:W+120,d:d,v:(L.up<1?520:420),y:760};runNext=7+Math.random()*7}
+        if(run){run.x+=run.d*run.v*dt;if(run.x<-160||run.x>W+160){run=null}}
+      },
+      draw:function(c){
+        if(ok(bg))c.drawImage(bg,0,0,W,W*1935/1080);else{c.fillStyle='#24305a';c.fillRect(0,0,W,H)}
+        if(!ok(img))return;
+        acts.slice().sort(function(a,b){return SPOTS[a.s].y-SPOTS[b.s].y}).forEach(function(a){var b=box(a);if(b.h<=1)return;
+          c.save();c.beginPath();c.rect(0,0,W,b.s.y);c.clip();
+          var wob=a.k==='pardo'&&!a.hit?Math.sin(a.t*14)*.04:0;c.translate(b.s.x,b.s.y-b.h+b.fh/2);c.rotate(wob);
+          c.drawImage(img,b.k[0],b.k[1],b.k[2],b.k[3],-b.fw/2,-b.fh/2,b.fw,b.fh);c.restore();
+          if(DEBUG){c.strokeStyle='#0f0';c.beginPath();c.moveTo(b.s.x-60,b.s.y);c.lineTo(b.s.x+60,b.s.y);c.stroke()}});
+        if(DEBUG)SPOTS.forEach(function(s){c.strokeStyle='#f0f';c.lineWidth=2;c.beginPath();c.moveTo(s.x-50,s.y);c.lineTo(s.x+50,s.y);c.stroke()});
+        if(run){var k=R.run,h=118,w=h*k[2]/k[3];c.save();c.translate(run.x,run.y);if(run.d<0)c.scale(-1,1);c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h/2,w,h);c.restore();
+          c.font='800 18px Montserrat';c.textAlign='center';c.lineWidth=5;c.strokeStyle='#3E1019';c.fillStyle='#fff';c.strokeText('Prendilo!',run.x,run.y-70);c.fillText('Prendilo!',run.x,run.y-70)}
+        var k=R[pose],eh=pose==='cheer'?230:pose==='swing'?178:pose==='facepalm'?180:200,ew=eh*k[2]/k[3];
+        c.save();c.translate(ex,H-10);if(pose==='swing'&&etx<ex-4)c.scale(-1,1);c.drawImage(img,k[0],k[1],k[2],k[3],-ew/2,-eh,ew,eh);c.restore();
+        if(flash>0){c.fillStyle='rgba(255,255,255,'+(flash*.8)+')';c.fillRect(0,0,W,H)}
+      },
+      down:function(p){
+        if(run){var k=R.run,h=118,w=h*k[2]/k[3];if(Math.abs(p.x-run.x)<w/2+10&&Math.abs(p.y-run.y)<h/2+16){var st=T.state;st.combo++;T.add(250+Math.min(10,st.combo)*10,run.x,run.y-40,'#FFD24A');T.burst(run.x,run.y,'#F3C04A',18);T.sfx('coin');T.pop('Al volo!',700);act(run.x,'cheer');run=null;return}}
+        var best=null;acts.forEach(function(a){if(a.hit||a.out<.45)return;var b=box(a);if(p.x>b.x-12&&p.x<b.x+b.w+12&&p.y>b.y-12&&p.y<b.s.y+8){if(!best||SPOTS[a.s].y>SPOTS[best.s].y)best=a}});
+        if(!best){act(p.x,'swing');T.sfx('whoosh');return}
+        var b=box(best),st=T.state;best.hit=1;
+        if(best.k==='turista'){act(b.s.x,'facepalm');flash=1;T.float('Ehi! La mia foto!',b.s.x,b.y-10,'#fff',22);T.state.combo=0;T.lose(1);T.shake();return}
+        st.combo++;var pts=best.k==='oro'?300:100+Math.min(10,st.combo-1)*15;T.add(pts,b.s.x,b.y,best.k==='oro'?'#FFE36B':'#FFD24A');T.burst(b.s.x,b.y+b.h/2,best.k==='oro'?'#FFE36B':'#E9B04A',best.k==='oro'?22:12);
+        T.sfx(best.k==='oro'?'coin':'pop');T.buzz(15);if(best.k==='oro'){T.pop('Pardo star!',700);act(b.s.x,'cheer')}else act(b.s.x,'swing');
+        if(st.combo===10)T.pop('Dieci di fila!',800)}
+    };
+  }
+});
+})();
+</script>
+</body>
+</html>
