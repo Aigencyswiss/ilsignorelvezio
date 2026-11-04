@@ -136,70 +136,92 @@ footer .w{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-betwee
 .save input{flex:1 1 200px;min-height:50px;border-radius:999px;border:0;padding:0 18px;font-size:16px}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;z-index:80;transition:.3s;pointer-events:none;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
+
+
+/* ---- home a tutto schermo ---- */
+html,body{height:100%}
+body.home{overflow:hidden}
+.app{position:fixed;inset:0;display:flex;flex-direction:column}
+.top{position:relative}
+.tb{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--wine2);border:0;border-radius:999px;padding:8px 14px;font:800 14px Montserrat}
+.tb.dark{background:rgba(255,255,255,.1);color:var(--cream)}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden;background:#E3D6B5 radial-gradient(circle at 20% 20%,rgba(255,255,255,.35),transparent 40%),repeating-radial-gradient(circle at 80% 70%,transparent 0 22px,rgba(107,74,50,.06) 22px 23px);touch-action:none}
+.stage>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .zoom{top:auto;bottom:14px;right:max(12px,env(safe-area-inset-right,0px))}
+.pins{position:absolute;inset:0;pointer-events:none}
+.hp{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.hp .hb{width:52px;height:52px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);display:grid;place-items:center;background:var(--red);border:3px solid #fff;box-shadow:0 6px 14px rgba(62,16,25,.35);transition:transform .2s}
+.hp .hb span{transform:rotate(45deg);font-size:24px;line-height:1}
+.hp:hover .hb,.hp:focus-visible .hb{transform:rotate(-45deg) scale(1.1)}
+.hp.lock .hb{background:#8f8068;filter:saturate(.6)}
+.hp .hl{font:800 12px Montserrat;color:var(--wine2);background:rgba(255,255,255,.92);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.hp.lock .hl{color:#6b5a44}
+.hp.open::before{content:"";position:absolute;left:50%;top:26px;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(232,59,43,.45);animation:pu 2s ease-out infinite;z-index:-1}
+.hp.sel .hb{transform:rotate(-45deg) scale(1.15);box-shadow:0 0 0 5px var(--gold2),0 8px 18px rgba(62,16,25,.4)}
+.small .hp .hl{display:none}
+.hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:rgba(42,26,18,.82);color:#fff;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;white-space:nowrap;transition:opacity .6s;pointer-events:none}
+.brand{position:absolute;left:max(24px,env(safe-area-inset-left,0px));top:24px;width:min(340px,calc(50% - 300px));display:flex;flex-direction:column;gap:10px;color:var(--wine2);pointer-events:none}
+.brand b{font:800 46px/1 Fraunces,serif;color:var(--wine)}
+.brand span:last-child{font-size:16px;color:#4a3526}
+.brand .lbl{color:var(--red)}
+@media (max-width:1100px){.brand{display:none}}
+.stage .src{position:absolute;left:12px;bottom:10px;font-size:10px;color:#7a6650}
+.pop{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 18px 40px rgba(62,16,25,.3);display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;z-index:5}
+.pop .pi{grid-row:span 2;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:var(--cream)}
+.pop h3{font-size:22px;color:var(--wine);line-height:1.1}
+.pop p{margin:0;color:#4a3526;font-size:15px}
+.pop .row{grid-column:1/-1;display:flex;gap:10px;align-items:center;margin-top:6px}
+.pop .x{margin-left:auto;background:none;border:0;font-size:14px;font-weight:700;color:var(--brown);padding:8px}
+.dock{background:var(--wine);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 24px rgba(62,16,25,.25);position:relative;z-index:6}
+.dock .w{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-block:10px}
+.dk{display:flex;align-items:center;gap:12px;min-width:0;text-align:left;background:rgba(255,255,255,.08);color:var(--cream);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 12px}
+.dk.daily{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--wine2);border:0;box-shadow:0 4px 0 #8f6a1c}
+.dk .dic{flex:0 0 auto;font-size:26px}
+.dk .dtx{min-width:0;display:flex;flex-direction:column}
+.dk small{font:800 10px Montserrat;letter-spacing:.08em;text-transform:uppercase;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk b{font:800 17px Montserrat;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk .dgo{margin-left:auto;font-size:28px;line-height:1;opacity:.7}
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(23,9,12,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet-in{width:min(560px,100%);max-height:85vh;overflow:auto;background:#17090c;color:#F5EBD6;border-radius:24px 24px 0 0;padding:22px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));display:grid;gap:12px}
+.sheet-in h3{font-size:24px;color:#FFE08A}
+#lbRows{display:grid;gap:6px}
+@media (max-width:520px){.hide-s{display:none}.dk b{font-size:15px}.dk .dic{font-size:22px}.dk .dgo{display:none}.hp .hb{width:46px;height:46px}.hp .hb span{font-size:21px}}
+
 @media (max-width:820px){.mapwrap{grid-template-columns:1fr}}
 @media (max-width:600px){.pin>text{display:none}}
 @media (max-width:480px){.hero{padding-block:26px 58px}.hero p{font-size:16px}.card h3{font-size:23px}.gr{grid-template-columns:minmax(0,1fr) auto auto}.gr>div:nth-child(4){display:none}.stats b{font-size:20px}}
 @media (prefers-reduced-motion:reduce){.pulse{animation:none}.game{transition:none}}
 </style>
 </head>
-<body>
+<body class="home">
+<div class="app">
 <header class="top"><div class="w">
-  <a class="back" href="/paese/#giochi">← Il paese</a>
-  <span class="ttl">Il parco giochi</span>
-  <span class="streak" id="streak" hidden>🔥 <span id="streakN">0</span></span>
+  <a class="back" href="/paese/#giochi" aria-label="Torna al paese">←<span class="hide-s"> Il paese</span></a>
+  <span class="ttl">Il parco giochi <span class="hide-s">di Elvezio</span></span>
+  <span class="streak" id="streak" hidden title="Giorni di fila al paese del giorno">🔥 <span id="streakN">0</span></span>
+  <button class="tb" id="lbBtn" type="button" aria-haspopup="dialog">🏆<span class="hide-s"> Classifica</span></button>
 </div></header>
-
-<section class="hero"><div class="w">
-  <span class="pill lbl">Gratis · dal telefono · tutto il Ticino</span>
-  <h1>Il parco giochi<br>di Elvezio</h1>
-  <p>Ho messo tutto il Ticino su una mappa e ci ho nascosto dentro i giochi. Ogni giorno un paese nuovo da indovinare, e ogni settimana una classifica nuova. Io non vinco mai, ma organizzo benissimo.</p>
-</div></section>
-
-<section class="w today" aria-label="I giochi di oggi">
-  <div class="cards">
-    <article class="card daily">
-      <span class="num" id="dNum">IL PAESE DEL GIORNO</span>
-      <h3>Il paese del giorno</h3>
-      <p>Un comune del Ticino al giorno, uguale per tutti. Hai 6 tentativi: a ogni nome ti dico quanti chilometri mancano e da che parte andare.</p>
-      <div class="meta"><span>Ogni giorno</span><span>6 tentativi</span><span>Da condividere</span></div>
-      <span class="done-badge" id="dDone" hidden></span>
-      <button class="btn gold" id="openDaily" type="button">Gioca di oggi</button>
-    </article>
-    <article class="card">
-      <span class="lbl" style="color:var(--red)">Classifica della settimana</span>
-      <h3>Dov'è?</h3>
-      <p>Ti dico un comune, tu lo tocchi sulla mappa. Dieci comuni, mille punti l'uno se ci prendi in pieno. Il lunedì la classifica si azzera.</p>
-      <div class="meta"><span>10 comuni</span><span>2 minuti</span><span>Classifica</span></div>
-      <button class="btn wine" id="openDove" type="button">Gioca a Dov'è?</button>
-    </article>
-  </div>
-</section>
-
-<section class="sec"><div class="w">
-  <span class="lbl" style="color:var(--brown)">La mappa del parco</span>
-  <h2>Tutto il Ticino, un gioco alla volta</h2>
-  <p class="lead">Tocca un posto sulla mappa. Quelli col lucchetto arrivano nelle prossime settimane: ogni volta che ne apre uno, lo annuncio su Instagram.</p>
-  <div class="mapwrap">
-    <div class="mapbox" id="hubMap" aria-label="Mappa del Ticino con i giochi"><div style="aspect-ratio:1000/1511"></div><span class="src">Confini: UST/swisstopo</span></div>
-    <div>
-      <div class="glist" id="glist"></div>
-      <div class="legend"><span><i style="background:var(--red)"></i>Si gioca</span><span><i style="background:#9a8a70"></i>Presto</span></div>
-    </div>
-  </div>
-</div></section>
-
-<section class="sec" style="padding-top:0"><div class="w">
-  <div class="lb" id="lb">
-    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between"><h3>Dov'è? · la classifica</h3><span class="lbl" style="color:#C9B8A0" id="lbReset"></span></div>
+<main class="stage" id="hubMap" aria-label="Mappa del Ticino con i giochi">
+  <div class="pins" id="pins"></div>
+  <div class="hint" id="hint">Tocca una puntina · trascina e ingrandisci</div>
+  <div class="brand" aria-hidden="true"><span class="lbl">Gratis · tutto il Ticino</span><b>Il parco giochi<br>di Elvezio</b><span>Ho messo il Ticino su una mappa e ci ho nascosto dentro i giochi. Io non vinco mai, ma organizzo benissimo.</span></div>
+  <span class="src">Confini: UST/swisstopo</span>
+  <div class="pop" id="pop" hidden role="dialog" aria-live="polite"></div>
+</main>
+<nav class="dock" aria-label="I giochi di oggi"><div class="w">
+  <button class="dk daily" id="openDaily" type="button"><span class="dic">🗓️</span><span class="dtx"><small id="dNum">Il paese del giorno</small><b id="dTxt">Gioca di oggi</b></span><span class="dgo">›</span></button>
+  <button class="dk" id="openDove" type="button"><span class="dic">📍</span><span class="dtx"><small>Classifica della settimana</small><b>Dov'è?</b></span><span class="dgo">›</span></button>
+</div></nav>
+<span id="dDone" hidden></span>
+</div>
+<div class="sheet" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbT" hidden>
+  <div class="sheet-in">
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><h3 id="lbT">Dov'è? · la classifica</h3><button class="tb dark" id="lbClose" type="button">Chiudi</button></div>
+    <span class="lbl" style="color:#C9B8A0" id="lbReset"></span>
     <div id="lbRows"><p class="lbempty">Carico la classifica…</p></div>
+    <button class="btn gold" id="lbPlay" type="button" style="margin:4px 0 0">Gioca a Dov'è?</button>
   </div>
-</div></section>
-
-<footer><div class="w">
-  <span>Il Signor Elvezio è un personaggio creato con l'AI. I posti sono veri.</span>
-  <span><a href="https://ilsignorelvezio.com">ilsignorelvezio.com</a> · <a href="https://instagram.com/ilsignorelvezio">Instagram</a> · Confini dei comuni: UST/swisstopo</span>
-</div></footer>
-
+</div>
 <!-- finestra di gioco -->
 <div class="game" id="game" role="dialog" aria-modal="true" aria-labelledby="gTitle">
   <div class="gbar"><div class="w"><b id="gTitle">Gioco</b><button type="button" id="gClose">Esci</button></div></div>
@@ -266,18 +288,21 @@ var GAMES=[
  {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l'}
 ];
 function hub(){
-  var box=$('hubMap'),s=baseSvg({labels:1});box.replaceChild(s,box.firstChild);
-  var o=s.querySelector('#over'),h='';
-  GAMES.forEach(function(g){if(g.fn)return;var m=byName(g.where);if(!m)return;var x=m.x,y=m.y;
-    h+='<g class="pin'+(g.open?'':' lock')+'" tabindex="0" role="button" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'" data-g="'+g.id+'" transform="translate('+x+' '+y+')">'+
-      (g.open?'<circle class="pulse" r="26" fill="#E83B2B"/>':'')+
-      '<g class="dot"><path d="M0 0 C -6 -14 -22 -24 -22 -42 A22 22 0 1 1 22 -42 C 22 -24 6 -14 0 0Z" fill="'+(g.open?'#E83B2B':'#9a8a70')+'" stroke="#fff" stroke-width="4"/><text x="0" y="-33" text-anchor="middle" font-size="22" style="stroke:none;font-size:22px">'+(g.open?g.ic:'🔒')+'</text></g>'+
-      ((g.side||(x>720?'l':'r'))==='l'?'<text x="-30" y="'+(-34+(g.dy||0))+'" text-anchor="end">':'<text x="30" y="'+(-34+(g.dy||0))+'">')+esc(g.s||g.t)+'</text></g>'});
-  o.innerHTML=h;
-  o.querySelectorAll('.pin').forEach(function(p){function go(){openGame(p.dataset.g)}p.addEventListener('click',go);p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
-  $('glist').innerHTML=GAMES.map(function(g){var tag=g.href?'a':'button';return '<'+tag+' class="gi'+(g.open?'':' lock')+'" data-g="'+g.id+'"'+(g.href?' href="'+g.href+'"':' type="button" style="font:inherit;text-align:left;cursor:pointer"')+'><span class="ic">'+(g.open?g.ic:'🔒')+'</span><span style="min-width:0"><b>'+esc(g.t)+'</b><small>'+esc(g.where)+' · '+esc(g.d)+'</small></span><span class="go">'+(g.open?'Gioca':'Presto')+'</span></'+tag+'>'}).join('');
-  $('glist').querySelectorAll('button.gi').forEach(function(b){b.addEventListener('click',function(){openGame(b.dataset.g)})});
+  var box=$('hubMap'),pins=$('pins');
+  pins.innerHTML=GAMES.filter(function(g){return !g.fn&&byName(g.where)}).map(function(g){return '<button type="button" class="hp '+(g.open?'open':'lock')+'" data-g="'+g.id+'" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'"><span class="hb"><span>'+(g.open?g.ic:'🔒')+'</span></span><span class="hl">'+esc(g.s||g.t)+'</span></button>'}).join('');
+  var els=[].slice.call(pins.querySelectorAll('.hp'));
+  function place(vb,s){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height),ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;
+    box.classList.toggle('small',r.width<600&&vb.w>D.W*.7);
+    els.forEach(function(e){var m=byName(GAMES.filter(function(g){return g.id===e.dataset.g})[0].where);e.style.left=((m.x-vb.x+ox)/sc)+'px';e.style.top=((m.y-vb.y+oy)/sc)+'px'})}
+  var map=gameMap(box,function(){closePop()},{labels:1,pan:1,onView:place});
+  els.forEach(function(e){e.addEventListener('pointerdown',function(ev){ev.stopPropagation()});e.addEventListener('click',function(){showPop(e.dataset.g,e)})});
+  setTimeout(function(){$('hint').style.opacity=0},4500);
 }
+function showPop(id,el){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
+  [].forEach.call(document.querySelectorAll('.hp.sel'),function(x){x.classList.remove('sel')});if(el)el.classList.add('sel');
+  var p=$('pop');p.innerHTML='<span class="pi">'+(g.open?g.ic:'🔒')+'</span><h3>'+esc(g.t)+'</h3><p>'+esc(g.where)+' · '+esc(g.d)+'</p><div class="row">'+(g.open?'<button class="btn gold" id="popGo" type="button" style="margin:0">Gioca</button>':'<span style="font-weight:700;color:var(--brown)">Arriva presto. Lo annuncio su Instagram!</span>')+'<button class="x" id="popX" type="button">Chiudi</button></div>';
+  p.hidden=false;$('popX').onclick=closePop;if($('popGo'))$('popGo').onclick=function(){openGame(id)};ev('click','pin_'+id)}
+function closePop(){$('pop').hidden=true;[].forEach.call(document.querySelectorAll('.hp.sel'),function(x){x.classList.remove('sel')})}
 function openGame(id){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
   if(!g.open){toast(g.t+': arriva presto! Lo annuncio su Instagram.');return}
   if(g.href){ev('click','parco_'+id);location.href=g.href;return}
@@ -286,16 +311,16 @@ function openGame(id){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g
 
 // ---------- finestra ----------
 var lastFocus=null;
-function showGame(title){lastFocus=document.activeElement;$('gTitle').textContent=title;$('game').classList.add('on');document.body.style.overflow='hidden';$('gBody').scrollTop=0;setTimeout(function(){$('gClose').focus()},350)}
-function closeGame(){$('game').classList.remove('on');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus();refreshDailyCard();loadLb()}
+function showGame(title){lastFocus=document.activeElement;$('gTitle').textContent=title;$('game').classList.add('on');$('gBody').scrollTop=0;setTimeout(function(){$('gClose').focus()},350)}
+function closeGame(){$('game').classList.remove('on');if(lastFocus&&lastFocus.focus)lastFocus.focus();refreshDailyCard();loadLb()}
 $('gClose').addEventListener('click',closeGame);
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('game').classList.contains('on'))closeGame()});
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('game').classList.contains('on'))closeGame();else if(!$('lb').hidden)$('lb').hidden=true;else closePop()});
 function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</span><p>'+t+'</p></div>'}
 
 // mappa di gioco con zoom e spostamento
-function gameMap(el,onTap){
-  var s=baseSvg();el.appendChild(s);
-  var vb={x:0,y:0,w:D.W,h:D.H};function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h)}
+function gameMap(el,onTap,opt){opt=opt||{};
+  var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
+  var vb={x:0,y:0,w:D.W,h:D.H};function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
   function clamp(){vb.w=Math.max(120,Math.min(D.W*1.2,vb.w));vb.h=vb.w*D.H/D.W;vb.x=Math.max(-vb.w*.2,Math.min(D.W-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(D.H-vb.h*.8,vb.y))}
   function zoomAt(f,cx,cy){var nx=cx-(cx-vb.x)*f,ny=cy-(cy-vb.y)*f;vb.w*=f;vb.h*=f;vb.x=nx;vb.y=ny;clamp();apply()}
   function pt(e){var r=s.getBoundingClientRect();var sc=Math.max(vb.w/r.width,vb.h/r.height);var ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;return {x:vb.x+(e.clientX-r.left)*sc-ox,y:vb.y+(e.clientY-r.top)*sc-oy,sc:sc}}
@@ -303,13 +328,14 @@ function gameMap(el,onTap){
   s.addEventListener('pointerdown',function(e){s.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);if(k.length===1){start={x:e.clientX,y:e.clientY,vx:vb.x,vy:vb.y};moved=false}else if(k.length===2){var a=ptrs[k[0]],b=ptrs[k[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};moved=true}});
   s.addEventListener('pointermove',function(e){if(!ptrs[e.pointerId])return;ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);
     if(k.length===2&&pinch){var a=ptrs[k[0]],b=ptrs[k[1]],d=Math.hypot(a.x-b.x,a.y-b.y),c=pt({clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2});var f=(pinch.w*pinch.d/d)/vb.w;zoomAt(f,c.x,c.y);return}
-    if(start){var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(moved&&vb.w<D.W*1.01){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height);vb.x=start.vx-dx*sc;vb.y=start.vy-dy*sc;clamp();apply()}}});
+    if(start){var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(moved&&(vb.w<D.W*1.01||opt.pan)){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height);vb.x=start.vx-dx*sc;vb.y=start.vy-dy*sc;clamp();apply()}}});
   function up(e){var had=!!ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch=null;if(had&&!moved&&Object.keys(ptrs).length===0&&e.type==='pointerup'){var p=pt(e);onTap(p.x,p.y)}if(!Object.keys(ptrs).length)start=null}
   s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);
   s.addEventListener('wheel',function(e){e.preventDefault();var p=pt(e);zoomAt(e.deltaY>0?1.15:1/1.15,p.x,p.y)},{passive:false});
   var z=document.createElement('div');z.className='zoom';z.innerHTML='<button type="button" aria-label="Ingrandisci">+</button><button type="button" aria-label="Riduci">−</button><button type="button" aria-label="Tutta la mappa" style="font-size:14px">⤢</button>';el.appendChild(z);
   var bs=z.querySelectorAll('button');bs[0].onclick=function(){zoomAt(1/1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[1].onclick=function(){zoomAt(1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[2].onclick=function(){vb={x:0,y:0,w:D.W,h:D.H};apply()};
-  return {svg:s,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*D.H/D.W;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb={x:0,y:0,w:D.W,h:D.H};apply()},sc:function(){return vb.w/D.W}};
+  setTimeout(apply,0);addEventListener('resize',apply);
+  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*D.H/D.W;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb={x:0,y:0,w:D.W,h:D.H};apply()},sc:function(){return vb.w/D.W}};
 }
 
 // ---------- DOV'È? ----------
@@ -368,8 +394,8 @@ var ARR=['⬆️','↗️','➡️','↘️','⬇️','↙️','⬅️','↖️'
 function dailyTarget(ds){var n=dayNum(ds),L=D.m.length,r=rng(20261104),perm=D.m.map(function(_,i){return i});for(var i=L-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=perm[i];perm[i]=perm[j];perm[j]=t}var cyc=Math.floor((n-1)/L),idx=((n-1)%L+L)%L;if(cyc>0){var r2=rng(20261104+cyc);for(var a=L-1;a>0;a--){var b=Math.floor(r2()*(a+1));var u=perm[a];perm[a]=perm[b];perm[b]=u}}return D.m[perm[idx]]}
 function dState(){var ds=today();var st=LS.get('pdg_'+ds,{g:[],done:0,win:0});return {ds:ds,st:st}}
 function stats(){return LS.get('pdg_stats',{p:0,w:0,cur:0,max:0,last:'',dist:[0,0,0,0,0,0]})}
-function refreshDailyCard(){if(!D)return;var x=dState(),n=dayNum(x.ds),s=stats();$('dNum').textContent='IL PAESE DEL GIORNO · N. '+n;
-  if(x.st.done){$('dDone').hidden=false;$('dDone').textContent=x.st.win?'✔ Fatto oggi in '+x.st.g.length+'/6. Torna domani!':'✘ Oggi è andata male. Domani si riprova!';$('openDaily').textContent='Vedi il risultato'}else{$('dDone').hidden=true;$('openDaily').textContent=x.st.g.length?'Continua ('+x.st.g.length+'/6)':'Gioca di oggi'}
+function refreshDailyCard(){if(!D)return;var x=dState(),n=dayNum(x.ds),s=stats();$('dNum').textContent='Il paese del giorno · n. '+n;
+  if(x.st.done){$('dDone').hidden=false;$('dDone').textContent=x.st.win?'✔ Fatto oggi in '+x.st.g.length+'/6. Torna domani!':'✘ Oggi è andata male. Domani si riprova!';$('dTxt').textContent=x.st.win?'Fatto in '+x.st.g.length+'/6 ✔':'Vedi il risultato'}else{$('dDone').hidden=true;$('dTxt').textContent=x.st.g.length?'Continua ('+x.st.g.length+'/6)':'Gioca di oggi'}
   var cur=s.last===x.ds||s.last===prevDay(x.ds)?s.cur:0;if(cur>0){$('streak').hidden=false;$('streakN').textContent=cur}else $('streak').hidden=true}
 function prevDay(ds){var a=ds.split('-'),d=new Date(Date.UTC(+a[0],+a[1]-1,+a[2]-1));return d.toISOString().slice(0,10)}
 function startDaily(){var x=dState();DAY={ds:x.ds,st:x.st,t:dailyTarget(x.ds),n:dayNum(x.ds)};if(!x.st.g.length&&!x.st.done)ev('game_start','paese');
@@ -427,6 +453,10 @@ function loadLb(){fetch('/api/top?g=dove&l=normale&p=week&n=10').then(function(r
 (function(){function t(){var z=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Zurich'})),d=(8-z.getDay())%7||7,h=24-z.getHours();$('lbReset').textContent='Si azzera tra '+(d-1)+' g '+h+' h'}t();setInterval(t,60000)})();
 
 $('openDaily').addEventListener('click',startDaily);
+$('lbBtn').addEventListener('click',function(){$('lb').hidden=false;loadLb();$('lbClose').focus()});
+$('lbClose').addEventListener('click',function(){$('lb').hidden=true});
+$('lb').addEventListener('click',function(e){if(e.target===$('lb'))$('lb').hidden=true});
+$('lbPlay').addEventListener('click',function(){$('lb').hidden=true;startDove()});
 $('openDove').addEventListener('click',startDove);
 fetch('ticino.json').then(function(r){return r.json()}).then(function(j){D=j;hub();refreshDailyCard();if(location.hash==='#paese-del-giorno')startDaily();else if(location.hash==='#dove')startDove()}).catch(function(){$('hubMap').innerHTML='<p style="padding:20px">La mappa non si è caricata. Ricarica la pagina.</p>'});
 loadLb();
