@@ -254,16 +254,16 @@ function ll(x,y){return {lon:x/D.k[0]+D.bbox[0],lat:D.bbox[3]-y/D.k[1]}}
 
 // ---------- i giochi della mappa ----------
 var GAMES=[
- {id:'autopostale',ic:'🚌',t:'Prendi l\'AutoPostale!',d:'Corri dietro all\'AutoPostale tra capre e turisti',where:'Airolo',href:SHOP+'/pages/autopostale',open:1},
- {id:'quiz',ic:'❓',t:'Quanto sei ticinese?',d:'Dieci domande, il verdetto in caschetti',where:'Lugano',href:SHOP+'/pages/quiz-ticinese',open:1},
+ {id:'autopostale',ic:'🚌',t:'Prendi l\'AutoPostale!',d:'Corri dietro all\'AutoPostale tra capre e turisti',where:'Airolo',s:'AutoPostale',href:SHOP+'/pages/autopostale',open:1},
+ {id:'quiz',ic:'❓',t:'Quanto sei ticinese?',d:'Dieci domande, il verdetto in caschetti',where:'Lugano',s:'Quiz ticinese',href:SHOP+'/pages/quiz-ticinese',open:1},
  {id:'dove',ic:'📍',t:'Dov\'è?',d:'Trova dieci comuni sulla mappa',where:'Monteceneri',fn:'dove',open:1},
  {id:'paese',ic:'🗓️',t:'Il paese del giorno',d:'Un comune al giorno, 6 tentativi',where:'Verzasca',fn:'daily',open:1},
- {id:'catapulta',ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona'},
- {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Gordola',dy:-34},
- {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno'},
+ {id:'catapulta',ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona',s:'Catapulta',side:'r'},
+ {id:'diga',ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Gordola',s:'Salto dalla diga',side:'r',dy:-40},
+ {id:'pardo',ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l'},
  {id:'piode',ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio'},
  {id:'vendemmia',ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Mendrisio'},
- {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote'}
+ {id:'scale',ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l'}
 ];
 function hub(){
   var box=$('hubMap'),s=baseSvg({labels:1});box.replaceChild(s,box.firstChild);
@@ -272,7 +272,7 @@ function hub(){
     h+='<g class="pin'+(g.open?'':' lock')+'" tabindex="0" role="button" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'" data-g="'+g.id+'" transform="translate('+x+' '+y+')">'+
       (g.open?'<circle class="pulse" r="26" fill="#E83B2B"/>':'')+
       '<g class="dot"><path d="M0 0 C -6 -14 -22 -24 -22 -42 A22 22 0 1 1 22 -42 C 22 -24 6 -14 0 0Z" fill="'+(g.open?'#E83B2B':'#9a8a70')+'" stroke="#fff" stroke-width="4"/><text x="0" y="-33" text-anchor="middle" font-size="22" style="stroke:none;font-size:22px">'+(g.open?g.ic:'🔒')+'</text></g>'+
-      (x>640?'<text x="-30" y="'+(-34+(g.dy||0))+'" text-anchor="end">':'<text x="30" y="'+(-34+(g.dy||0))+'">')+esc(g.t.length>22?g.t.slice(0,21)+'…':g.t)+'</text></g>'});
+      ((g.side||(x>720?'l':'r'))==='l'?'<text x="-30" y="'+(-34+(g.dy||0))+'" text-anchor="end">':'<text x="30" y="'+(-34+(g.dy||0))+'">')+esc(g.s||g.t)+'</text></g>'});
   o.innerHTML=h;
   o.querySelectorAll('.pin').forEach(function(p){function go(){openGame(p.dataset.g)}p.addEventListener('click',go);p.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
   $('glist').innerHTML=GAMES.map(function(g){var tag=g.href?'a':'button';return '<'+tag+' class="gi'+(g.open?'':' lock')+'" data-g="'+g.id+'"'+(g.href?' href="'+g.href+'"':' type="button" style="font:inherit;text-align:left;cursor:pointer"')+'><span class="ic">'+(g.open?g.ic:'🔒')+'</span><span style="min-width:0"><b>'+esc(g.t)+'</b><small>'+esc(g.where)+' · '+esc(g.d)+'</small></span><span class="go">'+(g.open?'Gioca':'Presto')+'</span></'+tag+'>'}).join('');
