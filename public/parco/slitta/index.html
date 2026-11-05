@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Discesa in slitta – Il parco giochi di Elvezio</title>
+<meta name="description" content="Il Signor Elvezio scende in slitta in Leventina: passa tra le porte, salta le gobbe e schiva abeti, sassi e mucche distratte. 3 livelli e classifica, discesa senza fine.">
+<meta property="og:title" content="Discesa in slitta">
+<meta property="og:description" content="Porte, gobbe e mucche distratte. Fin dove arrivi in slitta?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'5da5ba04-6e25-4102-a6f2-c872e48a906c.webp',SP=CDN+'82e3f8ab-9914-45ad-822e-fdfd03fa8e8a.webp';
+var R={slitta:[54,44,297,302],botto:[374,56,342,293],mucca:[779,89,265,259],abete:[1102,40,197,313],
+  rossa:[118,430,148,264],blu:[451,431,148,263],gobba:[686,487,326,173],sasso:[1043,461,297,208]};
+// altezza a schermo e raggio di urto (in proporzione alla larghezza) per ogni cosa
+var SZ={mucca:{h:100,hit:.32},abete:{h:135,hit:.2},sasso:{h:70,hit:.36},gobba:{h:52},rossa:{h:78},blu:{h:78}};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+var PY=300,TILE=540*1635/1080;
+
+Telaio.start({
+  id:'slitta',n:10,title:'Discesa in slitta',zone:'Leventina',
+  preload:[BG,SP],
+  intro:'In Leventina ho trovato la slitta del nonno in cantina. Freni? No. Sterzo? Più o meno. Tu <b>trascina il dito</b> e io vado dove dici, passando tra le bandierine. Le mucche, però, non si spostano per nessuno.',
+  how:[['👉','<b>Trascina il dito</b> a destra e a sinistra per guidare la slitta. Vanno bene anche le frecce.'],['🚩','Passa <b>tra la bandierina rossa e quella blu</b>: più porte fai di fila, più valgono.'],['⛷️','Le <b>gobbe</b> ti fanno saltare: in aria vola sopra tutto e prendi punti.'],['🐄','Abeti, sassi e <b>mucche distratte</b>: se li prendi, botto e una vita in meno. La discesa non finisce mai.']],
+  levels:{
+    facile:{desc:'Porte larghe, si va piano',lives:3,v0:300,vmax:560,acc:4,gate:180,stars:[1500,4000,8000]},
+    medio:{desc:'Porte più strette, più mucche',lives:3,v0:360,vmax:660,acc:5,gate:150,stars:[2000,5000,10000]},
+    difficile:{desc:'Porte strette e velocità folle',lives:3,v0:420,vmax:780,acc:6,gate:124,stars:[2500,6000,12000]}
+  },
+  hudExtra:function(st){return st?'<span><b>'+Math.floor((st.metri||0))+'</b> m</span>':''},
+  verdict:function(st){return ['Più tempo nella neve che sulla slitta. Le mucche ridono ancora.','Discreto! Il nonno sarebbe quasi fiero.','Bravo! In Leventina parlano già di te.','Perfetto! Ti vogliono alla Coppa del mondo. Di slitta, eh.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,v=L.v0,d=0,px=W/2,tx=W/2,vx=0,objs=[],nextAt=500,crash=0,air=0,airMax=.85,combo=0,keys={},scrollY=0,lastPts=0,inv=0;
+    T.state.metri=0;
+    function spawn(y){var r=Math.random(),dense=Math.min(1,d/40000);
+      if(r<.38){var gw=L.gate*(1-dense*.15),cx=80+gw/2+Math.random()*(W-160-gw);objs.push({k:'porta',x:cx,y:y,w:gw,done:0})}
+      else if(r<.5){objs.push({k:'gobba',x:70+Math.random()*(W-140),y:y})}
+      else{var n=1+(Math.random()<.35+dense*.4?1:0);for(var i=0;i<n;i++){var q=Math.random(),k=q<.3+(L.gate<160?.1:0)?'mucca':q<.7?'abete':'sasso';objs.push({k:k,x:50+Math.random()*(W-100),y:y+i*40,ph:Math.random()*6})}}}
+    function hitR(o){var k=R[o.k],s=SZ[o.k],w=s.h*k[2]/k[3];return w*s.hit}
+    return {
+      update:function(dt){t+=dt;inv=Math.max(0,inv-dt);
+        if(crash>0){crash-=dt;v=Math.max(0,v-v*dt*3);if(crash<=0){v=L.v0*.7;inv=1.2}}
+        else{v=Math.min(L.vmax,v+L.acc*dt*10)}
+        if(keys.ArrowLeft)tx-=480*dt;if(keys.ArrowRight)tx+=480*dt;tx=Math.max(36,Math.min(W-36,tx));
+        if(crash<=0){var want=(tx-px)*7;vx+=(want-vx)*Math.min(1,dt*10);vx=Math.max(-420,Math.min(420,vx));px+=vx*dt;px=Math.max(30,Math.min(W-30,px))}
+        var dy=v*dt;d+=dy;scrollY+=dy;T.state.metri=d/12;
+        var p=Math.floor(d/120);if(p>lastPts){T.add((p-lastPts)*5);lastPts=p}
+        if(air>0){air-=dt}
+        while(d+H>nextAt){spawn(nextAt-d+PY);nextAt+=200+Math.random()*130-Math.min(70,d/1000)}
+        for(var i=objs.length-1;i>=0;i--){var o=objs[i];o.y-=dy;
+          if(o.k==='porta'&&!o.done&&o.y<PY){o.done=1;if(Math.abs(px-o.x)<o.w/2-6&&crash<=0){combo++;T.state.combo=combo;var pts=100+Math.min(10,combo-1)*20;T.add(pts,o.x,PY+40,'#FFD24A');T.sfx('coin');if(combo%5===0)T.pop(combo+' porte di fila!',800)}else{if(combo>1)T.float('Porta saltata',px,PY+60,'#fff',20);combo=0;T.state.combo=0}}
+          else if(o.k==='gobba'&&!o.done&&Math.abs(o.y-PY)<16&&Math.abs(o.x-px)<60&&air<=0&&crash<=0){o.done=1;air=airMax;T.add(150,px,PY-60,'#BFE8FF');T.sfx('boing');T.float('Hop!',px,PY-100,'#fff',26)}
+          else if(SZ[o.k]&&SZ[o.k].hit&&!o.done&&air<=0&&crash<=0&&inv<=0&&Math.abs(o.y-PY)<20&&Math.abs(o.x-px)<hitR(o)+18){o.done=1;crash=1.1;combo=0;T.state.combo=0;T.shake();T.float(o.k==='mucca'?'Muuu!':o.k==='abete'?'Botto!':'Ahia!',px,PY-70,'#fff',28);T.burst(px,PY,'#ffffff',20);T.lose(1)}
+          if(o.y<-160)objs.splice(i,1)}
+      },
+      draw:function(c){
+        if(ok(bg)){var off=scrollY%TILE;for(var y=-off;y<H;y+=TILE)c.drawImage(bg,0,y,W,TILE+1)}else{c.fillStyle='#eef3fb';c.fillRect(0,0,W,H)}
+        if(!ok(img))return;
+        // la scia della slitta
+        var list=objs.slice();list.push({k:'me',y:PY});list.sort(function(a,b){return a.y-b.y});
+        list.forEach(function(o){var k,h,w;
+          if(o.k==='porta'){[['rossa',o.x-o.w/2],['blu',o.x+o.w/2]].forEach(function(f){k=R[f[0]];h=SZ[f[0]].h;w=h*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],f[1]-w*.2,o.y-h,w,h)});
+            if(o.done===1&&Math.abs(px-o.x)<o.w/2-6){}return}
+          if(o.k==='me'){var air01=air>0?Math.sin((1-air/airMax)*Math.PI):0;
+            if(air01>0){c.fillStyle='rgba(60,80,120,.18)';c.beginPath();c.ellipse(px,PY+8,40,10,0,0,7);c.fill()}
+            k=crash>0?R.botto:R.slitta;h=crash>0?100:110;h*=1+air01*.35;w=h*k[2]/k[3];c.save();c.translate(px,PY-air01*50);if(crash<=0){if(vx>30)c.scale(-1,1);c.rotate(Math.max(-.25,Math.min(.25,Math.abs(vx)/1600)))}
+            if(inv>0&&Math.floor(t*12)%2)c.globalAlpha=.4;c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h*.75,w,h);c.restore();return}
+          k=R[o.k];h=SZ[o.k].h;w=h*k[2]/k[3];var sx=o.k==='mucca'&&Math.sin(o.ph)>0?-1:1;c.save();c.translate(o.x,o.y);if(sx<0)c.scale(-1,1);c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h*.85,w,h);c.restore()});
+        if(t<2.5){c.save();c.globalAlpha=Math.min(1,2.5-t);c.font='800 22px Montserrat';c.textAlign='center';c.lineWidth=6;c.strokeStyle='#3E1019';c.fillStyle='#fff';c.strokeText('Trascina il dito per guidare',W/2,H-80);c.fillText('Trascina il dito per guidare',W/2,H-80);c.restore()}
+      },
+      down:function(p){tx=p.x},move:function(p,e){if(e.buttons||e.pointerType==='touch')tx=p.x},
+      key:function(k,dn){keys[k]=dn}
+    };
+  }
+});
+})();
+</script>
+</body>
+</html>
