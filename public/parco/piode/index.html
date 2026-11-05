@@ -23,15 +23,15 @@ var R={casa:[115,43,477,452],pioda:[686,378,428,102],nuvola:[1208,181,348,302],c
 function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
 var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
 // il rustico: scala, base e dove comincia il tetto
-var S=.75,CX=267,BASE=760,TOPY=BASE-R.casa[3]*S,LEFT=270-(353.5-R.casa[0])*S,EAVE=TOPY+(238-43)*S,ROWS=6,TH=26;
-function rowY(i){return EAVE+8-i*TH}            // fondo della fila i
-function rowW(i){return 350*(1-i/6.6)}          // larghezza del tetto alla fila i
+var S=.75,CX=267,BASE=760,TOPY=BASE-R.casa[3]*S,LEFT=270-(353.5-R.casa[0])*S,EAVE=TOPY+(238-43)*S,ROWS=7,TH=20;
+function rowY(i){return EAVE+6-i*TH}            // fondo della fila i
+function rowW(i){return 400*(1-i*TH/152)}          // larghezza del tetto alla fila i
 
 Telaio.start({
   id:'piode',n:7,title:'Piode',zone:'Valle Maggia',
   preload:[BG,SP],
   intro:'A Cevio sta arrivando il temporale e il mio rustico non ha ancora il tetto. Le piode le porto io, sono pesanti come un mese di polenta. Tu <b>tocca quando la pioda è sopra il tetto</b>, così cade dritta. Prima che piova, eh.',
-  how:[['🪨','La pioda scorre avanti e indietro: <b>tocca</b> per lasciarla cadere sul tetto.'],['🎯','Più è centrata, più punti. <b>Perfetta</b> vale il doppio, e di fila ancora di più.'],['💥','Se cade troppo storta si rompe: <b>crack</b>, e perdi una vita.'],['🌧️','Sei file e il tetto è finito, poi si passa al rustico dopo. Quando arriva la pioggia è finita.']],
+  how:[['🪨','La pioda scorre avanti e indietro: <b>tocca</b> per lasciarla cadere sul tetto.'],['🎯','Più è centrata, più punti. <b>Perfetta</b> vale il doppio, e di fila ancora di più.'],['💥','Se cade troppo storta si rompe: <b>crack</b>, e perdi una vita.'],['🌧️','Sette file e il tetto è finito, poi si passa al rustico dopo. Quando arriva la pioggia è finita.']],
   time:75,
   levels:{
     facile:{desc:'Piode lente, temporale lontano',lives:3,time:75,v:210,stars:[2000,4000,5500]},
@@ -43,14 +43,14 @@ Telaio.start({
   game:function(T,L){
     var W=T.W,H=T.H,t=0,row=0,laid=[],cur=null,st='wait',wt=.5,fall=null,pose='carry',pt=0,goat=0,fade=0,combo=0,houses=0,crack=null,drops=[];
     T.state.tetti=0;
-    function speed(){return L.v*(1+houses*.08)*(1+row*.05)}
-    function newSlab(){var w=rowW(row),d=Math.random()<.5?1:-1;cur={w:w,x:CX-d*230,d:d,y:rowY(row)-110,ph:Math.random()*6};st='slide'}
+    function speed(){return L.v*(1+houses*.08)*(1+row*.03)}
+    function newSlab(){var w=rowW(row),d=Math.random()<.5?1:-1;cur={w:w,x:CX-d*(110+w*.3),d:d,y:rowY(row)-110,ph:Math.random()*6};st='slide'}
     function finishRoof(){st='done';wt=1.6;houses++;T.state.tetti=houses;T.add(300,CX,EAVE-200,'#FFD24A');T.pop('Tetto finito!',900);T.sfx('win');pose='cheer';pt=1.4;goat=1.6;T.burst(CX,EAVE-150,'#D9D2C3',24)}
     return {
       update:function(dt){t+=dt;if(pt>0){pt-=dt;if(pt<=0)pose='carry'}goat=Math.max(0,goat-dt);fade=Math.max(0,fade-dt*2.5);
         if((T.state.time||0)<9&&pose==='carry')pose='ombrello';
         if(st==='wait'){wt-=dt;if(wt<=0)newSlab()}
-        else if(st==='slide'){var v=speed(),lim=200;cur.x+=cur.d*v*dt;if(cur.x>CX+lim){cur.x=CX+lim;cur.d=-1}if(cur.x<CX-lim){cur.x=CX-lim;cur.d=1}
+        else if(st==='slide'){var v=speed(),lim=110+cur.w*.3;cur.x+=cur.d*v*dt;if(cur.x>CX+lim){cur.x=CX+lim;cur.d=-1}if(cur.x<CX-lim){cur.x=CX-lim;cur.d=1}
           if(L.wind)cur.x+=Math.sin(t*1.7+cur.ph)*28*dt}
         else if(st==='fall'){fall.t+=dt;cur.y=fall.y0+(fall.y1-fall.y0)*Math.min(1,(fall.t/.14)*(fall.t/.14));if(fall.t>=.14)land()}
         else if(st==='done'){wt-=dt;if(wt<=0){laid=[];row=0;fade=1;st='wait';wt=.35}}
@@ -66,10 +66,10 @@ Telaio.start({
         // il rustico
         k=R.casa;c.drawImage(img,k[0],k[1],k[2],k[3],LEFT,TOPY,k[2]*S,k[3]*S);
         // le piode posate, dal basso in alto
-        k=R.pioda;laid.forEach(function(s){c.drawImage(img,k[0],k[1],k[2],k[3],s.x-s.w/2,s.y-TH*1.45,s.w,TH*1.6)});
+        k=R.pioda;laid.forEach(function(s){c.drawImage(img,k[0],k[1],k[2],k[3],s.x-s.w/2,s.y-TH*1.6,s.w,TH*1.75)});
         // la guida della fila
-        if(st==='slide'||st==='fall'){var y=rowY(row),w=rowW(row);c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=2.5;c.strokeRect(CX-w/2,y-TH*1.3,w,TH*1.3);c.restore()}
-        if(cur&&(st==='slide'||st==='fall')){c.drawImage(img,k[0],k[1],k[2],k[3],cur.x-cur.w/2,cur.y-TH*1.45,cur.w,TH*1.6)}
+        if(st==='slide'||st==='fall'){var y=rowY(row),w=rowW(row);c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=2.5;c.strokeRect(CX-w/2,y-TH*1.5,w,TH*1.5);c.restore()}
+        if(cur&&(st==='slide'||st==='fall')){c.drawImage(img,k[0],k[1],k[2],k[3],cur.x-cur.w/2,cur.y-TH*1.6,cur.w,TH*1.75)}
         if(crack){c.save();c.translate(crack.x,crack.y);c.rotate(crack.r);c.globalAlpha=Math.max(0,1-crack.t);c.drawImage(img,k[0],k[1],k[2]/2,k[3],-crack.w/2,-TH*.8,crack.w/2,TH*1.6);c.drawImage(img,k[0]+k[2]/2,k[1],k[2]/2,k[3],8,-TH*.6,crack.w/2,TH*1.6);c.restore()}
         // Elvezio e la capra
         k=R[pose];var eh=pose==='cheer'?215:pose==='carry'?190:200,ew=eh*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],86-ew/2,H-14-eh,ew,eh);
@@ -81,7 +81,7 @@ Telaio.start({
       down:function(){if(st!=='slide')return;st='fall';fall={t:0,y0:cur.y,y1:rowY(row)};T.sfx('whoosh')}
     };
     function land(){var w=rowW(row),off=Math.abs(cur.x-CX),cov=Math.max(0,(w-off)/w);
-      if(cov<.55){crack={x:cur.x,y:cur.y-10,w:cur.w,vy:-160,vr:(cur.x<CX?-2:2),r:0,t:0};combo=0;T.state.combo=0;T.pop('Crack!',700);T.lose(1);T.shake();pose='facepalm';pt=.9;cur=null;st='wait';wt=.5;return}
+      if(off>Math.max(.45*w,38)){crack={x:cur.x,y:cur.y-10,w:cur.w,vy:-160,vr:(cur.x<CX?-2:2),r:0,t:0};combo=0;T.state.combo=0;T.pop('Crack!',700);T.lose(1);T.shake();pose='facepalm';pt=.9;cur=null;st='wait';wt=.5;return}
       var perfect=off<6;if(perfect){cur.x=CX;combo++;T.state.combo=combo;T.add(100+Math.min(8,combo-1)*20,CX,rowY(row)-50,'#FFE36B');T.sfx('coin');if(combo>1)T.float('Perfetta ×'+combo,CX,rowY(row)-90,'#fff',22);else T.float('Perfetta!',CX,rowY(row)-90,'#fff',22)}
       else{combo=0;T.state.combo=0;T.add(40+Math.round(cov*60),cur.x,rowY(row)-50);T.sfx('hit')}
       T.buzz(20);laid.push({x:cur.x,y:rowY(row),w:cur.w});cur=null;row++;
