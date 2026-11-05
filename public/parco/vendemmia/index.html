@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vendemmia – Il parco giochi di Elvezio</title>
+<meta name="description" content="Vendemmia a Novazzano: il Signor Elvezio raccoglie il Merlot con la cesta, ma dalla pergola cadono anche vespe e scarponi. 3 livelli e classifica.">
+<meta property="og:title" content="Vendemmia">
+<meta property="og:description" content="L'uva sì, le vespe no. Quante cassette riempi in 60 secondi?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'f47f7872-e586-4c2b-9ebc-481080fb2776.webp',SP=CDN+'713ebab4-d490-4e2e-a0f4-b229e269bde8.webp';
+var R={uva:[80,46,225,278],oro:[431,43,204,278],vespa:[756,61,234,247],scarpone:[1065,82,231,214],
+  ready:[125,382,141,346],punto:[446,376,222,355],cheer:[791,335,164,405],cassa:[1059,473,255,197]};
+var SIZE={uva:62,oro:62,vespa:58,scarpone:56};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+
+Telaio.start({
+  id:'vendemmia',n:8,title:'Vendemmia',zone:'Mendrisiotto',
+  preload:[BG,SP],
+  intro:'A Novazzano è tempo di vendemmia e io ho la cesta pronta. Il Merlot cade dalla pergola, tu <b>muovi la cesta</b> e lo prendi al volo. Il problema è che dalla pergola cade anche altra roba: vespe arrabbiate e, non chiedermi perché, scarponi.',
+  how:[['👉','<b>Trascina il dito</b> a destra e a sinistra per muovere Elvezio con la cesta.'],['🍇','Ogni grappolo vale punti, <b>di fila</b> vale di più. Quello <b>d\'oro</b> vale 250.'],['🐝','<b>Le vespe no!</b> Se ne prendi una, puntura sul naso e una vita in meno.'],['🥾','Lo scarpone toglie punti. Ogni 20 grappoli riempi una <b>cassetta</b>: bonus.']],
+  time:60,
+  levels:{
+    facile:{desc:'Uva lenta, poche vespe',lives:3,time:60,every:.8,g:430,vespa:.12,stars:[1500,3000,4500]},
+    medio:{desc:'Più vespe e uva più svelta',lives:3,time:60,every:.65,g:540,vespa:.18,stars:[1800,3600,5400]},
+    difficile:{desc:'Vespe a zig zag e uva che vola',lives:3,time:60,every:.52,g:650,vespa:.24,zig:1,stars:[2000,4000,6000]}
+  },
+  hudExtra:function(st){return st?'<span>📦 <b>'+(st.casse||0)+'</b></span>':''},
+  verdict:function(st){return ['Più vespe che uva. Quest\'anno beviamo acqua.','Discreto! Ne viene fuori un mezzo litro di nostrano.','Bravo! Il viticoltore ti chiede di tornare l\'anno prossimo.','Perfetto! Con la tua uva fanno un Merlot da medaglia.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,items=[],next=.5,ex=W/2,tx=W/2,pose='ready',pt=0,grapes=0,keys={},cassaPop=0;
+    T.state.casse=0;
+    function spawn(){var r=Math.random(),k=r<L.vespa?'vespa':r<L.vespa+.06?'oro':r<L.vespa+.14?'scarpone':'uva';
+      var x=50+Math.random()*(W-100);items.push({k:k,x:x,x0:x,y:120+Math.random()*90,vy:0,hang:k==='vespa'?0:.45,t:0,ph:Math.random()*6,dead:0})}
+    function catchY(){return H-18-200*.6}
+    return {
+      update:function(dt){t+=dt;if(pt>0){pt-=dt;if(pt<=0)pose='ready'}cassaPop=Math.max(0,cassaPop-dt);
+        if(keys.ArrowLeft)tx-=520*dt;if(keys.ArrowRight)tx+=520*dt;tx=Math.max(50,Math.min(W-50,tx));
+        var sp=pose==='punto'?.35:1;ex+=(tx-ex)*Math.min(1,dt*14*sp);
+        var hurry=1-Math.min(.3,t/200);next-=dt;if(next<=0){spawn();next=L.every*hurry*(.7+Math.random()*.6)}
+        var cy=catchY();
+        for(var i=items.length-1;i>=0;i--){var it=items[i];it.t+=dt;
+          if(it.dead){it.dead-=dt;it.y-=60*dt;if(it.dead<=0)items.splice(i,1);continue}
+          if(it.t<it.hang)continue;
+          it.vy=Math.min(it.vy+L.g*dt*(it.k==='vespa'?.55:1),L.g*.9);it.y+=it.vy*dt;
+          if(it.k==='vespa'){it.x=it.x0+Math.sin(it.t*(L.zig?5:3)+it.ph)*(L.zig?90:55);it.x=Math.max(30,Math.min(W-30,it.x))}
+          var prevY=it.y-it.vy*dt;
+          if(prevY<cy&&it.y>=cy&&Math.abs(it.x-ex)<58){hit(it);items.splice(i,1);continue}
+          if(it.y>H+40){if(it.k==='uva'||it.k==='oro')T.state.combo=0;items.splice(i,1)}}
+      },
+      draw:function(c){
+        if(ok(bg))c.drawImage(bg,0,0,W,W*1935/1080);else{c.fillStyle='#9bb56a';c.fillRect(0,0,W,H)}
+        if(!ok(img))return;
+        items.forEach(function(it){var k=R[it.k],s=SIZE[it.k],w=s,h=s*k[3]/k[2];if(it.k==='vespa'){h=s*k[3]/k[2];w=s}
+          c.save();c.translate(it.x,it.y);if(it.t<it.hang)c.rotate(Math.sin(it.t*30)*.15);else if(it.k==='scarpone')c.rotate(it.t*4);
+          if(it.k==='vespa'&&Math.cos(it.t*(L.zig?5:3)+it.ph)<0)c.scale(-1,1);
+          if(it.k==='oro'){c.shadowColor='rgba(255,220,90,.9)';c.shadowBlur=18}
+          c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h/2,w,h);c.restore()});
+        // la cassetta
+        var k=R.cassa,cw=118+cassaPop*30,ch=cw*k[3]/k[2];c.drawImage(img,k[0],k[1],k[2],k[3],W-cw-10,H-ch-10,cw,ch);
+        c.save();c.font='900 18px Montserrat';c.textAlign='center';c.lineWidth=5;c.strokeStyle='#3E1019';c.fillStyle='#FFD24A';var tx2=W-10-cw/2;c.strokeText(grapes%20+'/20',tx2,H-ch-16);c.fillText(grapes%20+'/20',tx2,H-ch-16);c.restore();
+        // Elvezio
+        k=R[pose];var eh=pose==='cheer'?225:200,ew=eh*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],ex-ew/2,H-18-eh,ew,eh);
+      },
+      down:function(p){tx=p.x},move:function(p,e){if(e.buttons||e.pointerType==='touch')tx=p.x},
+      key:function(k,dn){keys[k]=dn}
+    };
+    function hit(it){var st=T.state,y=catchY()-30;
+      if(it.k==='vespa'){pose='punto';pt=.9;st.combo=0;T.float('Ahia!',ex,y-30,'#fff',30);T.lose(1);T.shake();return}
+      if(it.k==='scarpone'){st.combo=0;T.add(-100,ex,y,'#fff');T.float('Uno scarpone?!',ex,y-40,'#fff',22);T.sfx('bad');return}
+      st.combo++;var pts=it.k==='oro'?250:50+Math.min(10,st.combo-1)*5;T.add(pts,ex,y,it.k==='oro'?'#FFE36B':'#E6B3FF');T.sfx(it.k==='oro'?'coin':'pop');T.burst(ex,y+20,it.k==='oro'?'#FFE36B':'#6B2E7A',it.k==='oro'?18:8);
+      grapes+=it.k==='oro'?3:1;if(grapes>=20*(st.casse+1)){st.casse++;T.add(300,W-70,H-170,'#FFD24A');T.pop('Cassetta piena!',800);T.sfx('win');pose='cheer';pt=.9;cassaPop=.6}}
+  }
+});
+})();
+</script>
+</body>
+</html>
