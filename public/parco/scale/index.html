@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le scale di Morcote – Il parco giochi di Elvezio</title>
+<meta name="description" content="Le scale di Morcote non finiscono mai: aiuta il Signor Elvezio a salire gradino dopo gradino verso la chiesa, a destra e a sinistra, senza perdere il fiato. 3 livelli e classifica.">
+<meta property="og:title" content="Le scale di Morcote">
+<meta property="og:description" content="Destra, sinistra, destra... Quanti gradini fai prima del fiatone?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'8f3f5edb-afad-4616-ac5c-76217dea7bbb.webp',SP=CDN+'8a523173-048f-47df-9597-241257b4abae.webp';
+var R={step:[56,81,253,202],gerani:[393,32,253,251],gelato:[813,43,105,258],campana:[1132,87,142,167],
+  sale:[92,358,179,376],fiatone:[441,407,180,333],cade:[704,421,346,316],evviva:[1096,325,195,417]};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+var DX=62,DY=50,SW=124,SH=SW*202/253,PY=650;
+
+Telaio.start({
+  id:'scale',n:9,title:'Le scale di Morcote',zone:'Ceresio',
+  preload:[BG,SP],
+  intro:'A Morcote per arrivare alla chiesa ci sono più scale che a casa di mia zia. Il gradino dopo è a destra o a sinistra: <b>tocca il lato giusto</b> e sali. Ma vai svelto, perché il fiato finisce. E io ho una certa età.',
+  how:[['👆','Il prossimo gradino è a destra? <b>Tocca a destra</b>. È a sinistra? <b>Tocca a sinistra</b>. Vanno bene anche le frecce.'],['😮‍💨','La barra del <b>fiato</b> scende sempre. Ogni gradino la ricarica un po\'. Se finisce: fiatone.'],['🍦','Il <b>gelato</b> sui gradini ridà fiato e punti.'],['🔔','Ogni 50 gradini suona la <b>campana</b>: bonus. Le scale non finiscono mai.']],
+  levels:{
+    facile:{desc:'Fiato lungo',lives:3,d:.1,g:.0006,stars:[1000,2500,5000]},
+    medio:{desc:'Fiato più corto',lives:3,d:.14,g:.0008,stars:[1200,3000,6000]},
+    difficile:{desc:'Fiato cortissimo, salita senza sosta',lives:3,d:.19,g:.001,stars:[1400,3500,7000]}
+  },
+  hudExtra:function(st){return st?'<span>🪜 <b>'+(st.gradini||0)+'</b></span>':''},
+  verdict:function(st){return ['Tre gradini e un caffè. Domani riprovi.','Discreto! La chiesa si vede già, più o meno.','Bravo! Polpacci da campione di Morcote.','Perfetto! Il sagrestano ti ha fatto suonare la campana.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,steps=[],n=0,col=0,camC=0,camN=0,fiato=1,pose='sale',pt=0,lock=0,face=1,hop=0,keys={};
+    T.state.gradini=0;
+    function gen(upto){while(steps.length<upto){var i=steps.length,c=i===0?0:steps[i-1].c+(Math.random()<.5?-1:1);
+      if(i>2&&Math.abs(c)>3)c=steps[i-1].c-Math.sign(c);
+      steps.push({c:c,g:i>4&&i%50!==0&&Math.random()<.06?1:0,dec:Math.random()<.18,bell:i>0&&i%50===0})}}
+    gen(40);
+    function move(dir){if(lock>0)return;var nx=steps[n+1];gen(n+40);
+      if(nx.c===col+dir){n++;col=nx.c;face=dir;hop=1;pose='sale';T.state.gradini=n;var st=T.state;st.combo++;
+        fiato=Math.min(1,fiato+.085);T.add(10+Math.min(40,Math.floor(st.combo/10)*5));T.sfx('tick');
+        if(nx.g){nx.g=0;fiato=Math.min(1,fiato+.3);T.add(100,W/2,PY-110,'#FFF3D6');T.float('Gelato!',W/2,PY-150,'#fff',24);T.sfx('coin')}
+        if(nx.bell){T.add(500,W/2,PY-140,'#FFD24A');T.pop('Din don! '+n+' gradini',900);T.sfx('win');pose='evviva';pt=.7}}
+      else{face=dir;pose='cade';pt=.6;lock=.6;T.state.combo=0;T.float('Inciampato!',W/2,PY-130,'#fff',24);T.lose(1);T.shake()}}
+    return {
+      update:function(dt){t+=dt;lock=Math.max(0,lock-dt);hop=Math.max(0,hop-dt*8);if(pt>0){pt-=dt;if(pt<=0)pose='sale'}
+        camC+=(col-camC)*Math.min(1,dt*10);camN+=(n-camN)*Math.min(1,dt*12);
+        if(n>0&&lock<=0){fiato-=(L.d+n*L.g)*dt;if(fiato<=0){fiato=.7;pose='fiatone';pt=1.1;lock=1.1;T.state.combo=0;T.pop('Fiatone!',900);T.lose(1)}}
+      },
+      draw:function(c){
+        // sfondo: si sale dal lago fino alla chiesa
+        var bw=W*1.25,bh=bw*1935/1080,pr=Math.min(1,camN/300);if(ok(bg))c.drawImage(bg,(W-bw)/2-(camC*6)%40,-(bh-H)*(1-pr),bw,bh);else{c.fillStyle='#8fb7c9';c.fillRect(0,0,W,H)}
+        c.fillStyle='rgba(255,248,235,.12)';c.fillRect(0,0,W,H);
+        if(!ok(img))return;
+        var lo=Math.max(0,Math.floor(camN)-4),hi=Math.min(steps.length-1,Math.floor(camN)+16);
+        for(var i=hi;i>=lo;i--){var s=steps[i],x=W/2+(s.c-camC)*DX,y=PY+(camN-i)*DY,k=s.dec?R.gerani:R.step,h=SW*k[3]/k[2];
+          c.drawImage(img,k[0],k[1],k[2],k[3],x-SW/2,y-h+SH*.67,SW,h);
+          if(s.g){var g=R.gelato,gh=58,gw=gh*g[2]/g[3];c.drawImage(img,g[0],g[1],g[2],g[3],x-gw/2,y-gh+4+Math.sin(t*4+i)*3,gw,gh)}
+          if(s.bell){var b=R.campana,bh2=46,bw2=bh2*b[2]/b[3];c.save();c.translate(x+34,y-30);c.rotate(Math.sin(t*3)*.25);c.drawImage(img,b[0],b[1],b[2],b[3],-bw2/2,0,bw2,bh2);c.restore()}
+          if(i===n){// Elvezio
+            var k2=R[pose],eh=pose==='cade'?120:pose==='evviva'?165:150,ew=eh*k2[2]/k2[3];c.save();c.translate(x,y+4-Math.sin(hop*Math.PI)*26);if(face<0)c.scale(-1,1);c.drawImage(img,k2[0],k2[1],k2[2],k2[3],-ew/2,-eh,ew,eh);c.restore()}}
+        // la barra del fiato
+        var bx=70,by=64,bwid=W-140;c.fillStyle='rgba(42,26,18,.65)';c.beginPath();c.roundRect?c.roundRect(bx,by,bwid,16,8):c.rect(bx,by,bwid,16);c.fill();
+        c.fillStyle=fiato<.25?'#E83B2B':fiato<.5?'#F0A830':'#6CC070';c.beginPath();c.roundRect?c.roundRect(bx+2,by+2,(bwid-4)*Math.max(0,fiato),12,6):c.rect(bx+2,by+2,(bwid-4)*Math.max(0,fiato),12);c.fill();
+        c.font='800 13px Montserrat';c.fillStyle='#fff';c.textAlign='left';c.fillText('FIATO',bx,by-5);
+        if(n<3){c.save();c.globalAlpha=.6+.3*Math.sin(t*5);c.font='900 40px Montserrat';c.fillStyle='#fff';c.strokeStyle='#3E1019';c.lineWidth=6;c.textAlign='center';var d=steps[n+1].c>col?1:-1;var ax=d>0?W-60:60;c.strokeText(d>0?'▶':'◀',ax,PY-60);c.fillText(d>0?'▶':'◀',ax,PY-60);c.restore()}
+      },
+      down:function(p){move(p.x<W/2?-1:1)},
+      key:function(k,dn){if(!dn||keys[k])return keys[k]=dn,void 0;keys[k]=dn;if(k==='ArrowLeft')move(-1);if(k==='ArrowRight')move(1)}
+    };
+  }
+});
+})();
+</script>
+</body>
+</html>
