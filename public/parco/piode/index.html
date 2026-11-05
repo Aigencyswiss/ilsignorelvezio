@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Piode – Il parco giochi di Elvezio</title>
+<meta name="description" content="A Cevio sta arrivando il temporale e il rustico non ha il tetto. Aiuta il Signor Elvezio a posare le piode una sopra l'altra, più dritte che puoi. 3 livelli e classifica.">
+<meta property="og:title" content="Piode">
+<meta property="og:description" content="Il temporale arriva, il rustico è senza tetto. Quanti tetti di piode riesci a fare?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'e43b5e39-a329-42eb-83e1-354f981416ff.webp',SP=CDN+'bd256bab-acca-45e6-854b-967378b918ec.webp';
+var R={casa:[115,43,477,452],pioda:[686,378,428,102],nuvola:[1208,181,348,302],capra:[1690,188,250,388],
+  carry:[166,591,366,521],cheer:[743,575,310,541],facepalm:[1246,606,211,509],ombrello:[1644,576,334,544]};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+// il rustico: scala, base e dove comincia il tetto
+var S=.75,CX=267,BASE=760,TOPY=BASE-R.casa[3]*S,LEFT=270-(353.5-R.casa[0])*S,EAVE=TOPY+(238-43)*S,ROWS=6,TH=26;
+function rowY(i){return EAVE+8-i*TH}            // fondo della fila i
+function rowW(i){return 350*(1-i/6.6)}          // larghezza del tetto alla fila i
+
+Telaio.start({
+  id:'piode',n:7,title:'Piode',zone:'Valle Maggia',
+  preload:[BG,SP],
+  intro:'A Cevio sta arrivando il temporale e il mio rustico non ha ancora il tetto. Le piode le porto io, sono pesanti come un mese di polenta. Tu <b>tocca quando la pioda è sopra il tetto</b>, così cade dritta. Prima che piova, eh.',
+  how:[['🪨','La pioda scorre avanti e indietro: <b>tocca</b> per lasciarla cadere sul tetto.'],['🎯','Più è centrata, più punti. <b>Perfetta</b> vale il doppio, e di fila ancora di più.'],['💥','Se cade troppo storta si rompe: <b>crack</b>, e perdi una vita.'],['🌧️','Sei file e il tetto è finito, poi si passa al rustico dopo. Quando arriva la pioggia è finita.']],
+  time:75,
+  levels:{
+    facile:{desc:'Piode lente, temporale lontano',lives:3,time:75,v:210,stars:[2000,4000,5500]},
+    medio:{desc:'Piode più svelte',lives:3,time:75,v:280,stars:[2200,4400,6000]},
+    difficile:{desc:'Piode di corsa e un po\' di vento',lives:3,time:75,v:350,wind:1,stars:[2400,4800,6600]}
+  },
+  hudExtra:function(st){return st&&st.tetti?'<span>🏠 <b>'+st.tetti+'</b></span>':''},
+  verdict:function(st){return ['Il rustico è rimasto senza tetto. Le capre ringraziano, ci dormono loro.','Discreto! Qualche goccia entra, ma si dorme.','Bravo! Un tetto da patriziato, roba che dura cent\'anni.','Perfetto! Il patriziato di Cevio ti vuole come capomastro.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,row=0,laid=[],cur=null,st='wait',wt=.5,fall=null,pose='carry',pt=0,goat=0,fade=0,combo=0,houses=0,crack=null,drops=[];
+    T.state.tetti=0;
+    function speed(){return L.v*(1+houses*.08)*(1+row*.05)}
+    function newSlab(){var w=rowW(row),d=Math.random()<.5?1:-1;cur={w:w,x:CX-d*230,d:d,y:rowY(row)-110,ph:Math.random()*6};st='slide'}
+    function finishRoof(){st='done';wt=1.6;houses++;T.state.tetti=houses;T.add(300,CX,EAVE-200,'#FFD24A');T.pop('Tetto finito!',900);T.sfx('win');pose='cheer';pt=1.4;goat=1.6;T.burst(CX,EAVE-150,'#D9D2C3',24)}
+    return {
+      update:function(dt){t+=dt;if(pt>0){pt-=dt;if(pt<=0)pose='carry'}goat=Math.max(0,goat-dt);fade=Math.max(0,fade-dt*2.5);
+        if((T.state.time||0)<9&&pose==='carry')pose='ombrello';
+        if(st==='wait'){wt-=dt;if(wt<=0)newSlab()}
+        else if(st==='slide'){var v=speed(),lim=200;cur.x+=cur.d*v*dt;if(cur.x>CX+lim){cur.x=CX+lim;cur.d=-1}if(cur.x<CX-lim){cur.x=CX-lim;cur.d=1}
+          if(L.wind)cur.x+=Math.sin(t*1.7+cur.ph)*28*dt}
+        else if(st==='fall'){fall.t+=dt;cur.y=fall.y0+(fall.y1-fall.y0)*Math.min(1,(fall.t/.14)*(fall.t/.14));if(fall.t>=.14)land()}
+        else if(st==='done'){wt-=dt;if(wt<=0){laid=[];row=0;fade=1;st='wait';wt=.35}}
+        if(crack){crack.t+=dt;crack.y+=crack.vy*dt;crack.vy+=900*dt;crack.r+=crack.vr*dt;if(crack.t>1.2)crack=null}
+        var rain=(T.state.time||75)<10;if(rain&&drops.length<90)for(var i=0;i<4;i++)drops.push({x:Math.random()*W,y:-20,v:700+Math.random()*300});
+        for(var i=drops.length-1;i>=0;i--){drops[i].y+=drops[i].v*dt;if(drops[i].y>H)drops.splice(i,1)}
+      },
+      draw:function(c){
+        if(ok(bg))c.drawImage(bg,0,0,W,W*1935/1080);else{c.fillStyle='#7f9a5e';c.fillRect(0,0,W,H)}
+        if(!ok(img))return;
+        // la nuvola che si avvicina
+        var p=1-Math.max(0,(T.state.time||0))/ (L.time||75),k=R.nuvola,nw=170+p*230,nh=nw*k[3]/k[2];c.save();c.globalAlpha=.55+p*.45;c.drawImage(img,k[0],k[1],k[2],k[3],-150+p*(CX-nw/2+150),40+p*40,nw,nh);c.restore();
+        // il rustico
+        k=R.casa;c.drawImage(img,k[0],k[1],k[2],k[3],LEFT,TOPY,k[2]*S,k[3]*S);
+        // le piode posate, dal basso in alto
+        k=R.pioda;laid.forEach(function(s){c.drawImage(img,k[0],k[1],k[2],k[3],s.x-s.w/2,s.y-TH*1.45,s.w,TH*1.6)});
+        // la guida della fila
+        if(st==='slide'||st==='fall'){var y=rowY(row),w=rowW(row);c.save();c.setLineDash([8,7]);c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=2.5;c.strokeRect(CX-w/2,y-TH*1.3,w,TH*1.3);c.restore()}
+        if(cur&&(st==='slide'||st==='fall')){c.drawImage(img,k[0],k[1],k[2],k[3],cur.x-cur.w/2,cur.y-TH*1.45,cur.w,TH*1.6)}
+        if(crack){c.save();c.translate(crack.x,crack.y);c.rotate(crack.r);c.globalAlpha=Math.max(0,1-crack.t);c.drawImage(img,k[0],k[1],k[2]/2,k[3],-crack.w/2,-TH*.8,crack.w/2,TH*1.6);c.drawImage(img,k[0]+k[2]/2,k[1],k[2]/2,k[3],8,-TH*.6,crack.w/2,TH*1.6);c.restore()}
+        // Elvezio e la capra
+        k=R[pose];var eh=pose==='cheer'?215:pose==='carry'?190:200,ew=eh*k[2]/k[3];c.drawImage(img,k[0],k[1],k[2],k[3],86-ew/2,H-14-eh,ew,eh);
+        if(goat>0){k=R.capra;var gh=110,gw=gh*k[2]/k[3],up=Math.min(1,(1.6-goat)/.25)*Math.min(1,goat/.25);c.drawImage(img,k[0],k[1],k[2],k[3],W-gw-24,H-16-gh*up,gw,gh)}
+        // la pioggia
+        if(drops.length){c.strokeStyle='rgba(200,225,255,.7)';c.lineWidth=2;c.beginPath();drops.forEach(function(d){c.moveTo(d.x,d.y);c.lineTo(d.x-4,d.y+18)});c.stroke()}
+        if(fade>0){c.fillStyle='rgba(255,250,235,'+fade+')';c.fillRect(0,0,W,H)}
+      },
+      down:function(){if(st!=='slide')return;st='fall';fall={t:0,y0:cur.y,y1:rowY(row)};T.sfx('whoosh')}
+    };
+    function land(){var w=rowW(row),off=Math.abs(cur.x-CX),cov=Math.max(0,(w-off)/w);
+      if(cov<.55){crack={x:cur.x,y:cur.y-10,w:cur.w,vy:-160,vr:(cur.x<CX?-2:2),r:0,t:0};combo=0;T.state.combo=0;T.pop('Crack!',700);T.lose(1);T.shake();pose='facepalm';pt=.9;cur=null;st='wait';wt=.5;return}
+      var perfect=off<6;if(perfect){cur.x=CX;combo++;T.state.combo=combo;T.add(100+Math.min(8,combo-1)*20,CX,rowY(row)-50,'#FFE36B');T.sfx('coin');if(combo>1)T.float('Perfetta ×'+combo,CX,rowY(row)-90,'#fff',22);else T.float('Perfetta!',CX,rowY(row)-90,'#fff',22)}
+      else{combo=0;T.state.combo=0;T.add(40+Math.round(cov*60),cur.x,rowY(row)-50);T.sfx('hit')}
+      T.buzz(20);laid.push({x:cur.x,y:rowY(row),w:cur.w});cur=null;row++;
+      if(row>=ROWS)finishRoof();else{st='wait';wt=.22}}
+  }
+});
+})();
+</script>
+</body>
+</html>
