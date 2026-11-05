@@ -22,7 +22,6 @@ var R={casa:[115,43,477,452],pioda:[686,378,428,102],nuvola:[1208,181,348,302],c
   carry:[166,591,366,521],cheer:[743,575,310,541],facepalm:[1246,606,211,509],ombrello:[1644,576,334,544]};
 function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
 var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
-var DEMO=/demo/.test(location.search);
 // il rustico: scala, base e dove comincia il tetto
 var S=.75,CX=267,BASE=760,TOPY=BASE-R.casa[3]*S,LEFT=270-(353.5-R.casa[0])*S,EAVE=TOPY+(238-43)*S,ROWS=7,TH=20;
 function rowY(i){return EAVE+6-i*TH}            // fondo della fila i
@@ -52,7 +51,7 @@ Telaio.start({
         if((T.state.time||0)<9&&pose==='carry')pose='ombrello';
         if(st==='wait'){wt-=dt;if(wt<=0)newSlab()}
         else if(st==='slide'){var v=speed(),lim=110+cur.w*.3;cur.x+=cur.d*v*dt;if(cur.x>CX+lim){cur.x=CX+lim;cur.d=-1}if(cur.x<CX-lim){cur.x=CX-lim;cur.d=1}
-          if(L.wind)cur.x+=Math.sin(t*1.7+cur.ph)*28*dt;if(DEMO&&Math.abs(cur.x-CX)<5)this.down()}
+          if(L.wind)cur.x+=Math.sin(t*1.7+cur.ph)*28*dt}
         else if(st==='fall'){fall.t+=dt;cur.y=fall.y0+(fall.y1-fall.y0)*Math.min(1,(fall.t/.14)*(fall.t/.14));if(fall.t>=.14)land()}
         else if(st==='done'){wt-=dt;if(wt<=0){laid=[];row=0;fade=1;st='wait';wt=.35}}
         if(crack){crack.t+=dt;crack.y+=crack.vy*dt;crack.vy+=900*dt;crack.r+=crack.vr*dt;if(crack.t>1.2)crack=null}
