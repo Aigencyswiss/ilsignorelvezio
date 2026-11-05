@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pedalò sul Verbano – Il parco giochi di Elvezio</title>
+<meta name="description" content="Il Signor Elvezio in pedalò sul Lago Maggiore: pedala a destra e a sinistra, raccogli quello che i turisti perdono e schiva cigni arrabbiati e battelli. 3 livelli e classifica.">
+<meta property="og:title" content="Pedalò sul Verbano">
+<meta property="og:description" content="Destra, sinistra, destra: quanta strada fai in pedalò in 60 secondi?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/parco/telaio.css">
+</head>
+<body>
+<script src="/parco/telaio.js"></script>
+<script>
+(function(){
+var CDN='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/';
+var BG=CDN+'7d1b58f2-1aa8-4c71-874c-a65ac798f6b4.webp',SP=CDN+'3ce40b3f-7fee-4e91-af94-c5f7c293c375.webp';
+var R={pedalo:[32,61,292,271],giro:[359,60,325,262],cigno:[759,62,234,255],battello:[1069,72,276,256],
+  salvagente:[46,509,264,165],pallone:[435,500,166,169],boa:[774,490,162,177],cappello:[1090,521,216,123]};
+var SZ={salvagente:{w:70,pts:100,txt:'Salvagente!'},pallone:{w:56,pts:80,txt:'Pallone!'},cappello:{w:70,pts:200,txt:'Il cappello della turista!'},
+  boa:{w:52,hit:22},cigno:{w:88,hit:30},battello:{w:220,hit:70}};
+function load(s){var i=new Image();i.crossOrigin='anonymous';i.src=s;return i}
+var img=load(SP),bg=load(BG);function ok(i){return i.complete&&i.naturalWidth>0}
+var PY=720,TILE=540*1635/1080;
+
+Telaio.start({
+  id:'pedalo',n:11,title:'Pedalò sul Verbano',zone:'Lago Maggiore',
+  preload:[BG,SP],
+  intro:'Ho noleggiato un pedalò ad Ascona per un\'ora e voglio vedere l\'Italia. Il pedalò va avanti solo se pedali: <b>sinistra, destra, sinistra, destra</b>. Più pedali a sinistra, più vai a sinistra. Attento ai cigni: sono eleganti, ma mordono.',
+  how:[['🦵','<b>Tocca a sinistra e a destra, alternando</b>: ogni pedalata ti spinge avanti. Vanno bene anche le frecce.'],['↔️','Il pedalò va un po\' dal lato della pedalata: <b>pedala di più a sinistra</b> per andare a sinistra.'],['🛟','Raccogli <b>salvagenti, palloni e cappelli</b> persi dai turisti.'],['🦢','<b>Cigni, boe e battelli</b>: se li prendi, giri su te stesso e perdi una vita. Il battello suona prima: TUUU!']],
+  time:60,
+  levels:{
+    facile:{desc:'Lago calmo, pochi cigni',lives:3,time:60,boost:62,swan:.25,ferry:9,stars:[1500,3000,4500]},
+    medio:{desc:'Più cigni e più battelli',lives:3,time:60,boost:58,swan:.35,ferry:7,stars:[1800,3600,5400]},
+    difficile:{desc:'Cigni ovunque e battelli di linea',lives:3,time:60,boost:55,swan:.45,ferry:5,stars:[2000,4000,6000]}
+  },
+  hudExtra:function(st){return st?'<span><b>'+Math.floor(st.metri||0)+'</b> m</span>':''},
+  verdict:function(st){return ['Sei ancora davanti ad Ascona. Il noleggio vuole indietro il pedalò.','Discreto! Brissago si vede all\'orizzonte.','Bravo! Polpacci da campione del Verbano.','Perfetto! Sei arrivato in Italia e nessuno ti ha chiesto il passaporto.'][st]},
+  game:function(T,L){
+    var W=T.W,H=T.H,t=0,v=0,d=0,px=W/2,vx=0,last=0,objs=[],nextAt=0,spin=0,inv=0,keys={},scrollY=0,lastPts=0,ferryT=L.ferry*.6,ferries=[],legs=0,taps=0;
+    T.state.metri=0;
+    for(var y0=80;y0<480;y0+=160)spawn(y0);
+    function spawn(y){var r=Math.random();
+      if(r<L.swan*.6){objs.push({k:'cigno',x:60+Math.random()*(W-120),y:y,vx:(Math.random()<.5?-1:1)*(30+Math.random()*40)})}
+      else if(r<L.swan*.6+.22){objs.push({k:'boa',x:50+Math.random()*(W-100),y:y})}
+      else{var q=Math.random(),k=q<.45?'salvagente':q<.85?'pallone':'cappello';objs.push({k:k,x:50+Math.random()*(W-100),y:y,ph:Math.random()*6})}}
+    function pedal(side){if(spin>0)return;taps++;var good=side!==last;last=side;legs=.15;
+      v=Math.min(720,v+(good?L.boost:L.boost*.35));vx+=side*(good?55:95);if(!good)T.float('A vuoto!',px+side*60,PY-60,'#fff',18);T.sfx(good?'tick':'whoosh')}
+    function crash(txt){spin=1;inv=1.6;v*=.3;T.state.combo=0;T.shake();T.float(txt,px,PY-90,'#fff',26);T.burst(px,PY,'#CFF3FF',22);T.lose(1)}
+    return {
+      update:function(dt){t+=dt;inv=Math.max(0,inv-dt);legs=Math.max(0,legs-dt);if(spin>0)spin-=dt;
+        v=Math.max(0,v-v*.55*dt-12*dt);vx-=vx*2.4*dt;px+=vx*dt;if(px<45){px=45;vx=0}if(px>W-45){px=W-45;vx=0}
+        var dy=v*dt;d+=dy;scrollY+=dy;T.state.metri=d/10;var p=Math.floor(d/20);if(p>lastPts){T.add(p-lastPts);lastPts=p}
+        while(d>=nextAt){spawn(-60);nextAt+=150+Math.random()*120}
+        // i battelli
+        ferryT-=dt;if(ferryT<=0){ferryT=L.ferry*(.7+Math.random()*.6);var fy=120+Math.random()*260;ferries.push({y:fy,x:W+170,warn:1.4,d:-1});T.sfx('bad')}
+        ferries.forEach(function(f){if(f.warn>0){f.warn-=dt}else{f.x+=f.d*230*dt}f.y+=dy});ferries=ferries.filter(function(f){return f.x>-200&&f.y<H+150});
+        for(var i=objs.length-1;i>=0;i--){var o=objs[i];o.y+=dy;if(o.vx){o.x+=o.vx*dt;if(o.x<40||o.x>W-40)o.vx*=-1}
+          var s=SZ[o.k];if(!o.done&&Math.abs(o.y-PY)<40&&Math.abs(o.x-px)<(s.hit||s.w/2)+28){
+            if(s.pts){o.done=1;var st=T.state;st.combo++;T.add(s.pts+Math.min(5,st.combo-1)*20,o.x,o.y-30,'#FFD24A');if(o.k==='cappello')T.float(s.txt,W/2,PY-160,'#fff',20);T.sfx('coin');T.burst(o.x,o.y,'#FFFFFF',10);objs.splice(i,1);continue}
+            else if(inv<=0&&spin<=0){o.done=1;crash(o.k==='cigno'?'Il cigno ti ha morso!':'Boa!')}}
+          if(o.y>H+80)objs.splice(i,1)}
+        ferries.forEach(function(f){if(f.warn<=0&&inv<=0&&spin<=0&&Math.abs(f.y-PY)<60&&Math.abs(f.x-px)<SZ.battello.hit+30)crash('Il battello delle 10:15!')});
+      },
+      draw:function(c){
+        if(ok(bg)){var off=scrollY%TILE;for(var y=off-TILE;y<H;y+=TILE)c.drawImage(bg,0,y,W,TILE+1)}else{c.fillStyle='#3fa6b6';c.fillRect(0,0,W,H)}
+        if(!ok(img))return;
+        objs.forEach(function(o){var k=R[o.k],w=SZ[o.k].w,h=w*k[3]/k[2];c.save();c.translate(o.x,o.y+Math.sin(t*2+(o.ph||0))*3);if(o.vx>0)c.scale(-1,1);c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h/2,w,h);c.restore()});
+        ferries.forEach(function(f){var k=R.battello,w=SZ.battello.w,h=w*k[3]/k[2];
+          if(f.warn>0){c.save();c.globalAlpha=.6+.4*Math.sin(t*14);c.font='900 30px Montserrat';c.textAlign='right';c.lineWidth=6;c.strokeStyle='#3E1019';c.fillStyle='#FFD24A';c.strokeText('TUUU! ◀',W-14,f.y+10);c.fillText('TUUU! ◀',W-14,f.y+10);c.restore()}
+          else c.drawImage(img,k[0],k[1],k[2],k[3],f.x-w/2,f.y-h/2,w,h)});
+        // la scia e il pedalò
+        if(v>60){c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=3;c.beginPath();c.moveTo(px-26,PY+40);c.lineTo(px-40,PY+40+v*.15);c.moveTo(px+26,PY+40);c.lineTo(px+40,PY+40+v*.15);c.stroke()}
+        var k=spin>0?R.giro:R.pedalo,w=118,h=w*k[3]/k[2];c.save();c.translate(px,PY+(legs>0?-2:0));if(spin>0)c.rotate((1-spin)*Math.PI*4);else c.rotate(Math.max(-.2,Math.min(.2,vx/600)));
+        if(inv>0&&spin<=0&&Math.floor(t*12)%2)c.globalAlpha=.45;c.drawImage(img,k[0],k[1],k[2],k[3],-w/2,-h/2,w,h);c.restore();
+        // i pedali a schermo
+        if(taps<6){c.save();c.globalAlpha=.75;c.font='900 26px Montserrat';c.textAlign='center';c.lineWidth=6;c.strokeStyle='#3E1019';c.fillStyle='#fff';c.strokeText('SINISTRA',W*.25,H-40);c.fillText('SINISTRA',W*.25,H-40);c.strokeText('DESTRA',W*.75,H-40);c.fillText('DESTRA',W*.75,H-40);c.restore()}
+      },
+      down:function(p){pedal(p.x<W/2?-1:1)},
+      key:function(k,dn){if(!dn){keys[k]=0;return}if(keys[k])return;keys[k]=1;if(k==='ArrowLeft')pedal(-1);if(k==='ArrowRight')pedal(1)}
+    };
+  }
+});
+})();
+</script>
+</body>
+</html>
