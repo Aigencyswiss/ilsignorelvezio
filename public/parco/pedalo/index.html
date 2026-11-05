@@ -30,12 +30,12 @@ Telaio.start({
   id:'pedalo',n:11,title:'Pedalò sul Verbano',zone:'Lago Maggiore',
   preload:[BG,SP],
   intro:'Ho noleggiato un pedalò ad Ascona per un\'ora e voglio vedere l\'Italia. Il pedalò va avanti solo se pedali: <b>sinistra, destra, sinistra, destra</b>. Più pedali a sinistra, più vai a sinistra. Attento ai cigni: sono eleganti, ma mordono.',
-  how:[['🦵','<b>Tocca a sinistra e a destra, alternando</b>: ogni pedalata ti spinge avanti. Vanno bene anche le frecce.'],['↔️','Il pedalò va un po\' dal lato della pedalata: <b>pedala di più a sinistra</b> per andare a sinistra.'],['🛟','Raccogli <b>salvagenti, palloni e cappelli</b> persi dai turisti.'],['🦢','<b>Cigni, boe e battelli</b>: se li prendi, giri su te stesso e perdi una vita. Il battello suona prima: TUUU!']],
+  how:[['🦵','<b>Tocca a sinistra e a destra, alternando</b>: ogni pedalata ti spinge avanti. Vanno bene anche le frecce.'],['↔️','Il pedalò va un po\' dal lato della pedalata: <b>pedala di più a sinistra</b> per andare a sinistra.'],['🛟','Raccogli <b>salvagenti, palloni e cappelli</b> persi dai turisti.'],['🦢','<b>Cigni e battelli</b>: se li prendi giri su te stesso e perdi una vita. Il battello suona prima: TUUU! Le boe ti rallentano.']],
   time:60,
   levels:{
-    facile:{desc:'Lago calmo, pochi cigni',lives:3,time:60,boost:62,swan:.25,ferry:9,stars:[1500,3000,4500]},
-    medio:{desc:'Più cigni e più battelli',lives:3,time:60,boost:58,swan:.35,ferry:7,stars:[1800,3600,5400]},
-    difficile:{desc:'Cigni ovunque e battelli di linea',lives:3,time:60,boost:55,swan:.45,ferry:5,stars:[2000,4000,6000]}
+    facile:{desc:'Lago calmo, pochi cigni',lives:3,time:60,boost:62,swan:.18,ferry:9,stars:[1500,3000,4500]},
+    medio:{desc:'Più cigni e più battelli',lives:3,time:60,boost:58,swan:.28,ferry:7,stars:[1800,3600,5400]},
+    difficile:{desc:'Cigni ovunque e battelli di linea',lives:3,time:60,boost:55,swan:.38,ferry:5,stars:[2000,4000,6000]}
   },
   hudExtra:function(st){return st?'<span><b>'+Math.floor(st.metri||0)+'</b> m</span>':''},
   verdict:function(st){return ['Sei ancora davanti ad Ascona. Il noleggio vuole indietro il pedalò.','Discreto! Brissago si vede all\'orizzonte.','Bravo! Polpacci da campione del Verbano.','Perfetto! Sei arrivato in Italia e nessuno ti ha chiesto il passaporto.'][st]},
@@ -54,14 +54,14 @@ Telaio.start({
       update:function(dt){t+=dt;inv=Math.max(0,inv-dt);legs=Math.max(0,legs-dt);if(spin>0)spin-=dt;
         v=Math.max(0,v-v*.55*dt-12*dt);vx-=vx*2.4*dt;px+=vx*dt;if(px<45){px=45;vx=0}if(px>W-45){px=W-45;vx=0}
         var dy=v*dt;d+=dy;scrollY+=dy;T.state.metri=d/10;var p=Math.floor(d/20);if(p>lastPts){T.add(p-lastPts);lastPts=p}
-        while(d>=nextAt){spawn(-60);nextAt+=150+Math.random()*120}
+        while(d>=nextAt){spawn(-60);nextAt+=190+Math.random()*130}
         // i battelli
         ferryT-=dt;if(ferryT<=0){ferryT=L.ferry*(.7+Math.random()*.6);var fy=120+Math.random()*260;ferries.push({y:fy,x:W+170,warn:1.4,d:-1});T.sfx('bad')}
         ferries.forEach(function(f){if(f.warn>0){f.warn-=dt}else{f.x+=f.d*230*dt}f.y+=dy});ferries=ferries.filter(function(f){return f.x>-200&&f.y<H+150});
         for(var i=objs.length-1;i>=0;i--){var o=objs[i];o.y+=dy;if(o.vx){o.x+=o.vx*dt;if(o.x<40||o.x>W-40)o.vx*=-1}
-          var s=SZ[o.k];if(!o.done&&Math.abs(o.y-PY)<40&&Math.abs(o.x-px)<(s.hit||s.w/2)+28){
+          var s=SZ[o.k];if(!o.done&&Math.abs(o.y-PY)<40&&Math.abs(o.x-px)<(s.hit?s.hit+18:s.w/2+28)){
             if(s.pts){o.done=1;var st=T.state;st.combo++;T.add(s.pts+Math.min(5,st.combo-1)*20,o.x,o.y-30,'#FFD24A');if(o.k==='cappello')T.float(s.txt,W/2,PY-160,'#fff',20);T.sfx('coin');T.burst(o.x,o.y,'#FFFFFF',10);objs.splice(i,1);continue}
-            else if(inv<=0&&spin<=0){o.done=1;crash(o.k==='cigno'?'Il cigno ti ha morso!':'Boa!')}}
+            else if(inv<=0&&spin<=0){o.done=1;if(o.k==='boa'){v*=.4;vx=-vx;T.float('Boa! Bonk!',px,PY-80,'#fff',24);T.sfx('boing');T.shake();T.state.combo=0}else crash('Il cigno ti ha morso!')}}
           if(o.y>H+80)objs.splice(i,1)}
         ferries.forEach(function(f){if(f.warn<=0&&inv<=0&&spin<=0&&Math.abs(f.y-PY)<60&&Math.abs(f.x-px)<SZ.battello.hit+30)crash('Il battello delle 10:15!')});
       },
