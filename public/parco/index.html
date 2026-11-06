@@ -41,11 +41,15 @@ img{display:block;max-width:100%}
 .prog span{white-space:nowrap}
 
 /* oggi */
-.today{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:-18px}
+.today{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:-18px}
+@media (max-width:760px){.today{grid-template-columns:1fr 1fr}.today .tc.daily{grid-column:1/-1}}
 .tc{position:relative;display:flex;flex-direction:column;gap:6px;min-height:150px;padding:16px;border-radius:22px;color:#fff;overflow:hidden;box-shadow:0 12px 26px rgba(62,16,25,.22);isolation:isolate}
 .tc::after{content:"";position:absolute;inset:auto -20px -40px auto;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.1);z-index:-1}
 .tc.daily{background:linear-gradient(150deg,#D59A2A,#9E5F12)}
 .tc.dove{background:linear-gradient(150deg,#2E8C8C,#155A63)}
+.tc.parola{background:linear-gradient(150deg,#4E8F5E,#25553A)}
+.tl{display:flex;gap:3px}.tl i{width:22px;height:22px;border-radius:5px;background:rgba(255,255,255,.22);display:grid;place-items:center;font:900 12px Montserrat,sans-serif;font-style:normal;text-transform:uppercase}.tl i.o{background:#3E8E5A;box-shadow:0 0 0 1.5px rgba(255,255,255,.5)}.tl i.n{background:#D9A32B}
+.cv.tiles{display:grid;place-items:center;background:linear-gradient(150deg,#4E8F5E,#25553A)}.cv.tiles .tl i{width:38px;height:38px;font-size:20px;border-radius:8px}
 .tc small{font:800 11px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;opacity:.9}
 .tc b{font:800 22px/1.05 Fraunces,Georgia,serif;text-wrap:balance}
 .tc .st{margin-top:auto;font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -129,6 +133,13 @@ main{padding:18px 0 40px}
       <b>Indovina il comune di oggi</b>
       <span class="st" id="tdSt">6 tentativi · uno nuovo ogni giorno</span>
     </a>
+    <a class="tc parola" href="/parco/parola/">
+      <span class="go" aria-hidden="true">›</span>
+      <span class="tl" aria-hidden="true"><i class="o">g</i><i>e</i><i class="n">r</i><i>l</i><i class="o">a</i></span>
+      <small id="tpNum">La parola del giorno</small>
+      <b>Cinque lettere, sei tentativi</b>
+      <span class="st" id="tpSt">Una parola ticinese nuova ogni giorno</span>
+    </a>
     <a class="tc dove" href="/parco/dove/">
       <span class="go" aria-hidden="true">›</span>
       <span class="md" style="background-position:66.667% 0%"></span>
@@ -166,6 +177,7 @@ var C='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/',
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 // n = posizione nel foglio delle icone (4 x 3)
 var G={
+  parola:{t:'La parola del giorno',pl:'Cinque lettere, sei tentativi',n:-1,href:'/parco/parola/',tiles:1},
   paese:{t:'Il paese del giorno',pl:'Un comune al giorno',n:3,href:'/parco/paese/',bg:'linear-gradient(150deg,#E7B04A,#9E5F12)'},
   dove:{t:'Dov\'è?',pl:'Dieci comuni sulla mappa',n:2,href:'/parco/dove/',bg:'linear-gradient(150deg,#3AA0A0,#155A63)'},
   quiz:{t:'Quanto sei ticinese?',pl:'Dieci domande, verdetto in caschetti',n:1,href:SHOP+'/pages/quiz-ticinese',bg:'linear-gradient(150deg,#C04A5A,#5C1F2B)',ext:1},
@@ -180,7 +192,7 @@ var G={
   vendemmia:{t:'Vendemmia',pl:'Novazzano, Mendrisiotto',n:8,href:'/parco/vendemmia/',th:'871c1fb4-311c-48f3-8a50-c346bf56c416',lv:1}
 };
 var THEMES=[
-  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['paese','dove','quiz']},
+  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['parola','paese','dove','quiz']},
   {e:'🏔️',t:'Montagne e valli',d:'Dighe, rustici di sasso, slitte e postali di montagna.',g:['diga','piode','slitta','autopostale']},
   {e:'🌊',t:'Sui laghi',d:'Il Verbano e il Ceresio, tra pedalò, cigni e scalinate.',g:['pedalo','scale']},
   {e:'🏰',t:'Città e tradizioni',d:'Castelli, il festival di Locarno e la vendemmia.',g:['catapulta','pardo','vendemmia']},
@@ -189,7 +201,7 @@ var THEMES=[
 function pos(n){return (n%4)*100/3+'% '+Math.floor(n/4)*50+'%'}
 function stars(n){var h='<span class="sts" aria-label="'+n+' stelle su 3">';for(var i=0;i<3;i++)h+='<i class="'+(i<n?'on':'')+'">★</i>';return h+'</span>'}
 function card(id){var g=G[id],s=g.lv?LS.get('stars_'+id,0):0,played=g.lv&&LS.get('best_'+id+'_facile',null)!=null;
-  var cv=g.th?'<div class="cv" style="background-image:url('+C+g.th+'.webp)"><span class="md" style="background-position:'+pos(g.n)+'"></span>'+(g.bd?'<span class="bd'+(g.nw?' new':'')+'">'+g.bd+'</span>':'')+'</div>'
+  var cv=g.tiles?'<div class="cv tiles"><span class="tl"><i class="o">g</i><i>e</i><i class="n">r</i><i>l</i><i class="o">a</i></span></div>':g.th?'<div class="cv" style="background-image:url('+C+g.th+'.webp)"><span class="md" style="background-position:'+pos(g.n)+'"></span>'+(g.bd?'<span class="bd'+(g.nw?' new':'')+'">'+g.bd+'</span>':'')+'</div>'
     :'<div class="cv ic" style="background:'+g.bg+'"><span class="md big" style="background-position:'+pos(g.n)+'"></span></div>';
   var ft=g.lv?(played?stars(s):'<span class="try">Da provare</span>'+stars(0)):(g.ext?'<span class="ext">Sul sito di Elvezio ↗</span>':'<span class="try">Gioca</span>');
   return '<a class="gc" href="'+g.href+'">'+cv+'<div class="gi"><b>'+esc(g.t)+'</b><span class="pl">📍 '+esc(g.pl)+'</span><div class="ft">'+ft+'</div></div></a>'}
@@ -222,6 +234,9 @@ if(st.done){td.innerHTML=(st.win?'✔ Fatto in '+st.g.length+'/6':'✘ Oggi nien
   (function tick(){var e=document.getElementById('cd');if(!e)return;var z=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Zurich'})),s=86400-(z.getHours()*3600+z.getMinutes()*60+z.getSeconds());e.textContent='nuovo tra '+Math.floor(s/3600)+'h '+String(Math.floor(s%3600/60)).padStart(2,'0')+'m';setTimeout(tick,30000)})()}
 else if(st.g.length)td.textContent='Continua: '+st.g.length+'/6 tentativi';
 if(stats.cur>1&&(stats.last===ds))td.innerHTML+=' · 🔥 '+stats.cur+' di fila';
+// la parola del giorno
+var pw=LS.get('pdp_'+ds,{g:[],done:0,win:0});document.getElementById('tpNum').textContent='La parola del giorno · n. '+dn;
+var tp=document.getElementById('tpSt');if(pw.done)tp.textContent=pw.win?'✔ Indovinata in '+pw.g.length+'/6':'✘ Oggi niente, domani si riprova';else if(pw.g.length)tp.textContent='Continua: '+pw.g.length+'/6';
 })();
 </script>
 </body>
