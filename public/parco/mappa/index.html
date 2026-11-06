@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Il parco giochi di Elvezio</title>
+<meta name="description" content="Il parco giochi del Signor Elvezio: la mappa del Ticino con giochi gratis, il paese del giorno, Dov'è? e le classifiche della settimana.">
+<meta property="og:title" content="Il parco giochi di Elvezio">
+<meta property="og:description" content="Il paese del giorno, Dov'è? e tanti giochi sul Ticino. Gratis, dal telefono.">
+<meta name="theme-color" content="#5C1F2B">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--wine:#5C1F2B;--wine2:#3E1019;--cream:#F1E6CF;--paper:#FBF5E8;--ink:#2A1A12;--brown:#6B4A32;--gold:#C9962E;--gold2:#FFD24A;--red:#E83B2B;--lake:#6FA8C9;--lake2:#4E8DB3;--land:#C9D6A3;--land2:#AFC28A;--line:#DCC9A4;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.5 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+.w{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;text-wrap:balance}
+.lbl{font:800 12px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+/* barra */
+.top{position:sticky;top:0;z-index:20;background:var(--wine);color:var(--cream);padding-top:env(safe-area-inset-top,0px)}
+.top .w{display:flex;align-items:center;gap:12px;min-height:58px}
+.top a.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;border:1.5px solid rgba(241,230,207,.35)}
+.top .ttl{font:800 16px Montserrat,sans-serif;letter-spacing:.04em;text-transform:uppercase;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.streak{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--wine2);font:800 13px Montserrat;padding:7px 12px;border-radius:999px}
+/* testata */
+.hero{background:radial-gradient(circle at 80% 0,#7A2A3A,var(--wine) 45%,var(--wine2));color:var(--cream);padding-block:36px 64px;position:relative;overflow:hidden}
+.hero .w{display:grid;gap:18px}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:.98;font-weight:800}
+.hero p{max-width:600px;font-size:18px;color:#E8D7B4}
+.pill{display:inline-flex;align-self:start;justify-self:start;background:var(--gold);color:var(--wine2);padding:7px 14px;border-radius:999px}
+/* oggi */
+.today{margin-top:-40px;position:relative;z-index:2}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 16px 32px rgba(62,16,25,.12);min-width:0}
+.card h3{font-size:26px;color:var(--wine);line-height:1.1}
+.card p{margin:0;color:#3B2A20}
+.card .meta{display:flex;flex-wrap:wrap;gap:8px}
+.card .meta span{font-size:13px;font-weight:700;padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--brown)}
+.card.daily{background:linear-gradient(160deg,#FFF8E6,#F7E6BE);border-color:#E2C682}
+.card.daily .num{font:900 13px Montserrat;color:var(--red);letter-spacing:.1em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;border:0;font-weight:800;font-size:16px;text-decoration:none;align-self:flex-start;margin-top:auto}
+.btn.gold{background:var(--gold);color:var(--wine2);box-shadow:0 4px 0 #8f6a1c}
+.btn.wine{background:var(--wine);color:var(--cream);box-shadow:0 4px 0 var(--wine2)}
+.btn.ghost{background:transparent;border:1.5px solid currentColor}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.done-badge{font:800 13px Montserrat;color:#1F6B45}
+/* mappa */
+.sec{padding-block:56px}
+.sec h2{font-size:clamp(30px,4.5vw,46px);color:var(--wine);line-height:1.05}
+.sec .lead{max-width:640px;color:#3B2A20;font-size:17px;margin:10px 0 0}
+.mapwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start;margin-top:26px}
+.mapbox{position:relative;background:#E9DDBF;border-radius:26px;border:1px solid var(--line);overflow:hidden;box-shadow:inset 0 0 0 6px rgba(255,255,255,.35)}
+.mapbox svg{display:block;width:100%;height:auto}
+.ti-land{fill:url(#landG);stroke:var(--wine);stroke-width:3.5;stroke-linejoin:round}
+.ti-mun{fill:transparent;stroke:#fff;stroke-width:.9;opacity:.55}
+.ti-lake{fill:url(#lakeG);stroke:var(--lake2);stroke-width:1.5}
+.pin{cursor:pointer}
+.pin .dot{transition:transform .2s;transform-box:fill-box;transform-origin:50% 100%}
+.pin:hover .dot,.pin:focus .dot{transform:scale(1.12)}
+.pin text{font:800 26px Montserrat,sans-serif;fill:var(--wine2);paint-order:stroke;stroke:#fff;stroke-width:6px;stroke-linejoin:round;pointer-events:none}
+.pin.lock{opacity:.62}
+.pulse{animation:pu 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pu{0%{opacity:.7;transform:scale(.6)}100%{opacity:0;transform:scale(2.2)}}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--brown);margin-top:12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.src{position:absolute;right:10px;bottom:8px;font-size:10px;color:#8a7558}
+.glist{display:flex;flex-direction:column;gap:10px}
+.gi{display:flex;gap:14px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 14px;text-decoration:none;color:inherit;min-width:0}
+.gi .ic{flex:0 0 46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:24px;background:var(--cream)}
+.gi b{display:block;color:var(--wine);font-size:17px}
+.gi small{color:var(--brown);font-size:14px}
+.gi.lock{opacity:.6}
+.gi .go{margin-left:auto;font:800 12px Montserrat;letter-spacing:.08em;text-transform:uppercase;color:var(--wine);white-space:nowrap}
+.gi.lock .go{color:#8a7558}
+/* classifica */
+.lb{background:#17090c;color:#F5EBD6;border-radius:26px;padding:26px;display:grid;gap:16px;box-shadow:0 20px 40px rgba(23,9,12,.25)}
+.lb h3{font-size:26px;color:#FFE08A}
+.lbrow{display:flex;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04)}
+.lbrow:nth-child(1){background:linear-gradient(90deg,rgba(255,210,74,.28),rgba(255,210,74,.05))}
+.lbrow .r{font:900 18px Montserrat;width:28px;color:#FFD24A}
+.lbrow .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.lbrow .s{font:800 16px Montserrat;color:#FFE08A}
+.lbempty{color:#C9B8A0}
+footer{background:var(--ink);color:#E8D7B4;padding-block:36px calc(36px + env(safe-area-inset-bottom,0px));font-size:14px}
+footer .w{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+/* finestra di gioco */
+.game{position:fixed;inset:0;z-index:50;background:var(--cream);display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);visibility:hidden}
+.game.on{transform:none;visibility:visible}
+.gbar{background:var(--wine);color:var(--cream);padding-top:env(safe-area-inset-top,0px)}
+.gbar .w{display:flex;align-items:center;gap:12px;min-height:56px}
+.gbar b{font:800 15px Montserrat;letter-spacing:.06em;text-transform:uppercase;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gbar button{background:transparent;color:var(--cream);border:1.5px solid rgba(241,230,207,.4);border-radius:999px;padding:7px 14px;font-weight:700;font-size:14px}
+.gbody{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.gbody .w{padding-block:18px calc(28px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+.say{display:flex;gap:12px;align-items:flex-start}
+.say .av{flex:0 0 44px;height:44px;border-radius:50%;background:var(--wine);color:var(--gold2);display:grid;place-items:center;font:900 18px Fraunces}
+.say p{margin:0;background:var(--paper);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:10px 14px;font-weight:500;min-width:0}
+.q{font-family:Fraunces,serif;font-size:clamp(26px,5vw,40px);color:var(--wine);line-height:1.1}
+.q em{font-style:normal;background:var(--gold2);padding:0 8px;border-radius:6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hud{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.hud span{font:800 13px Montserrat;letter-spacing:.06em;color:var(--brown);text-transform:uppercase}
+.hud strong{font:900 22px Montserrat;color:var(--wine)}
+.gmap{position:relative;border-radius:20px;overflow:hidden;background:#E9DDBF;border:1px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none}
+.gmap svg{display:block;width:100%;height:min(66vh,760px)}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:#fff;font:900 22px Montserrat;color:var(--wine);box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.res{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 16px}
+.res b{font:900 20px Montserrat;color:var(--wine)}
+.inp{position:relative}
+.inp input{width:100%;min-height:54px;border-radius:14px;border:2px solid var(--brown);padding:0 16px;font:500 18px 'DM Sans';background:#fff;color:var(--ink)}
+.inp input:focus{outline:3px solid var(--gold);outline-offset:1px}
+.sug{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 30px rgba(0,0,0,.15);max-height:260px;overflow:auto;z-index:5}
+.sug button{display:block;width:100%;text-align:left;background:none;border:0;padding:12px 16px;font-size:16px;border-bottom:1px solid #F1E6CF}
+.sug button:hover,.sug button.hl{background:#FFF3D6}
+.guesses{display:grid;gap:8px}
+.gr{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center}
+.gr>div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+.gr>div:first-child{text-align:left}
+.gr.win>div{background:#DFF2DA;border-color:#9BCB8F}
+.gr.empty>div{background:transparent;border-style:dashed;color:transparent}
+.arrow{display:inline-block;font-size:20px;line-height:1;transition:transform .4s}
+.over{background:var(--wine);color:var(--cream);border-radius:20px;padding:22px;display:grid;gap:12px}
+.over h3{font-size:30px;color:var(--gold2)}
+.over p{margin:0;color:#E8D7B4}
+.over .row{display:flex;flex-wrap:wrap;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.stats div{background:rgba(255,255,255,.08);border-radius:12px;padding:10px 4px}
+.stats b{display:block;font:900 24px Montserrat;color:#fff}
+.stats small{font-size:12px;color:#E8D7B4}
+.save{display:flex;flex-wrap:wrap;gap:10px}
+.save input{flex:1 1 200px;min-height:50px;border-radius:999px;border:0;padding:0 18px;font-size:16px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;z-index:80;transition:.3s;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+
+/* ---- home a tutto schermo ---- */
+html,body{height:100%}
+body.home{overflow:hidden}
+.app{position:fixed;inset:0;display:flex;flex-direction:column}
+.top{position:relative}
+.tb{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--wine2);border:0;border-radius:999px;padding:8px 14px;font:800 14px Montserrat}
+.tb.dark{background:rgba(255,255,255,.1);color:var(--cream)}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden;background:#F2E7D1;touch-action:none}
+.stage>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .zoom{top:auto;bottom:14px;right:max(12px,env(safe-area-inset-right,0px))}
+.pins{position:absolute;inset:0;pointer-events:none}
+.hp{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:3px}
+.hp .hb{width:52px;height:52px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);display:grid;place-items:center;background:var(--red);border:3px solid #fff;box-shadow:0 6px 14px rgba(62,16,25,.35);transition:transform .2s}
+.hp .hb span{transform:rotate(45deg);font-size:24px;line-height:1}
+.hp:hover .hb,.hp:focus-visible .hb{transform:rotate(-45deg) scale(1.1)}
+.hp.lock .hb{background:#8f8068;filter:saturate(.6)}
+.hp .hl{font:800 12px Montserrat;color:var(--wine2);background:rgba(255,255,255,.92);padding:3px 8px;border-radius:999px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.hp.lock .hl{color:#6b5a44}
+.hp.open::before{content:"";position:absolute;left:50%;top:26px;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(232,59,43,.45);animation:pu 2s ease-out infinite;z-index:-1}
+.hp.sel .hb{transform:rotate(-45deg) scale(1.15);box-shadow:0 0 0 5px var(--gold2),0 8px 18px rgba(62,16,25,.4)}
+.small .hp .hl{display:none}
+.hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);background:rgba(42,26,18,.82);color:#fff;font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;white-space:nowrap;transition:opacity .6s;pointer-events:none}
+.brand{position:absolute;left:max(24px,env(safe-area-inset-left,0px));top:24px;width:min(340px,calc(50% - 300px));display:flex;flex-direction:column;gap:10px;color:var(--wine2);pointer-events:none}
+.brand b{font:800 46px/1 Fraunces,serif;color:var(--wine)}
+.brand span:last-child{font-size:16px;color:#4a3526}
+.brand .lbl{color:var(--red)}
+@media (max-width:1100px){.brand,.side{display:none}}
+.side{position:absolute;right:max(24px,env(safe-area-inset-right,0px));top:24px;width:min(320px,calc(50% - 300px));display:flex;flex-direction:column;gap:8px;max-height:calc(100% - 200px);overflow:auto}
+.side .lbl{color:var(--brown);margin-bottom:2px}
+.sg{display:flex;gap:10px;align-items:center;text-align:left;background:rgba(251,245,232,.92);border:1px solid var(--line);border-radius:14px;padding:8px 10px;font:inherit;color:inherit}
+.sg .i{font-size:20px;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--cream)}
+.sg b{display:block;font-size:14px;color:var(--wine)}.sg small{font-size:12px;color:var(--brown)}
+.sg.lock{opacity:.6}
+.stage .src{position:absolute;left:12px;bottom:10px;font-size:10px;color:#7a6650}
+.pop{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 18px 40px rgba(62,16,25,.3);display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;z-index:5}
+.pop .pi{grid-row:span 2;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:30px;background:var(--cream)}
+.pop h3{font-size:22px;color:var(--wine);line-height:1.1}
+.pop p{margin:0;color:#4a3526;font-size:15px}
+.pop .row{grid-column:1/-1;display:flex;gap:10px;align-items:center;margin-top:6px}
+.pop .x{margin-left:auto;background:none;border:0;font-size:14px;font-weight:700;color:var(--brown);padding:8px}
+.dock{background:var(--wine);padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -8px 24px rgba(62,16,25,.25);position:relative;z-index:6}
+.dock .w{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-block:10px}
+.dk{display:flex;align-items:center;gap:12px;min-width:0;text-align:left;background:rgba(255,255,255,.08);color:var(--cream);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:10px 12px}
+.dk.daily{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--wine2);border:0;box-shadow:0 4px 0 #8f6a1c}
+.dk .dic{flex:0 0 auto;font-size:26px}
+.dk .dtx{min-width:0;display:flex;flex-direction:column}
+.dk small{font:800 10px Montserrat;letter-spacing:.08em;text-transform:uppercase;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk b{font:800 17px Montserrat;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dk .dgo{margin-left:auto;font-size:28px;line-height:1;opacity:.7}
+.sheet{position:fixed;inset:0;z-index:40;background:rgba(23,9,12,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet-in{width:min(560px,100%);max-height:85vh;overflow:auto;background:#17090c;color:#F5EBD6;border-radius:24px 24px 0 0;padding:22px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));display:grid;gap:12px}
+.sheet-in h3{font-size:24px;color:#FFE08A}
+#lbRows{display:grid;gap:6px}
+@media (max-width:520px){.hide-s{display:none}.dk b{font-size:15px}.dk .dic{font-size:22px}.dk .dgo{display:none}.hp .hb{width:46px;height:46px}.hp .hb span{font-size:21px}}
+
+
+/* ---- accesso ---- */
+.gate{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(62,16,25,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:auto}
+.gcard{width:min(440px,100%);background:var(--paper);border:1px solid var(--line);border-radius:26px;padding:26px;box-shadow:0 30px 60px rgba(23,9,12,.4);display:grid;gap:14px;margin:auto}
+.gcard h2{font-size:34px;color:var(--wine);line-height:1}
+.gsub{margin:0;color:#4a3526}
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--cream);border-radius:999px;padding:4px}
+.tabs button{border:0;background:none;border-radius:999px;padding:10px;font:800 14px Montserrat;color:var(--brown)}
+.tabs button.on{background:var(--wine);color:var(--cream)}
+.gf{display:grid;gap:12px}
+.gf label{display:grid;gap:6px;font-weight:700;font-size:14px;color:var(--ink)}
+.gf label small{font-weight:500;color:var(--brown)}
+.gf input:not([type=checkbox]){min-height:50px;border-radius:14px;border:2px solid #CDB894;padding:0 14px;font:500 17px 'DM Sans';background:#fff;color:var(--ink);width:100%}
+.gf input:focus{outline:3px solid var(--gold);outline-offset:1px;border-color:var(--brown)}
+.gf input.code{font:800 28px Montserrat;letter-spacing:.4em;text-align:center}
+.gf .btn{width:100%;margin:0}
+.chk{display:flex!important;grid-template-columns:none!important;gap:10px!important;align-items:flex-start;font-weight:500!important}
+.chk input{width:20px;height:20px;margin-top:2px;accent-color:var(--wine);flex:0 0 auto}
+.lnk{background:none;border:0;color:var(--wine);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:4px;justify-self:center}
+.fine{margin:0;font-size:13px;color:var(--brown)}
+.gerr{margin:0;background:#FBEBEB;color:#8B1E14;border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
+.free{display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;border-top:1px solid var(--line);padding-top:12px;font-size:14px;color:var(--brown)}
+.mestat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.mestat div{background:rgba(255,255,255,.06);border-radius:12px;padding:10px 4px}
+.mestat b{display:block;font:900 22px Montserrat;color:#FFE08A}
+.mestat small{font-size:12px;color:#C9B8A0}
+
+/* ---- medaglie dei giochi ---- */
+.ico{display:block;width:100%;height:100%;border-radius:50%;background-image:url(https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/fafcb9f4-aaee-4b29-9106-75d21a37b361.webp);background-size:400% 300%;background-repeat:no-repeat}
+.hp{gap:0!important;transform:translate(-50%,-62%)!important}
+.hp .md{position:relative;width:76px;height:76px;border-radius:50%;filter:drop-shadow(0 8px 10px rgba(62,16,25,.35));transition:transform .25s cubic-bezier(.3,1.6,.6,1)}
+.hp.open .md{animation:bob 3s ease-in-out infinite}
+.hp:nth-child(2n) .md{animation-delay:-1.5s}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.hp:hover .md,.hp:focus-visible .md,.hp.sel .md{transform:scale(1.14);animation:none}
+.hp.sel .md{filter:drop-shadow(0 0 10px rgba(255,210,74,.95))}
+.hp.lock .md .ico{filter:grayscale(.85) brightness(.85) contrast(.9)}
+.hp .lk{position:absolute;right:-2px;bottom:2px;width:30px;height:30px;border-radius:50%;background:#3E1019;border:2px solid #FFD24A;display:grid;place-items:center;font-size:14px}
+.hp .rb{position:relative;margin-top:-10px;background:linear-gradient(180deg,#7A2A3A,#5C1F2B);color:#FFF3D6;font:800 12px Montserrat;letter-spacing:.03em;padding:5px 14px;white-space:nowrap;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%,6% 50%)}
+.hp.lock .rb{background:linear-gradient(180deg,#8a7a66,#6b5a44)}
+.hp .stars,.hp .soon{margin-top:3px;font:800 11px Montserrat;color:#3E1019;background:rgba(255,248,230,.92);border-radius:999px;padding:1px 8px}
+.stars i{font-style:normal;color:#CDBB98;font-size:13px}.stars i.on{color:#E8A20C}
+.hp.open::before{display:none}
+.small .hp .rb,.small .hp .stars,.small .hp .soon{display:none}
+.small .hp .md{width:56px;height:56px}
+.trail{animation:tr 1.6s linear infinite}
+@keyframes tr{to{stroke-dashoffset:-32}}
+.clouds{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.clouds i{position:absolute;left:0;width:260px;height:90px;border-radius:999px;background:radial-gradient(ellipse at 50% 60%,rgba(255,255,255,.85),rgba(255,255,255,0) 70%);filter:blur(4px);opacity:.75;animation:cl 80s linear infinite}
+.clouds i:nth-child(1){top:12%;animation-delay:-10s}
+.clouds i:nth-child(2){top:44%;width:340px;height:110px;animation-duration:110s;animation-delay:-60s;opacity:.55}
+.clouds i:nth-child(3){top:72%;animation-duration:95s;animation-delay:-35s}
+@keyframes cl{from{transform:translateX(-400px)}to{transform:translateX(calc(100vw + 400px))}}
+.pins{z-index:2}
+.brand,.side{z-index:3}
+@media (max-width:520px){.dock .w{gap:8px}.dk{padding:8px 10px;gap:8px}.dk b{font-size:14px}.dk small{font-size:9px;letter-spacing:.04em}}
+.pop .pi{background:none!important;width:72px!important;height:72px!important;filter:drop-shadow(0 6px 8px rgba(62,16,25,.3))}
+.pop .lv{grid-column:2;font:700 13px Montserrat;color:var(--brown)}
+.side .sg .i{width:42px!important;height:42px!important;background:none!important;padding:0;flex:0 0 42px}
+.sg.lock .i .ico{filter:grayscale(.85)}
+.dk .dic{width:42px;height:42px;flex:0 0 42px!important;font-size:0!important;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+@media (max-width:520px){.hp .md{width:62px;height:62px}.hp .rb{font-size:11px;padding:4px 11px}.dk .dic{width:36px;height:36px;flex-basis:36px!important}}
+@media (prefers-reduced-motion:reduce){.hp.open .md,.trail,.clouds i{animation:none}}
+
+@media (max-width:820px){.mapwrap{grid-template-columns:1fr}}
+@media (max-width:600px){.pin>text{display:none}}
+@media (max-width:480px){.hero{padding-block:26px 58px}.hero p{font-size:16px}.card h3{font-size:23px}.gr{grid-template-columns:minmax(0,1fr) auto auto}.gr>div:nth-child(4){display:none}.stats b{font-size:20px}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}.game{transition:none}}
+html.solo .stage,html.solo .dock,html.solo .side,html.solo .clouds,html.solo .brand{display:none!important}
+html.solo body{background:#3E1019}
+</style>
+</head>
+<body class="home">
+<div class="app">
+<header class="top"><div class="w">
+  <a class="back" href="/parco/" aria-label="Torna al parco giochi">←<span class="hide-s"> Il parco</span></a>
+  <span class="ttl">Il parco giochi <span class="hide-s">di Elvezio</span></span>
+  <span class="streak" id="streak" hidden title="Giorni di fila al paese del giorno">🔥 <span id="streakN">0</span></span>
+  <button class="tb" id="lbBtn" type="button" aria-haspopup="dialog">🏆<span class="hide-s"> Classifica</span></button>
+  <button class="tb dark" id="meBtn" type="button" aria-haspopup="dialog" hidden>👤 <span id="meNick" class="hide-s"></span></button>
+</div></header>
+<main class="stage" id="hubMap" aria-label="Mappa del Ticino con i giochi">
+  <div class="clouds" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="pins" id="pins"></div>
+  <div class="hint" id="hint">Tocca una puntina · trascina e ingrandisci</div>
+  <div class="brand" aria-hidden="true"><span class="lbl">Gratis · tutto il Ticino</span><b>Il parco giochi<br>di Elvezio</b><span>Ho messo il Ticino su una mappa e ci ho nascosto dentro i giochi. Io non vinco mai, ma organizzo benissimo.</span></div>
+  <div class="side" id="side"></div>
+  <div class="pop" id="pop" hidden role="dialog" aria-live="polite"></div>
+</main>
+<nav class="dock" aria-label="I giochi di oggi"><div class="w">
+  <button class="dk daily" id="openDaily" type="button"><span class="dic"><span class="ico" style="background-position:100% 0%"></span></span><span class="dtx"><small id="dNum">Il paese del giorno</small><b id="dTxt">Gioca di oggi</b></span><span class="dgo">›</span></button>
+  <button class="dk" id="openDove" type="button"><span class="dic"><span class="ico" style="background-position:66.667% 0%"></span></span><span class="dtx"><small>Classifica della settimana</small><b>Dov'è?</b></span><span class="dgo">›</span></button>
+</div></nav>
+<span id="dDone" hidden></span>
+</div>
+<div class="gate" id="gate" hidden role="dialog" aria-modal="true" aria-labelledby="gT">
+  <div class="gcard">
+    <span class="lbl" style="color:var(--red)">Il parco giochi di Elvezio</span>
+    <h2 id="gT">Entra nel parco</h2>
+    <p class="gsub" id="gSub">Per giocare a tutto il parco, entrare in classifica e vincere i premi serve il tuo account. È gratis.</p>
+    <div class="tabs" id="gTabs" role="tablist"><button type="button" role="tab" data-v="login" class="on">Entra</button><button type="button" role="tab" data-v="register">Crea account</button></div>
+    <form id="fLogin" class="gf" novalidate>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password<input name="password" type="password" autocomplete="current-password" required minlength="8"></label>
+      <button class="btn gold" type="submit">Entra</button>
+      <button class="lnk" type="button" id="toForgot">Hai dimenticato la password?</button>
+    </form>
+    <form id="fReg" class="gf" novalidate hidden>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <label>Password <small>(almeno 8 caratteri)</small><input name="password" type="password" autocomplete="new-password" required minlength="8"></label>
+      <label>Nome da giocatore <small>(si vede in classifica, per esempio il tuo nome Instagram)</small><input name="nick" autocomplete="nickname" required minlength="3" maxlength="25" autocapitalize="none" spellcheck="false" placeholder="es. mario.rossi"></label>
+      <label class="chk"><input name="news" type="checkbox" checked> Avvisami quando apre un gioco nuovo e delle novità di Elvezio</label>
+      <button class="btn gold" type="submit">Crea il mio account</button>
+      <p class="fine">Creando l'account accetti la <a href="https://ilsignorelvezio.com/pages/privacy" target="_blank" rel="noopener">privacy</a>. L'email non la vede nessuno, in classifica c'è solo il nome da giocatore.</p>
+    </form>
+    <form id="fCode" class="gf" novalidate hidden>
+      <p id="codeTxt">Ti ho mandato un codice di 6 cifre via email. Scrivilo qui.</p>
+      <label>Codice<input name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required class="code"></label>
+      <label id="newPwL" hidden>Nuova password <small>(almeno 8 caratteri)</small><input name="password" type="password" autocomplete="new-password" minlength="8"></label>
+      <button class="btn gold" type="submit">Conferma</button>
+      <button class="lnk" type="button" id="reCode">Non è arrivato? Mandalo di nuovo</button>
+    </form>
+    <form id="fForgot" class="gf" novalidate hidden>
+      <p>Scrivi la tua email: ti mando un codice per scegliere una nuova password.</p>
+      <label>Email<input name="email" type="email" autocomplete="email" required></label>
+      <button class="btn gold" type="submit">Mandami il codice</button>
+      <button class="lnk" type="button" id="backLogin">Torna all'accesso</button>
+    </form>
+    <p class="gerr" id="gErr" role="alert" hidden></p>
+    <div class="free"><span>Senza account:</span><button type="button" class="lnk" id="freeDaily">gioca al paese del giorno →</button></div>
+  </div>
+</div>
+<div class="sheet" id="me" role="dialog" aria-modal="true" aria-labelledby="meT" hidden>
+  <div class="sheet-in">
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><h3 id="meT">Il tuo profilo</h3><button class="tb dark" id="meClose" type="button">Chiudi</button></div>
+    <p style="margin:0;font:800 26px Montserrat;color:#fff" id="mePN"></p>
+    <p style="margin:0;color:#C9B8A0" id="mePE"></p>
+    <div class="mestat" id="meStats"></div>
+    <label class="chk" style="color:#F5EBD6"><input type="checkbox" id="meNews"> Avvisami dei giochi nuovi e delle novità di Elvezio</label>
+    <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn gold" id="meOut" type="button" style="margin:0">Esci</button><button class="btn ghost" id="meOutAll" type="button" style="margin:0;color:#F5EBD6">Esci da tutti i telefoni</button></div>
+    <p class="fine" style="color:#C9B8A0">Per cancellare l'account scrivi a ilsignorelvezio@gmail.com.</p>
+  </div>
+</div>
+<div class="sheet" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbT" hidden>
+  <div class="sheet-in">
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between"><h3 id="lbT">Dov'è? · la classifica</h3><button class="tb dark" id="lbClose" type="button">Chiudi</button></div>
+    <span class="lbl" style="color:#C9B8A0" id="lbReset"></span>
+    <div id="lbRows"><p class="lbempty">Carico la classifica…</p></div>
+    <button class="btn gold" id="lbPlay" type="button" style="margin:4px 0 0">Gioca a Dov'è?</button>
+  </div>
+</div>
+<!-- finestra di gioco -->
+<div class="game" id="game" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+  <div class="gbar"><div class="w"><b id="gTitle">Gioco</b><button type="button" id="gClose">Esci</button></div></div>
+  <div class="gbody" id="gBody"><div class="w" id="gIn"></div></div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var SHOP='https://ilsignorelvezio.com';
+var D=null; // dati del Ticino
+// pagina a sé: /parco/dove/ e /parco/paese/ usano questo stesso file e aprono subito il loro gioco
+var SOLO=(location.pathname.match(/^\/parco\/(dove|paese)\/?$/)||[])[1]||null;if(SOLO)document.documentElement.classList.add('solo');
+var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on')},2600)}
+// statistiche anonime (stesso sistema del sito)
+var SID=LS.get('elv_sid',null);if(!SID){SID=Math.random().toString(36).slice(2,12);LS.set('elv_sid',SID)}
+var NOI=/[?&]noi=1/.test(location.search);if(NOI)LS.set('elv_noi',1);NOI=NOI||LS.get('elv_noi',0);
+function ev(t,n,v){if(NOI)return;try{navigator.sendBeacon('/api/e',JSON.stringify({sid:SID,dev:innerWidth<760?'mob':'desk',ref:document.referrer.slice(0,120),ev:[{t:t,p:'/parco/',n:n||null,v:v==null?null:v}]}))}catch(e){}}
+ev('pv');
+
+// data di oggi in Svizzera
+function today(){var p=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Zurich',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());return p}
+var EPOCH=Date.UTC(2026,10,4);
+function dayNum(s){var a=s.split('-');return Math.round((Date.UTC(+a[0],+a[1]-1,+a[2])-EPOCH)/864e5)+1}
+// distanza e direzione
+function km(a,b){var R=6371,r=Math.PI/180,dLa=(b.lat-a.lat)*r,dLo=(b.lon-a.lon)*r,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLo/2)*Math.sin(dLo/2);return 2*R*Math.asin(Math.sqrt(x))}
+function bearing(a,b){var r=Math.PI/180,y=Math.sin((b.lon-a.lon)*r)*Math.cos(b.lat*r),x=Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos((b.lon-a.lon)*r);return (Math.atan2(y,x)/r+360)%360}
+function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z]/g,'')}
+// numeri casuali ripetibili
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+// ---------- mappa SVG ----------
+var NS='http://www.w3.org/2000/svg';
+function baseSvg(opts){
+  var s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 '+D.W+' '+D.H);s.setAttribute('role','img');
+  if(opts&&opts.img){s.setAttribute('viewBox','0 0 '+opts.W+' '+opts.H);s.innerHTML='<image href="'+opts.img+'" x="0" y="0" width="'+opts.W+'" height="'+opts.H+'" preserveAspectRatio="none"/><g id="over"></g>';return s}
+  s.innerHTML='<defs><linearGradient id="landG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9C98F"/><stop offset=".55" stop-color="#C9D6A3"/><stop offset="1" stop-color="#D8DFAE"/></linearGradient>'+
+   '<linearGradient id="lakeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8CC0DC"/><stop offset="1" stop-color="#5E9CC2"/></linearGradient>'+
+   '<filter id="sh" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#3E1019" flood-opacity=".25"/></filter></defs>'+
+   '<rect x="-3000" y="-3000" width="8000" height="8000" fill="transparent"/>'+
+   '<g filter="url(#sh)"><path class="ti-land" d="'+D.ti+'"/></g>'+
+   '<g id="muns">'+D.m.map(function(m,i){return '<path class="ti-mun" data-i="'+i+'" d="'+m.d+'"/>'}).join('')+'</g>'+
+   D.lakes.map(function(l){return '<path class="ti-lake" d="'+l.d+'"/>'}).join('')+
+   (opts&&opts.labels?'<g font-family="Fraunces,serif" font-weight="800" fill="#4E8DB3" font-size="26" opacity=".9"><text x="160" y="1330" transform="rotate(-62 160 1330)">Lago Maggiore</text><text x="640" y="1290" transform="rotate(-30 640 1290)">Ceresio</text></g>':'')+
+   '<g id="over"></g>';
+  return s;
+}
+function byName(n){for(var i=0;i<D.m.length;i++)if(D.m[i].n===n)return D.m[i]}
+function xy(lon,lat){return [(lon-D.bbox[0])*D.k[0],(D.bbox[3]-lat)*D.k[1]]}
+function ll(x,y){return {lon:x/D.k[0]+D.bbox[0],lat:D.bbox[3]-y/D.k[1]}}
+
+// ---------- i giochi della mappa ----------
+var HUBIMG='https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/7fb020ce-eb16-44e6-90df-c820972fd88e.webp';
+// f = posizione della puntina sul disegno del parco (in % di larghezza e altezza)
+var GAMES=[
+ {id:'autopostale',n:0,ic:'🚌',t:'Prendi l\'AutoPostale!',d:'Corri dietro all\'AutoPostale tra capre e turisti',where:'Airolo',s:'AutoPostale',f:[27,13],href:SHOP+'/pages/autopostale',open:1},
+ {id:'quiz',n:1,ic:'❓',t:'Quanto sei ticinese?',d:'Dieci domande, il verdetto in caschetti',where:'Lugano',s:'Quiz ticinese',f:[71,74],href:SHOP+'/pages/quiz-ticinese',open:1},
+ {id:'dove',n:2,ic:'📍',t:'Dov\'è?',d:'Trova dieci comuni sulla mappa',where:'Monteceneri',fn:'dove',href:'/parco/dove/',open:1},
+ {id:'paese',n:3,ic:'🗓️',t:'Il paese del giorno',d:'Un comune al giorno, 6 tentativi',where:'Verzasca',fn:'daily',href:'/parco/paese/',open:1},
+ {id:'catapulta',n:4,ic:'🏰',t:'La catapulta di Castelgrande',d:'Castagne contro i turisti',where:'Bellinzona',s:'Catapulta',side:'r',f:[57,51],href:'/parco/catapulta/',open:1},
+ {id:'diga',n:5,ic:'🌊',t:'Il salto dalla diga',d:'Il tuffo perfetto, voto dei giudici capre',where:'Verzasca',s:'Salto dalla diga',f:[39,40],href:'/parco/diga/',open:1},
+ {id:'pardo',n:6,ic:'🐆',t:'Acchiappa il pardo',d:'Piazza Grande, il pardo scappa',where:'Locarno',s:'Il pardo',side:'l',f:[42,62],href:'/parco/pardo/',open:1},
+ {id:'piode',n:7,ic:'🏠',t:'Piode',d:'Copri il rustico prima della pioggia',where:'Cevio',f:[17,37],href:'/parco/piode/',open:1},
+ {id:'vendemmia',n:8,ic:'🍇',t:'Vendemmia',d:'L\'uva sì, le vespe no',where:'Novazzano',s:'Vendemmia',f:[86,93],href:'/parco/vendemmia/',open:1},
+ {id:'scale',n:9,ic:'🪜',t:'Le scale di Morcote',d:'Su a ritmo, senza fiatone',where:'Morcote',s:'Scale di Morcote',side:'l',f:[63,86],href:'/parco/scale/',open:1},
+ {id:'slitta',n:10,ic:'🛷',t:'Discesa in slitta',d:'Porte, gobbe e mucche distratte',where:'Leventina',s:'Slitta',f:[72,13],href:'/parco/slitta/',open:1},
+ {id:'pedalo',n:11,ic:'🦢',t:'Pedalò sul Verbano',d:'Schiva battelli e cigni sul lago',where:'Lago Maggiore',s:'Pedalò',f:[31,79],href:'/parco/pedalo/',open:1}
+];
+var TRAIL=['autopostale','slitta','piode','diga','catapulta','pardo','pedalo','quiz','scale','vendemmia'];
+function ico(g,cls){return '<span class="ico'+(cls?' '+cls:'')+'" style="background-position:'+(g.n%4)*100/3+'% '+Math.floor(g.n/4)*50+'%"></span>'}
+function starsOf(id){var b=LS.get('stars_'+id,0);return '<span class="stars" aria-label="'+b+' stelle su 3">'+[0,1,2].map(function(i){return '<i class="'+(i<b?'on':'')+'">★</i>'}).join('')+'</span>'}
+function hub(){
+  var box=$('hubMap'),pins=$('pins');
+  pins.innerHTML=GAMES.filter(function(g){return !g.fn&&g.f}).map(function(g){return '<button type="button" class="hp '+(g.open?'open':'lock')+'" data-g="'+g.id+'" aria-label="'+esc(g.t)+(g.open?'':' (presto)')+'"><span class="md">'+ico(g)+(g.open?'':'<span class="lk" aria-hidden="true">🔒</span>')+'</span><span class="rb">'+esc(g.s||g.t)+'</span>'+(g.open?starsOf(g.id):'<span class="soon">Presto</span>')+'</button>'}).join('');
+  var els=[].slice.call(pins.querySelectorAll('.hp'));
+  function place(vb,s){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height),ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;
+    box.classList.toggle('small',r.width<600&&vb.w>700);
+    els.forEach(function(e){var f=GAMES.filter(function(g){return g.id===e.dataset.g})[0].f,mx=f[0]*10,my=f[1]*14.9;e.style.left=((mx-vb.x+ox)/sc)+'px';e.style.top=((my-vb.y+oy)/sc)+'px'})}
+  var map=gameMap(box,function(){closePop()},{img:HUBIMG,W:1000,H:1490,pan:1,pad:40,onView:place});
+  (function trail(){var pts=TRAIL.map(function(id){var g=GAMES.filter(function(x){return x.id===id})[0];return [g.f[0]*10,g.f[1]*14.9]}),d='M'+pts[0][0]+' '+pts[0][1];
+    for(var i=0;i<pts.length-1;i++){var p0=pts[i-1]||pts[i],p1=pts[i],p2=pts[i+1],p3=pts[i+2]||p2;d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+' '+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+' '+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+' '+p2[1]}
+    map.over.innerHTML='<path d="'+d+'" fill="none" stroke="rgba(62,16,25,.35)" stroke-width="11" stroke-linecap="round"/><path class="trail" d="'+d+'" fill="none" stroke="#FFF3D6" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>'})();
+  els.forEach(function(e){e.addEventListener('pointerdown',function(ev){ev.stopPropagation()});e.addEventListener('click',function(){showPop(e.dataset.g,e)})});
+  $('side').innerHTML='<span class="lbl">I giochi del parco</span>'+GAMES.map(function(g){return '<button type="button" class="sg'+(g.open?'':' lock')+'" data-g="'+g.id+'"><span class="i">'+ico(g)+'</span><span><b>'+esc(g.t)+'</b><small>'+(g.open?'Si gioca':'Presto')+' · '+esc(g.where)+'</small></span></button>'}).join('');
+  [].forEach.call($('side').querySelectorAll('.sg'),function(b){b.addEventListener('click',function(){var g=GAMES.filter(function(x){return x.id===b.dataset.g})[0];if(g.fn)openGame(g.id);else showPop(g.id,pins.querySelector('.hp[data-g="'+g.id+'"]'))})});
+  setTimeout(function(){$('hint').style.opacity=0},4500);
+}
+function showPop(id,el){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
+  [].forEach.call(document.querySelectorAll('.hp.sel'),function(x){x.classList.remove('sel')});if(el)el.classList.add('sel');
+  var p=$('pop');p.innerHTML='<span class="pi">'+ico(g,'big')+'</span><h3>'+esc(g.t)+'</h3><p>'+esc(g.where)+' · '+esc(g.d)+'</p>'+(g.open&&!g.href?'<p class="lv">'+starsOf(g.id)+' Facile · Medio · Difficile</p>':'')+'<div class="row">'+(g.open?'<button class="btn gold" id="popGo" type="button" style="margin:0">Gioca</button>':'<span style="font-weight:700;color:var(--brown)">Arriva presto. Lo annuncio su Instagram!</span>')+'<button class="x" id="popX" type="button">Chiudi</button></div>';
+  p.hidden=false;$('popX').onclick=closePop;if($('popGo'))$('popGo').onclick=function(){openGame(id)};ev('click','pin_'+id)}
+function closePop(){$('pop').hidden=true;[].forEach.call(document.querySelectorAll('.hp.sel'),function(x){x.classList.remove('sel')})}
+function openGame(id){var g=GAMES.filter(function(x){return x.id===id})[0];if(!g)return;
+  if(!g.open){toast(g.t+': arriva presto! Lo annuncio su Instagram.');return}
+  if(g.href){ev('click','parco_'+id);location.href=g.href;return}
+  if(g.fn==='dove')need(startDove);else if(g.fn==='daily')startDaily();
+}
+
+// ---------- finestra ----------
+var lastFocus=null;
+function showGame(title){lastFocus=document.activeElement;$('gTitle').textContent=title;$('game').classList.add('on');$('gBody').scrollTop=0;setTimeout(function(){$('gClose').focus()},350)}
+function closeGame(){if(SOLO){location.href='/parco/';return}$('game').classList.remove('on');if(!ME&&READY)setTimeout(function(){openGate('Ti è piaciuto? Con l\'account giochi a tutto il parco, entri in classifica e vinci i premi.')},400);if(lastFocus&&lastFocus.focus)lastFocus.focus();refreshDailyCard();loadLb()}
+$('gClose').addEventListener('click',closeGame);
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if($('game').classList.contains('on'))closeGame();else if(!$('lb').hidden)$('lb').hidden=true;else if(!$('me').hidden)$('me').hidden=true;else closePop()});
+function say(t){return '<div class="say"><span class="av" aria-hidden="true">E</span><p>'+t+'</p></div>'}
+
+// mappa di gioco con zoom e spostamento
+function gameMap(el,onTap,opt){opt=opt||{};var MW=opt.W||D.W,MH=opt.H||D.H;
+  var s=baseSvg(opt);el.insertBefore(s,el.firstChild);
+  var P0=opt.pad||0,V0=function(){return {x:-P0,y:-P0*2.4,w:MW+2*P0,h:(MW+2*P0)*MH/MW}};var vb=V0();function apply(){s.setAttribute('viewBox',vb.x+' '+vb.y+' '+vb.w+' '+vb.h);if(opt.onView)opt.onView(vb,s)}
+  function clamp(){vb.w=Math.max(120,Math.min(MW*1.2,vb.w));vb.h=vb.w*MH/MW;vb.x=Math.max(-vb.w*.2,Math.min(MW-vb.w*.8,vb.x));vb.y=Math.max(-vb.h*.2,Math.min(MH-vb.h*.8,vb.y))}
+  function zoomAt(f,cx,cy){var nx=cx-(cx-vb.x)*f,ny=cy-(cy-vb.y)*f;vb.w*=f;vb.h*=f;vb.x=nx;vb.y=ny;clamp();apply()}
+  function pt(e){var r=s.getBoundingClientRect();var sc=Math.max(vb.w/r.width,vb.h/r.height);var ox=(r.width*sc-vb.w)/2,oy=(r.height*sc-vb.h)/2;return {x:vb.x+(e.clientX-r.left)*sc-ox,y:vb.y+(e.clientY-r.top)*sc-oy,sc:sc}}
+  var ptrs={},start=null,moved=false,pinch=null;
+  s.addEventListener('pointerdown',function(e){s.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);if(k.length===1){start={x:e.clientX,y:e.clientY,vx:vb.x,vy:vb.y};moved=false}else if(k.length===2){var a=ptrs[k[0]],b=ptrs[k[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),w:vb.w};moved=true}});
+  s.addEventListener('pointermove',function(e){if(!ptrs[e.pointerId])return;ptrs[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(ptrs);
+    if(k.length===2&&pinch){var a=ptrs[k[0]],b=ptrs[k[1]],d=Math.hypot(a.x-b.x,a.y-b.y),c=pt({clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2});var f=(pinch.w*pinch.d/d)/vb.w;zoomAt(f,c.x,c.y);return}
+    if(start){var dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>8)moved=true;if(moved&&(vb.w<MW*1.01||opt.pan)){var r=s.getBoundingClientRect(),sc=Math.max(vb.w/r.width,vb.h/r.height);vb.x=start.vx-dx*sc;vb.y=start.vy-dy*sc;clamp();apply()}}});
+  function up(e){var had=!!ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch=null;if(had&&!moved&&Object.keys(ptrs).length===0&&e.type==='pointerup'){var p=pt(e);onTap(p.x,p.y)}if(!Object.keys(ptrs).length)start=null}
+  s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);
+  s.addEventListener('wheel',function(e){e.preventDefault();var p=pt(e);zoomAt(e.deltaY>0?1.15:1/1.15,p.x,p.y)},{passive:false});
+  var z=document.createElement('div');z.className='zoom';z.innerHTML='<button type="button" aria-label="Ingrandisci">+</button><button type="button" aria-label="Riduci">−</button><button type="button" aria-label="Tutta la mappa" style="font-size:14px">⤢</button>';el.appendChild(z);
+  var bs=z.querySelectorAll('button');bs[0].onclick=function(){zoomAt(1/1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[1].onclick=function(){zoomAt(1.6,vb.x+vb.w/2,vb.y+vb.h/2)};bs[2].onclick=function(){vb=V0();apply()};
+  setTimeout(apply,0);addEventListener('resize',apply);
+  return {svg:s,apply:apply,over:s.querySelector('#over'),focus:function(x,y,w){vb.w=w;vb.h=w*MH/MW;vb.x=x-vb.w/2;vb.y=y-vb.h/2;clamp();apply()},reset:function(){vb=V0();apply()},sc:function(){return vb.w/MW}};
+}
+
+// ---------- DOV'È? ----------
+var DV=null;
+var DV_OK=['Centrato! Neanche il postino lo trova così in fretta.','Perfetto. Ci sei nato, ammettilo.','In pieno! La nonna sarebbe fiera.'];
+var DV_NEAR=['Quasi! Con l\'AutoPostale ci arrivi in cinque minuti.','Vicino, vicino. Ancora una curva.','Ci sei andato vicino come io con il telefonino.'];
+var DV_FAR=['Eh… quello è un altro paese. Forse un\'altra valle.','Mmm. Hai chiesto la strada a Gianni, vero?','Lontanuccio. Anche io mi perdo, non preoccuparti.'];
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function pts(k){return Math.round(1000*Math.exp(-k/12))}
+function startDove(){
+  ev('game_start','dove');
+  var r=rng(Date.now()&0xffffffff),pool=D.m.slice(),list=[];while(list.length<10){list.push(pool.splice(Math.floor(r()*pool.length),1)[0])}
+  DV={list:list,i:0,tot:0,tk:null,t0:Date.now(),res:[]};
+  fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({g:'dove',l:'normale'})}).then(function(x){return x.json()}).then(function(j){DV.tk=j.tk}).catch(function(){});
+  showGame('Dov\'è?');
+  $('gIn').innerHTML='<div class="hud"><span>Comune <strong id="dvI">1</strong>/10</span><span>Punti <strong id="dvT">0</strong></span></div><div class="q" id="dvQ"></div><div class="gmap" id="dvMap"></div><div id="dvRes"></div>';
+  DV.map=gameMap($('dvMap'),dvTap);dvRound();
+}
+function dvRound(){var m=DV.list[DV.i];DV.lock=false;$('dvI').textContent=DV.i+1;$('dvQ').innerHTML='Dov\'è <em>'+esc(m.n)+'</em>?';$('dvRes').innerHTML=say(DV.i===0?'Tocca la mappa dove pensi che sia. Puoi ingrandire con + o con due dita.':'Il prossimo. Concentrati, che questo è difficile.');DV.map.over.innerHTML='';DV.map.reset();
+  DV.map.svg.querySelectorAll('.ti-mun').forEach(function(p){p.style.fill='';p.style.opacity=''})}
+function dvTap(x,y){if(DV.lock)return;DV.lock=true;var m=DV.list[DV.i],idx=D.m.indexOf(m),path=DV.map.svg.querySelector('.ti-mun[data-i="'+idx+'"]');
+  var inside=false;try{inside=path.isPointInFill(new DOMPoint(x,y))}catch(e){}
+  var p=ll(x,y),k=inside?0:km(p,m),score=inside?1000:pts(k);DV.tot+=score;DV.res.push(score);
+  path.style.fill='rgba(232,59,43,.45)';path.style.opacity='1';
+  var sc=DV.map.sc();DV.map.over.innerHTML='<line x1="'+x+'" y1="'+y+'" x2="'+m.x+'" y2="'+m.y+'" stroke="#3E1019" stroke-width="'+(3*sc+1)+'" stroke-dasharray="'+(10*sc+2)+' '+(8*sc+2)+'"/><circle cx="'+x+'" cy="'+y+'" r="'+(10*sc+3)+'" fill="#3E1019" stroke="#fff" stroke-width="'+(3*sc+1)+'"/><circle cx="'+m.x+'" cy="'+m.y+'" r="'+(12*sc+4)+'" fill="#FFD24A" stroke="#3E1019" stroke-width="'+(4*sc+1)+'"/>';
+  $('dvT').textContent=DV.tot;
+  var msg=inside?pick(DV_OK):k<6?pick(DV_NEAR):pick(DV_FAR);
+  $('dvRes').innerHTML='<div class="res"><span>'+(inside?'Dentro il comune!':(k<1?'Meno di 1 km':Math.round(k)+' km')+' da '+esc(m.n))+'</span><b>+'+score+'</b></div>'+say(msg)+'<button class="btn gold" id="dvNext" type="button">'+(DV.i<9?'Avanti →':'Vedi il risultato')+'</button>';
+  $('dvNext').onclick=function(){DV.i++;if(DV.i<10)dvRound();else dvEnd()};$('dvNext').focus({preventScroll:true});
+  $('dvNext').scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+// il caschetto di Elvezio (il taglio di capelli), pieno o vuoto
+function cas(on){return '<svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30 C4 14 12 5 20 5 C28 5 36 14 34 30 L28 30 L28 17 C24 19 16 19 12 17 L12 30 Z" fill="'+(on?'#E8853B':'rgba(255,255,255,.18)')+'" stroke="'+(on?'#FFD24A':'rgba(255,255,255,.35)')+'" stroke-width="2"/></svg>'}
+function casc(s){return s>=8500?5:s>=6500?4:s>=4500?3:s>=2500?2:1}
+var VERD=['','Turista con le calze nei sandali.','Ospite di passaggio. Torna presto.','Quasi nipote. La nonna ti dà un\'altra possibilità.','Nipote ufficiale. Conosci il Ticino meglio di me.','Ticinese doc. Ti nomino sindaco onorario.'];
+function dvEnd(){var s=DV.tot,c=casc(s);ev('game_end','dove',s);
+  var best=LS.get('dove_best',0);if(s>best)LS.set('dove_best',s);
+  var name=ME?ME.nick:'';
+  $('gIn').innerHTML='<div class="over"><span class="lbl" style="color:#FFD24A">Dov\'è? · risultato</span><h3>'+s+' punti</h3><p aria-label="'+c+' caschetti su 5" style="display:flex;gap:6px">'+[0,1,2,3,4].map(function(i){return cas(i<c)}).join('')+'</p><p><b style="color:#fff">'+VERD[c]+'</b></p><p>Il tuo record: '+Math.max(best,s)+' punti.</p>'+
+   '<div id="dvSave"><p style="color:#FFD24A;font-weight:800">Salvo in classifica…</p></div>'+
+   '<div class="row"><button class="btn ghost" id="dvAgain" type="button" style="color:#F1E6CF;margin:0">Gioca ancora</button><button class="btn ghost" id="dvShare" type="button" style="color:#F1E6CF;margin:0">Condividi</button></div></div>'+
+   say(s>=6500?'Bravo! Adesso prova il paese del giorno, che quello è per veri esperti.':'Non preoccuparti: io a Corippo ho sbagliato strada per cinquant\'anni.');
+  $('dvAgain').onclick=startDove;
+  $('dvShare').onclick=function(){share('Ho fatto '+s+' punti a Dov\'è? nel parco giochi di Elvezio ('+c+'/5 caschetti)\nRiesci a battermi?')};
+  (function save(){var el=$('dvSave');if(!DV.tk){el.innerHTML='<p>La classifica non è raggiungibile adesso.</p>';return}
+    fetch('/api/score',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({tk:DV.tk,g:'dove',score:s})}).then(function(x){return x.json()}).then(function(j){
+      if(j.ok){DV.tk=null;el.innerHTML='<p style="color:#FFD24A;font-weight:800">'+(j.rankWeek===1?'🏆 Sei PRIMO in classifica questa settimana!':'Sei '+j.rankWeek+'° in classifica questa settimana.')+'</p>';loadLb()}
+      else if(j.error==='login'&&!READY){el.innerHTML='<p>La classifica del parco apre tra pochi giorni, insieme agli account dei giocatori.</p>'}
+      else if(j.error==='login'){el.innerHTML='<button class="btn gold" id="dvLog" type="button" style="margin:0">Entra per salvare il punteggio</button>';$('dvLog').onclick=function(){window._after=null;openGate('Entra per salvare il punteggio in classifica.')}}
+      else el.innerHTML='<p>'+(j.error==='troppo'?'Troppo veloce per essere vero! Questo punteggio non va in classifica.':'Non sono riuscito a salvare il punteggio.')+'</p>'}).catch(function(){el.innerHTML='<p>Connessione assente: punteggio non salvato.</p>'})})();
+}
+
+// ---------- IL PAESE DEL GIORNO ----------
+var DAY=null;
+var ARR=['⬆️','↗️','➡️','↘️','⬇️','↙️','⬅️','↖️'];
+function dailyTarget(ds){var n=dayNum(ds),L=D.m.length,r=rng(20261104),perm=D.m.map(function(_,i){return i});for(var i=L-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=perm[i];perm[i]=perm[j];perm[j]=t}var cyc=Math.floor((n-1)/L),idx=((n-1)%L+L)%L;if(cyc>0){var r2=rng(20261104+cyc);for(var a=L-1;a>0;a--){var b=Math.floor(r2()*(a+1));var u=perm[a];perm[a]=perm[b];perm[b]=u}}return D.m[perm[idx]]}
+function dState(){var ds=today();var st=LS.get('pdg_'+ds,{g:[],done:0,win:0});return {ds:ds,st:st}}
+function stats(){return LS.get('pdg_stats',{p:0,w:0,cur:0,max:0,last:'',dist:[0,0,0,0,0,0]})}
+function refreshDailyCard(){if(!D)return;var x=dState(),n=dayNum(x.ds),s=stats();$('dNum').textContent='Il paese del giorno · n. '+n;
+  if(x.st.done){$('dDone').hidden=false;$('dDone').textContent=x.st.win?'✔ Fatto oggi in '+x.st.g.length+'/6. Torna domani!':'✘ Oggi è andata male. Domani si riprova!';$('dTxt').textContent=x.st.win?'Fatto in '+x.st.g.length+'/6 ✔':'Vedi il risultato'}else{$('dDone').hidden=true;$('dTxt').textContent=x.st.g.length?'Continua ('+x.st.g.length+'/6)':'Gioca di oggi'}
+  var cur=s.last===x.ds||s.last===prevDay(x.ds)?s.cur:0;if(cur>0){$('streak').hidden=false;$('streakN').textContent=cur}else $('streak').hidden=true}
+function prevDay(ds){var a=ds.split('-'),d=new Date(Date.UTC(+a[0],+a[1]-1,+a[2]-1));return d.toISOString().slice(0,10)}
+function startDaily(){var x=dState();DAY={ds:x.ds,st:x.st,t:dailyTarget(x.ds),n:dayNum(x.ds)};if(!x.st.g.length&&!x.st.done)ev('game_start','paese');
+  showGame('Il paese del giorno · n. '+DAY.n);
+  $('gIn').innerHTML=say('Ho pensato a un comune del Ticino. Scrivi un nome: ti dico quanti chilometri mancano e da che parte andare.')+
+   '<div class="inp" id="dInp"><input id="dIn" placeholder="Scrivi un comune…" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Scrivi un comune del Ticino" role="combobox" aria-expanded="false" aria-controls="dSug"><div class="sug" id="dSug" role="listbox" hidden></div></div>'+
+   '<div class="guesses" id="dGs" aria-live="polite"></div><div id="dOver"></div><div class="gmap" id="dMap"></div>';
+  DAY.map=gameMap($('dMap'),function(){});
+  var inp=$('dIn'),sug=$('dSug'),hl=-1,items=[];
+  function render(){var q=norm(inp.value);if(!q){sug.hidden=true;inp.setAttribute('aria-expanded','false');return}
+    var used={};DAY.st.g.forEach(function(n){used[n]=1});
+    items=D.m.filter(function(m){return !used[m.n]&&norm(m.n).indexOf(q)>=0}).sort(function(a,b){return norm(a.n).indexOf(q)-norm(b.n).indexOf(q)}).slice(0,8);
+    hl=items.length?0:-1;
+    sug.innerHTML=items.length?items.map(function(m,i){return '<button type="button" role="option" data-n="'+esc(m.n)+'"'+(i===hl?' class="hl"':'')+'>'+esc(m.n)+'</button>'}).join(''):'<button type="button" disabled>Nessun comune con questo nome</button>';
+    sug.hidden=false;inp.setAttribute('aria-expanded','true');
+    sug.querySelectorAll('button[data-n]').forEach(function(b){b.addEventListener('mousedown',function(e){e.preventDefault()});b.addEventListener('click',function(){guess(b.dataset.n)})})}
+  inp.addEventListener('input',render);
+  inp.addEventListener('keydown',function(e){var bs=sug.querySelectorAll('button[data-n]');if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!bs.length)return;hl=(hl+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length;bs.forEach(function(b,i){b.classList.toggle('hl',i===hl)})}else if(e.key==='Enter'){e.preventDefault();if(hl>=0&&bs[hl])guess(bs[hl].dataset.n)}else if(e.key==='Escape'){sug.hidden=true}});
+  inp.addEventListener('blur',function(){setTimeout(function(){sug.hidden=true},150)});
+  function guess(n){if(DAY.st.done)return;var m=byName(n);if(!m||DAY.st.g.indexOf(n)>=0)return;DAY.st.g.push(n);inp.value='';sug.hidden=true;
+    if(m===DAY.t){DAY.st.done=1;DAY.st.win=1}else if(DAY.st.g.length>=6){DAY.st.done=1;DAY.st.win=0}
+    LS.set('pdg_'+DAY.ds,DAY.st);if(DAY.st.done)finish();draw(true)}
+  draw(false);if(DAY.st.done)drawOver();else setTimeout(function(){inp.focus()},400);
+}
+function prox(k){return Math.max(0,Math.round(100-k/110*100))}
+function draw(anim){var t=DAY.t,h='',ov='';
+  DAY.st.g.forEach(function(n,i){var m=byName(n),k=km(m,t),win=m===t,b=bearing(m,t);
+    h+='<div class="gr'+(win?' win':'')+'"><div>'+esc(n)+'</div><div>'+(win?'🎯':(k<1?'<1':Math.round(k))+' km')+'</div><div>'+(win?'🎉':'<span class="arrow" style="transform:rotate('+Math.round(b)+'deg)">⬆️</span>')+'</div><div>'+prox(win?0:k)+'%</div></div>';
+    var idx=D.m.indexOf(m);var p=DAY.map.svg.querySelector('.ti-mun[data-i="'+idx+'"]');if(p){p.style.fill=win?'rgba(31,107,69,.6)':'rgba(232,59,43,'+(0.2+prox(k)/140)+')';p.style.opacity='1'}
+    ov+='<g transform="translate('+m.x+' '+m.y+')"><circle r="9" fill="'+(win?'#1F6B45':'#3E1019')+'" stroke="#fff" stroke-width="3"/><text x="14" y="6" font-family="Montserrat" font-weight="800" font-size="22" fill="#3E1019" stroke="#fff" stroke-width="5" paint-order="stroke">'+esc(n)+'</text></g>'});
+  for(var i=DAY.st.g.length;i<6;i++)h+='<div class="gr empty"><div>·</div><div>·</div><div>·</div><div>·</div></div>';
+  $('dGs').innerHTML=h;
+  if(DAY.st.done){var t2=DAY.t,ti=D.m.indexOf(t2),tp=DAY.map.svg.querySelector('.ti-mun[data-i="'+ti+'"]');if(tp){tp.style.fill='rgba(255,210,74,.85)';tp.style.opacity='1';tp.style.stroke='#3E1019';tp.style.strokeWidth='3'}
+    ov+='<g transform="translate('+t2.x+' '+t2.y+')"><circle r="13" fill="#FFD24A" stroke="#3E1019" stroke-width="4"/></g>';$('dInp').hidden=true}
+  DAY.map.over.innerHTML=ov;
+  if(DAY.st.done&&anim)drawOver();
+}
+function finish(){var s=stats();s.p++;if(DAY.st.win){s.w++;s.dist[DAY.st.g.length-1]++;s.cur=(s.last===prevDay(DAY.ds)?s.cur:0)+1;s.max=Math.max(s.max,s.cur)}else s.cur=0;s.last=DAY.ds;LS.set('pdg_stats',s);ev('game_end','paese',DAY.st.win?DAY.st.g.length:0)}
+function grid(){return DAY.st.g.map(function(n){var m=byName(n);if(m===DAY.t)return '🟩🟩🟩🟩🟩 🎯';var p=prox(km(m,DAY.t)),f=Math.min(4,Math.floor(p/20));return '🟩'.repeat(f)+(p%20>=10&&f<5?'🟨':'⬜')+'⬜'.repeat(Math.max(0,4-f))+' '+ARR[Math.round(bearing(m,DAY.t)/45)%8]}).join('\n')}
+function drawOver(){var s=stats(),win=DAY.st.win,n=DAY.st.g.length,t=DAY.t;
+  var msg=win?(n===1?'Al primo colpo?! Confessa: abiti lì.':n<=3?'Bravissimo. Sei più ticinese del boccalino.':n<=5?'Ce l\'hai fatta! Con calma, come l\'AutoPostale.':'All\'ultimo respiro. Come me sulle scale di Morcote.'):'Era <b>'+esc(t.n)+'</b>! Non ti preoccupare, nemmeno Gianni sa dov\'è.';
+  $('dOver').innerHTML='<div class="over"><span class="lbl" style="color:#FFD24A">Il paese del giorno · n. '+DAY.n+'</span><h3>'+(win?'Trovato in '+n+'/6!':'Oggi no…')+'</h3><p>'+msg+'</p>'+
+   '<div class="stats"><div><b>'+s.p+'</b><small>giocati</small></div><div><b>'+(s.p?Math.round(s.w/s.p*100):0)+'%</b><small>vinti</small></div><div><b>'+s.cur+'</b><small>di fila</small></div><div><b>'+s.max+'</b><small>record</small></div></div>'+
+   '<div class="row"><button class="btn gold" id="dShare" type="button" style="margin:0">Condividi il risultato</button><button class="btn ghost" id="dDove" type="button" style="color:#F1E6CF;margin:0">Gioca a Dov\'è?</button></div><p id="dNext"></p></div>';
+  $('dShare').onclick=function(){share('Il paese del giorno di Elvezio n. '+DAY.n+' · '+(win?n:'X')+'/6\n'+grid())};
+  $('dDove').onclick=function(){need(startDove)};
+  (function tick(){var el=$('dNext');if(!el)return;var now=new Date(),z=new Date(now.toLocaleString('en-US',{timeZone:'Europe/Zurich'})),ms=(24*3600-(z.getHours()*3600+z.getMinutes()*60+z.getSeconds()))*1000;var h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4);el.textContent='Il prossimo paese tra '+h+' h '+m+' min.';setTimeout(tick,30000)})();
+}
+function share(text){var url=location.origin+(SOLO?'/parco/'+SOLO+'/':'/parco/');var full=text+'\n'+url;ev('share','parco');
+  if(navigator.share){navigator.share({text:full}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(full).then(function(){toast('Copiato! Incollalo nelle storie o su WhatsApp.')}).catch(function(){prompt('Copia il testo:',full)})}}
+
+// ---------- classifica ----------
+function loadLb(){fetch('/api/top?g=dove&l=normale&p=week&n=10').then(function(r){return r.json()}).then(function(j){var t=j.top||[],me=LS.get('elv_ig','');
+  $('lbRows').innerHTML=t.length?t.map(function(r,i){return '<div class="lbrow"'+(r.name===me?' style="outline:2px solid #FFD24A"':'')+'><span class="r">'+(i+1)+'</span><span class="n">@'+esc(r.name)+(r.name===me?' · tu':'')+'</span><span class="s">'+r.score+'</span></div>'}).join(''):'<p class="lbempty">Nessuno in classifica questa settimana. Il primo posto è tuo: gioca a Dov\'è?</p>'}).catch(function(){$('lbRows').innerHTML='<p class="lbempty">Classifica non raggiungibile adesso.</p>'})}
+(function(){function t(){var z=new Date(new Date().toLocaleString('en-US',{timeZone:'Europe/Zurich'})),d=(8-z.getDay())%7||7,h=24-z.getHours();$('lbReset').textContent='Si azzera tra '+(d-1)+' g '+h+' h'}t();setInterval(t,60000)})();
+
+
+// ---------- ACCOUNT ----------
+var ME=null,PEND=null,READY=false;// PEND = {email, kind:'verify'|'reset'}
+var ERR={email:'Controlla l\'email.',password:'La password deve avere almeno 8 caratteri.',nick:'Nome da giocatore: da 3 a 24 caratteri, solo lettere minuscole, numeri, punto e trattino basso.',nick_preso:'Questo nome da giocatore è già preso. Provane un altro.',esiste:'Con questa email c\'è già un account. Entra con la tua password.',credenziali:'Email o password sbagliate.',bloccato:'Troppi tentativi. Riprova tra 15 minuti.',troppi:'Ti ho già mandato troppi codici. Riprova tra un\'ora.',sbagliato:'Codice sbagliato. Controlla l\'email.',scaduto:'Codice scaduto. Chiedine uno nuovo.',mail:'In questo momento non riesco a mandare email. Riprova più tardi.',db:'Qualcosa non ha funzionato. Riprova.',dati:'Scrivi email e password.'};
+function api(b){return fetch('/api/auth',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json().catch(function(){return {error:'db'}})}).catch(function(){return {error:'db'}})}
+function gErr(t){var e=$('gErr');if(!t){e.hidden=true;return}e.textContent=t;e.hidden=false}
+function view(v){['fLogin','fReg','fCode','fForgot'].forEach(function(id){$(id).hidden=true});gErr('');
+  $('gTabs').hidden=!(v==='login'||v==='register');
+  [].forEach.call($('gTabs').children,function(b){b.classList.toggle('on',b.dataset.v===v)});
+  var f={login:'fLogin',register:'fReg',code:'fCode',forgot:'fForgot'}[v];$(f).hidden=false;var i=$(f).querySelector('input');if(i)setTimeout(function(){i.focus()},50)}
+function openGate(msg){$('gSub').textContent=msg||'Per giocare a tutto il parco, entrare in classifica e vincere i premi serve il tuo account. È gratis.';$('gate').hidden=false;view(PEND?'code':'login')}
+function closeGate(){$('gate').hidden=true}
+function setMe(u){ME=u;$('meBtn').hidden=!u;if(u){$('meNick').textContent=u.nick;closeGate()}}
+function busy(f,on){var b=f.querySelector('button[type=submit]');if(b){b.disabled=on;b.style.opacity=on?.6:1}}
+[].forEach.call($('gTabs').children,function(b){b.addEventListener('click',function(){PEND=null;view(b.dataset.v)})});
+$('toForgot').onclick=function(){view('forgot');$('fForgot').email.value=$('fLogin').email.value};
+$('backLogin').onclick=function(){view('login')};
+$('freeDaily').onclick=function(){closeGate();startDaily()};
+function done(j){if(j.user){var tr=(location.search.match(/[?&]torna=([^&]+)/)||[])[1];if(tr){tr=decodeURIComponent(tr);if(/^\/parco\/[a-z0-9-]+\/$/.test(tr)){location.href=tr;return}}PEND=null;setMe(j.user);toast('Benvenuto nel parco, '+j.user.nick+'!');ev('signup','parco_login');loadLb();if(window._after){var f=window._after;window._after=null;f()}}}
+$('fLogin').addEventListener('submit',function(e){e.preventDefault();var f=this;busy(f,true);
+  api({a:'login',email:f.email.value,password:f.password.value}).then(function(j){busy(f,false);
+    if(j.step==='verify'){PEND={email:f.email.value.trim().toLowerCase(),kind:'verify'};$('codeTxt').textContent='Prima conferma la tua email: ti ho mandato un codice di 6 cifre a '+PEND.email+'.';$('newPwL').hidden=true;view('code');return}
+    if(j.error){gErr(ERR[j.error]||ERR.db);return}done(j)})});
+$('fReg').addEventListener('submit',function(e){e.preventDefault();var f=this;
+  if(f.password.value.length<8){gErr(ERR.password);return}
+  busy(f,true);api({a:'register',email:f.email.value,password:f.password.value,nick:f.nick.value,news:f.news.checked}).then(function(j){busy(f,false);
+    if(j.error){gErr(ERR[j.error]||ERR.db);return}
+    PEND={email:f.email.value.trim().toLowerCase(),kind:'verify'};$('codeTxt').textContent='Ti ho mandato un codice di 6 cifre a '+PEND.email+'. Scrivilo qui (guarda anche nello spam).';$('newPwL').hidden=true;view('code')})});
+$('fForgot').addEventListener('submit',function(e){e.preventDefault();var f=this;busy(f,true);
+  api({a:'forgot',email:f.email.value}).then(function(j){busy(f,false);if(j.error){gErr(ERR[j.error]||ERR.db);return}
+    PEND={email:f.email.value.trim().toLowerCase(),kind:'reset'};$('codeTxt').textContent='Se c\'è un account con '+PEND.email+', ti è arrivato un codice di 6 cifre. Scrivilo e scegli la nuova password.';$('newPwL').hidden=false;view('code')})});
+$('fCode').addEventListener('submit',function(e){e.preventDefault();var f=this;if(!PEND){view('login');return}
+  var b=PEND.kind==='reset'?{a:'reset',email:PEND.email,code:f.code.value,password:f.password.value}:{a:'verify',email:PEND.email,code:f.code.value};
+  if(PEND.kind==='reset'&&f.password.value.length<8){gErr(ERR.password);return}
+  busy(f,true);api(b).then(function(j){busy(f,false);if(j.error){gErr(ERR[j.error]||ERR.db);return}f.reset();done(j)})});
+$('reCode').onclick=function(){if(!PEND)return;api(PEND.kind==='reset'?{a:'forgot',email:PEND.email}:{a:'resend',email:PEND.email}).then(function(j){if(j.error)gErr(ERR[j.error]||ERR.db);else toast('Codice mandato di nuovo.')})};
+// profilo
+$('meBtn').onclick=function(){if(!ME)return;$('mePN').textContent=ME.nick;$('mePE').textContent=ME.email;$('meNews').checked=!!ME.news;
+  var s=stats();$('meStats').innerHTML='<div><b>'+LS.get('dove_best',0)+'</b><small>record Dov\'è?</small></div><div><b>'+s.w+'</b><small>paesi trovati</small></div><div><b>'+s.max+'</b><small>giorni di fila</small></div>';$('me').hidden=false};
+$('meClose').onclick=function(){$('me').hidden=true};
+$('me').addEventListener('click',function(e){if(e.target===$('me'))$('me').hidden=true});
+$('meNews').onchange=function(){api({a:'news',news:this.checked}).then(function(j){if(j.ok){ME.news=j.news;toast(j.news?'Ok, ti avviso io!':'Va bene, niente email di novità.')}})};
+function out(all){api({a:all?'logout_all':'logout'}).then(function(){setMe(null);$('me').hidden=true;openGate('Sei uscito. A presto nel parco!')})}
+$('meOut').onclick=function(){out(false)};$('meOutAll').onclick=function(){out(true)};
+function need(f){if(ME||!READY)return f();window._after=f;openGate('Per questo gioco serve il tuo account: così il punteggio va in classifica col tuo nome.')}
+$('openDaily').addEventListener('click',function(){location.href='/parco/paese/'});
+$('lbBtn').addEventListener('click',function(){$('lb').hidden=false;loadLb();$('lbClose').focus()});
+$('lbClose').addEventListener('click',function(){$('lb').hidden=true});
+$('lb').addEventListener('click',function(e){if(e.target===$('lb'))$('lb').hidden=true});
+$('lbPlay').addEventListener('click',function(){$('lb').hidden=true;need(startDove)});
+$('openDove').addEventListener('click',function(){location.href='/parco/dove/'});
+fetch('/api/auth',{credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){READY=!!j.ready;setMe(j.user);if(READY&&!j.user&&location.hash!=='#paese-del-giorno')openGate()}).catch(function(){});
+fetch('/parco/ticino.json').then(function(r){return r.json()}).then(function(j){D=j;if(SOLO){if(SOLO==='dove')need(startDove);else startDaily();return}hub();refreshDailyCard();if(location.hash==='#paese-del-giorno')startDaily();else if(location.hash==='#dove')startDove()}).catch(function(){$('hubMap').innerHTML='<p style="padding:20px">La mappa non si è caricata. Ricarica la pagina.</p>'});
+loadLb();
+})();
+</script>
+</body>
+</html>

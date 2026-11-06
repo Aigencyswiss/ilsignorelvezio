@@ -2,3 +2,5 @@ node_modules
 .vercel
 .env*
 public/parco/ticino.json
+public/parco/dove/
+public/parco/paese/

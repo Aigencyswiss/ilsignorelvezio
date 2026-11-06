@@ -53,3 +53,10 @@ const out = {
 fs.mkdirSync('public/parco', { recursive: true });
 fs.writeFileSync('public/parco/ticino.json', JSON.stringify(out));
 console.log('ticino.json:', out.m.length, 'comuni,', fs.statSync('public/parco/ticino.json').size, 'byte');
+
+// pagine a sé di Dov'è? e Il paese del giorno: stesso file della mappa, che apre subito il gioco giusto
+for (const g of ['dove', 'paese']) {
+  fs.mkdirSync('public/parco/' + g, { recursive: true });
+  fs.copyFileSync('public/parco/mappa/index.html', 'public/parco/' + g + '/index.html');
+}
+console.log('pagine a sé: /parco/dove/ e /parco/paese/');

@@ -62,7 +62,7 @@ window.Telaio={start:function(cfg){
     main.querySelectorAll('.t-lvb').forEach(function(b){b.onclick=function(){if(b.classList.contains('lock')){toast('Prima prendi almeno una stella al livello '+LVN[LV[LV.indexOf(b.dataset.l)-1]]+'.');return}play(b.dataset.l)}});
     $('#tLb2').onclick=function(){board(LV.filter(function(l,i){return unlocked(i)}).pop())};
   }
-  function needLogin(){main.innerHTML='<div class="t-scr"><div class="t-card"><div class="t-hero"><span class="t-medal" style="'+medal+'"></span><div><p>Il parco giochi di Elvezio</p><h1>'+esc(cfg.title)+'</h1></div></div><div class="t-say"><b>E</b><p>Per giocare qui serve il tuo account del parco: così i punti vanno in classifica col tuo nome. È gratis e ci metti un minuto.</p></div><a class="t-btn gold" href="/parco/?torna='+encodeURIComponent(location.pathname)+'">Entra nel parco</a></div></div>'}
+  function needLogin(){main.innerHTML='<div class="t-scr"><div class="t-card"><div class="t-hero"><span class="t-medal" style="'+medal+'"></span><div><p>Il parco giochi di Elvezio</p><h1>'+esc(cfg.title)+'</h1></div></div><div class="t-say"><b>E</b><p>Per giocare qui serve il tuo account del parco: così i punti vanno in classifica col tuo nome. È gratis e ci metti un minuto.</p></div><a class="t-btn gold" href="/parco/mappa/?torna='+encodeURIComponent(location.pathname)+'">Entra nel parco</a></div></div>'}
 
   // ----- partita -----
   var G=null,raf=0,last=0,state=null,paused=false,cv,ctx,scale=1,dpr=1;
@@ -143,7 +143,7 @@ window.Telaio={start:function(cfg){
     },reason==='vite'||reason==='tempo'?700:400);
   }
   function save(s,l){var el=$('#tRank'),tk=state&&state.tk;
-    if(!ME){el.innerHTML=READY?'<a href="/parco/?torna='+encodeURIComponent(location.pathname)+'" style="color:#FFD24A">Entra nel parco</a> per mettere i punti in classifica.':'La classifica del parco apre tra pochi giorni, insieme agli account.';return}
+    if(!ME){el.innerHTML=READY?'<a href="/parco/mappa/?torna='+encodeURIComponent(location.pathname)+'" style="color:#FFD24A">Entra nel parco</a> per mettere i punti in classifica.':'La classifica del parco apre tra pochi giorni, insieme agli account.';return}
     if(!tk||s<1){el.textContent=s<1?'Zero punti: in classifica non ci vai, ma ci hai provato!':'Classifica non raggiungibile adesso.';return}
     fetch('/api/score',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({tk:tk,g:ID,score:s})}).then(function(r){return r.json()}).then(function(j){
       if(j.ok)el.innerHTML=j.rankWeek===1?'🏆 Sei <b>PRIMO</b> in classifica questa settimana!':'Sei <b>'+j.rankWeek+'°</b> questa settimana · <b>'+j.rankAll+'°</b> di sempre';
