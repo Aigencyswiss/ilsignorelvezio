@@ -179,6 +179,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 var G={
   parola:{t:'La parola del giorno',pl:'Cinque lettere, sei tentativi',n:-1,href:'/parco/parola/',tiles:1},
   grande:{t:'Più grande o più piccolo?',pl:'Quale comune è più grande?',n:3,href:'/parco/grande/',bg:'linear-gradient(150deg,#8E6BB8,#4B2E73)',bd:'Senza fine'},
+  bufala:{t:'Vero o bufala?',pl:'Curiosità vere o inventate da Elvezio',n:1,href:'/parco/bufala/',bg:'linear-gradient(150deg,#E2603F,#8E2A1B)',bd:'Nuovo'},
   paese:{t:'Il paese del giorno',pl:'Un comune al giorno',n:3,href:'/parco/paese/',bg:'linear-gradient(150deg,#E7B04A,#9E5F12)'},
   dove:{t:'Dov\'è?',pl:'Dieci comuni sulla mappa',n:2,href:'/parco/dove/',bg:'linear-gradient(150deg,#3AA0A0,#155A63)'},
   quiz:{t:'Quanto sei ticinese?',pl:'Dieci domande, verdetto in caschetti',n:1,href:SHOP+'/pages/quiz-ticinese',bg:'linear-gradient(150deg,#C04A5A,#5C1F2B)',ext:1},
@@ -193,7 +194,7 @@ var G={
   vendemmia:{t:'Vendemmia',pl:'Novazzano, Mendrisiotto',n:8,href:'/parco/vendemmia/',th:'871c1fb4-311c-48f3-8a50-c346bf56c416',lv:1}
 };
 var THEMES=[
-  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['parola','paese','grande','dove','quiz']},
+  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['parola','paese','bufala','grande','dove','quiz']},
   {e:'🏔️',t:'Montagne e valli',d:'Dighe, rustici di sasso, slitte e postali di montagna.',g:['diga','piode','slitta','autopostale']},
   {e:'🌊',t:'Sui laghi',d:'Il Verbano e il Ceresio, tra pedalò, cigni e scalinate.',g:['pedalo','scale']},
   {e:'🏰',t:'Città e tradizioni',d:'Castelli, il festival di Locarno e la vendemmia.',g:['catapulta','pardo','vendemmia']},

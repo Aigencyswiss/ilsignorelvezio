@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vero o bufala? – Il parco giochi di Elvezio</title>
+<meta name="description" content="Curiosità sul Ticino: sono vere o se le è inventate il Signor Elvezio? Dieci domande a partita, veloci e con la spiegazione.">
+<meta property="og:title" content="Vero o bufala?">
+<meta property="og:description" content="Curiosità sul Ticino: vere o inventate da Elvezio? Quante ne indovini su dieci?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--wine:#5C1F2B;--wine2:#3E1019;--cream:#F1E6CF;--paper:#FBF5E8;--ink:#2A1A12;--brown:#6B4A32;--gold:#C9962E;--gold2:#FFD24A;--line:#DCC9A4;--ok:#3E8E5A;--bad:#D2412F;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font:16px/1.45 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;min-height:56px;padding:calc(6px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 6px max(12px,env(safe-area-inset-left,0px));background:var(--wine2);color:var(--cream)}
+.bar h1{flex:1;min-width:0;margin:0;font:800 15px Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;padding:0 12px;border-radius:999px;border:1.5px solid rgba(241,230,207,.35);color:var(--cream);font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+main{width:min(540px,100%);margin:0 auto;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;gap:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots i{width:14px;height:14px;border-radius:50%;background:#E4D5B5}.dots i.ok{background:var(--ok)}.dots i.bad{background:var(--bad)}.dots i.cur{box-shadow:0 0 0 3px var(--gold)}
+.pts{font:900 18px Montserrat,sans-serif;color:var(--wine2);white-space:nowrap}
+.timer{height:8px;border-radius:999px;background:#E9DEC6;overflow:hidden}.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transform-origin:left}
+.q{position:relative;min-height:210px;display:grid;align-content:center;gap:10px;background:#fff;border:2px solid var(--line);border-radius:26px;padding:26px 22px;box-shadow:0 10px 22px rgba(62,16,25,.08);text-align:center}
+.q small{font:800 11px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--brown)}
+.q p{margin:0;font:800 clamp(21px,5.6vw,26px)/1.25 Fraunces,Georgia,serif;color:var(--wine);text-wrap:balance}
+.q.ok{border-color:var(--ok)}.q.bad{border-color:var(--bad);animation:sh .45s}
+@keyframes sh{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.stamp{position:absolute;top:14px;right:14px;transform:rotate(12deg);font:900 16px Montserrat,sans-serif;padding:5px 10px;border:3px solid currentColor;border-radius:8px;letter-spacing:.06em;opacity:0;transition:.2s}
+.stamp.on{opacity:1}
+.why{margin:0;background:var(--cream);border-radius:16px;padding:12px 14px;font-size:15px;color:var(--ink)}
+.why b{color:var(--wine)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{min-height:64px;border-radius:20px;border:0;font:800 19px 'DM Sans',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.v{background:var(--ok);color:#fff;box-shadow:0 5px 0 #26603b}
+.btn.b{background:var(--bad);color:#fff;box-shadow:0 5px 0 #8f2a1e}
+.btn:active{transform:translateY(3px);box-shadow:none}.btn:disabled{opacity:.45}
+.next{min-height:54px;border-radius:999px;border:0;background:var(--gold);color:var(--wine2);font:800 17px 'DM Sans',sans-serif;box-shadow:0 4px 0 #8f6a1c}
+.say{display:flex;gap:10px;align-items:flex-start}
+.say>b{flex:0 0 40px;height:40px;border-radius:50%;background:var(--wine);color:var(--gold2);display:grid;place-items:center;font:900 17px Fraunces,serif}
+.say>p{margin:0;background:#fff;border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:9px 13px;min-width:0;font-size:15px}
+.end{display:grid;gap:12px;text-align:center;background:#fff;border:2px solid var(--line);border-radius:26px;padding:24px 20px}
+.end h2{margin:0;font:800 28px/1.1 Fraunces,serif;color:var(--wine)}
+.big{font:900 62px/1 Montserrat,sans-serif;color:var(--wine2)}.big i{font-size:.4em;font-style:normal;color:var(--brown)}
+.end p{margin:0;color:var(--brown)}
+.sb{display:flex;flex-wrap:wrap;gap:10px}.sb>*{flex:1 1 140px}
+.gh{min-height:50px;border-radius:999px;border:2px solid var(--line);background:transparent;color:var(--wine);font:800 16px 'DM Sans',sans-serif;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);opacity:0;background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;transition:.25s;pointer-events:none}.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.q.bad{animation:none}}
+</style>
+</head>
+<body>
+<header class="bar"><a class="ib" href="/parco/" aria-label="Torna al parco giochi">← Parco</a><h1>Vero o bufala?</h1></header>
+<main id="main">
+  <div class="say"><b aria-hidden="true">E</b><p id="say">Ti dico dieci cose sul Ticino. Alcune sono vere, altre me le sono inventate io. Tu devi capire quali. <b>Più rispondi in fretta, più punti.</b></p></div>
+  <div class="top"><div class="dots" id="dots"></div><div class="pts"><span id="pts">0</span> punti</div></div>
+  <div class="timer" aria-hidden="true"><i id="tm"></i></div>
+  <div class="q" id="q" aria-live="polite"><span class="stamp" id="stamp"></span><small id="qn">Domanda 1 di 10</small><p id="qt">…</p></div>
+  <p class="why" id="why" hidden></p>
+  <div class="btns" id="btns"><button class="btn v" id="bV" type="button">✔ Vero</button><button class="btn b" id="bB" type="button">✘ Bufala</button></div>
+  <button class="next" id="nx" type="button" hidden>Avanti ›</button>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+// v = 1 vero, 0 bufala inventata da Elvezio. w = la spiegazione che si legge dopo.
+var Q=[
+[1,'In Ticino l\'italiano è l\'unica lingua ufficiale del cantone.','Vero. È l\'unico cantone svizzero con solo l\'italiano come lingua ufficiale. Nei Grigioni l\'italiano c\'è, ma insieme al tedesco e al romancio.'],
+[1,'Il capoluogo del Ticino è Bellinzona, non Lugano.','Vero. Lugano è la città più grande, ma la capitale del cantone è Bellinzona.'],
+[1,'I tre castelli di Bellinzona sono patrimonio mondiale dell\'UNESCO.','Vero. Castelgrande, Montebello e Sasso Corbaro sono nella lista dell\'UNESCO dal 2000.'],
+[1,'Il Monte San Giorgio è patrimonio UNESCO per i suoi fossili.','Vero. Lì si trovano fossili di pesci e rettili marini di circa 240 milioni di anni fa.'],
+[1,'Il punto più basso di tutta la Svizzera è in Ticino.','Vero. È la riva del Lago Maggiore, a circa 193 metri sul mare.'],
+[1,'Dalla diga della Verzasca si è lanciato James Bond.','Vero. Il salto con l\'elastico di GoldenEye (1995) è stato girato proprio lì.'],
+[1,'La galleria di base del San Gottardo è la galleria ferroviaria più lunga del mondo.','Vero. È lunga 57 chilometri ed è aperta dal 2016.'],
+[1,'Il festival del film di Locarno si fa d\'estate, in Piazza Grande.','Vero. Ogni agosto la piazza diventa un enorme cinema all\'aperto.'],
+[1,'Il Merlot è il vino più prodotto in Ticino.','Vero. È arrivato più di cento anni fa ed è diventato il vino di casa.'],
+[1,'Il Ticino è diventato un cantone svizzero nel 1803.','Vero. Prima era un insieme di baliaggi governati dai cantoni confederati.'],
+[1,'Il Lago di Lugano si chiama anche Ceresio.','Vero. Ceresio è il suo nome antico, ancora usato oggi.'],
+[1,'Sulle Isole di Brissago c\'è un parco botanico con piante di tutto il mondo.','Vero. Grazie al clima mite crescono piante subtropicali.'],
+[1,'Il Ponte dei Salti si trova a Lavertezzo, in Valle Verzasca.','Vero. È un ponte di sasso a due arcate sopra l\'acqua verde della Verzasca.'],
+[1,'Sul Monte Generoso si sale con un trenino a cremagliera da Capolago.','Vero. Il trenino porta fino alla vetta, dove c\'è il Fiore di pietra di Mario Botta.'],
+[1,'Il Ticino è il cantone più a sud della Svizzera.','Vero. Il punto più a sud della Svizzera è vicino a Chiasso.'],
+[1,'La bandiera del Ticino è rossa e blu.','Vero. Rosso sopra, blu sotto.'],
+[1,'A Bosco Gurin si parla da secoli un dialetto tedesco, il walser.','Vero. È l\'unico comune ticinese di tradizione tedesca.'],
+[1,'La maggior parte del Lago Maggiore è in Italia.','Vero. In Svizzera c\'è solo la parte nord, con Locarno, Ascona e Brissago.'],
+[1,'La Tremola, la vecchia strada del San Gottardo, è fatta di ciottoli.','Vero. È una delle strade a tornanti più famose delle Alpi.'],
+[1,'Lugano è la città con più abitanti del Ticino.','Vero. Dopo Lugano vengono Bellinzona e Locarno.'],
+[1,'Sul Monte Tamaro c\'è una chiesa disegnata da Mario Botta.','Vero. È la cappella di Santa Maria degli Angeli, vicino all\'arrivo della funivia.'],
+[1,'La funicolare del Ritom, a Piotta, è una delle più ripide del mondo.','Vero. In certi tratti la pendenza arriva a quasi il 90 per cento.'],
+[1,'Il carnevale di Bellinzona si chiama Rabadan.','Vero. È uno dei carnevali più grandi della Svizzera.'],
+[1,'In origine i grotti erano cantine naturali per tenere al fresco vino e formaggi.','Vero. Grazie all\'aria fresca che esce dalla montagna, stavano freschi anche d\'estate.'],
+[1,'A Melide c\'è un parco con la Svizzera in miniatura.','Vero. Si chiama Swissminiatur ed è sul lungolago.'],
+[1,'Monte Verità, sopra Ascona, era una colonia di artisti e sognatori di inizio Novecento.','Vero. Ci vivevano vegetariani, ballerini e pittori che volevano una vita diversa.'],
+[0,'Il capoluogo del Ticino è Lugano.','Bufala! Il capoluogo è Bellinzona. Lugano è solo la città più grande.'],
+[0,'I castelli di Bellinzona sono cinque.','Bufala! Sono tre: Castelgrande, Montebello e Sasso Corbaro.'],
+[0,'Il fiume Ticino si butta nel Lago di Lugano.','Bufala! Il Ticino arriva nel Lago Maggiore, vicino a Locarno.'],
+[0,'Il Ceresio è più grande del Lago Maggiore.','Bufala! Il Lago Maggiore è molto più grande.'],
+[0,'Le Isole di Brissago sono tre.','Bufala! Sono due: l\'isola di San Pancrazio e quella di Sant\'Apollinare.'],
+[0,'La bandiera del Ticino è verde e bianca.','Bufala! È rossa e blu.'],
+[0,'Il Ticino è entrato nella Confederazione nel 1991.','Bufala! Il Ticino è un cantone svizzero dal 1803.'],
+[0,'Il Merlot ticinese si fa con l\'uva bianca.','Bufala! Il Merlot è un\'uva nera. Esiste anche il Merlot bianco, ma si fa vinificando l\'uva nera senza le bucce.'],
+[0,'Il festival del film di Locarno si fa a gennaio, sulla neve.','Bufala! Si fa in agosto, sotto le stelle di Piazza Grande.'],
+[0,'Le piode dei tetti dei rustici sono di legno dipinto di grigio.','Bufala! Sono lastre di sasso vero, pesantissime.'],
+[0,'Bosco Gurin è il paese più a sud della Svizzera.','Bufala! Bosco Gurin è in alto in montagna. Il punto più a sud è vicino a Chiasso.'],
+[0,'La galleria di base del San Gottardo è la più corta della Svizzera.','Bufala! È la galleria ferroviaria più lunga del mondo: 57 chilometri.'],
+[0,'In Ticino la diga della Verzasca la puliscono ogni primavera le capre della valle.','Bufala! Le capre sono brave, ma sulla diga non le lasciano salire.'],
+[0,'Il Monte Generoso si chiama così perché in vetta offrono la grappa a tutti.','Bufala! Bella idea, però. Il nome è molto più antico.'],
+[0,'A Lugano è vietato fischiettare la domenica mattina.','Bufala! Inventata da me. Fischiettate pure, ma intonati.'],
+[0,'Gli AutoPostali di montagna hanno il clacson che suona la canzone del Grand Prix.','Bufala! Il clacson dell\'AutoPostale fa tre note famose, ma vengono dall\'ouverture del Guglielmo Tell di Rossini.']
+];
+var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function $(i){return document.getElementById(i)}
+function ev(t,n,v){try{navigator.sendBeacon('/api/e',JSON.stringify({sid:LS.get('elv_sid','x'),dev:innerWidth<760?'mob':'desk',ref:document.referrer?'ref':'dir',t:t,n:n,v:v||0}))}catch(e){}}
+var N=10,T=10,round=[],i=0,pts=0,ok=0,res=[],t0=0,raf=0,locked=false;
+function shuffle(a){for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function newRound(){// non ripete le domande dell'ultima partita, e mescola vere e bufale
+  var last=LS.get('bufala_last',[]),pool=Q.map(function(_,k){return k}).filter(function(k){return last.indexOf(k)<0});if(pool.length<N)pool=Q.map(function(_,k){return k});
+  var vere=shuffle(pool.filter(function(k){return Q[k][0]})),buf=shuffle(pool.filter(function(k){return !Q[k][0]})),nb=4+Math.floor(Math.random()*3);
+  round=shuffle(buf.slice(0,nb).concat(vere.slice(0,N-nb)));LS.set('bufala_last',round);i=0;pts=0;ok=0;res=[];ev('game_start','bufala')}
+function dots(){$('dots').innerHTML=round.map(function(_,k){return '<i class="'+(res[k]===1?'ok':res[k]===0?'bad':'')+(k===i?' cur':'')+'"></i>'}).join('')}
+function ask(){locked=false;var q=Q[round[i]];$('qn').textContent='Domanda '+(i+1)+' di '+N;$('qt').textContent=q[1];$('q').className='q';$('stamp').className='stamp';$('why').hidden=true;$('nx').hidden=true;$('btns').hidden=false;$('bV').disabled=$('bB').disabled=false;dots();
+  t0=performance.now();cancelAnimationFrame(raf);(function f(t){var k=Math.max(0,1-(t-t0)/(T*1000));$('tm').style.transform='scaleX('+k+')';if(k<=0&&!locked){pick(-1);return}if(!locked)raf=requestAnimationFrame(f)})(t0)}
+function pick(v){if(locked)return;locked=true;cancelAnimationFrame(raf);var q=Q[round[i]],right=v===q[0],sec=(performance.now()-t0)/1000;
+  var gain=right?Math.round(100+Math.max(0,T-sec)*10):0;pts+=gain;if(right)ok++;res[i]=right?1:0;$('pts').textContent=pts;
+  $('q').className='q '+(right?'ok':'bad');var s=$('stamp');s.textContent=q[0]?'VERO':'BUFALA';s.style.color=q[0]?'var(--ok)':'var(--bad)';s.className='stamp on';
+  $('why').innerHTML=(v===-1?'<b>Tempo scaduto!</b> ':right?'<b>Giusto! +'+gain+'</b> ':'<b>Sbagliato.</b> ')+q[2];$('why').hidden=false;$('btns').hidden=true;$('nx').hidden=false;$('nx').textContent=i<N-1?'Avanti ›':'Vedi il risultato';$('nx').focus();dots()}
+function end(){var best=LS.get('bufala_best',0),nb=pts>best;if(nb)LS.set('bufala_best',pts);ev('game_end','bufala',pts);
+  var title=ok===10?'Perfetto! Ne sai più di me.':ok>=8?'Bravissimo, ticinese doc!':ok>=6?'Bene! Il Ticino lo conosci.':ok>=4?'Così così. Mi hai creduto troppo.':'Ti ho fregato quasi sempre!';
+  $('main').innerHTML='<div class="say"><b aria-hidden="true">E</b><p>'+(ok>=6?'Non riesco più a fregarti. Devo inventare bufale più furbe.':'Hai visto quante bufale ti ho raccontato? Non fidarti mai di un uomo col caschetto.')+'</p></div>'+
+   '<div class="end"><h2>'+title+'</h2><div class="big">'+ok+'<i>/10</i></div><p>'+pts+' punti'+(nb?' · nuovo record!':' · record '+best)+'</p><p style="font-size:19px;letter-spacing:1px">'+res.map(function(r){return r?'🟩':'🟥'}).join('')+'</p>'+
+   '<div class="sb"><button class="next" id="again" type="button">Rigioca</button><button class="gh" id="shareB" type="button">Condividi</button></div><a class="gh" href="/parco/">Altri giochi</a></div>';
+  $('again').onclick=function(){location.reload()};
+  $('shareB').onclick=function(){var txt='Vero o bufala? sul Ticino: '+ok+'/10 '+res.map(function(r){return r?'🟩':'🟥'}).join('')+'\nRiesci a fare meglio? '+location.origin+'/parco/bufala/';ev('share','bufala');
+    if(navigator.share)navigator.share({text:txt}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){var t=$('toast');t.textContent='Copiato!';t.classList.add('on');setTimeout(function(){t.classList.remove('on')},1500)},function(){})}}
+$('bV').onclick=function(){pick(1)};$('bB').onclick=function(){pick(0)};
+$('nx').onclick=function(){if(i<N-1){i++;ask()}else end()};
+document.addEventListener('keydown',function(e){if(!$('btns')||!$('nx'))return;if(!locked&&(e.key==='v'||e.key==='ArrowLeft'))pick(1);else if(!locked&&(e.key==='b'||e.key==='ArrowRight'))pick(0);else if(locked&&e.key==='Enter'&&!$('nx').hidden)$('nx').click()});
+newRound();ask();
+})();
+</script>
+</body>
+</html>

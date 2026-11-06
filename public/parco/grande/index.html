@@ -102,7 +102,7 @@ function answer(bigger){if(busy)return;busy=true;$('up').disabled=true;$('dn').d
 var LINES_OK=['Giusto! {a} lo conoscevi, eh?','Brava testa! Il sindaco di {a} ti saluta.','Esatto! Sei più preciso dell\'ufficio del catasto.','Giusto! Vai avanti così.','Perfetto! Dove hai studiato, al Liceo di Lugano?'];
 function gameOver(){$('eN').textContent=streak;$('eP').textContent=streak===1?'giusto di fila':'giusti di fila';
   $('eT').textContent=streak>=15?'Sei un geometra cantonale!':streak>=8?'Bravissimo!':streak>=4?'Niente male!':'Peccato!';
-  $('eV').textContent=B.n+' misura '+fmt(B.a)+' km², '+A.n+' '+fmt(A.a)+' km². Il tuo record è '+rec+'.';$('end').hidden=false}
+  $('eV').textContent=B.n+' misura '+fmt(B.a)+' km², '+A.n+' '+fmt(A.a)+' km². Il tuo record è '+rec+'. (Misure dai confini ufficiali swisstopo, laghi esclusi.)';$('end').hidden=false}
 function start(){streak=0;$('sc').textContent=0;$('end').hidden=true;A=M[Math.floor(Math.random()*M.length)];B=pickB();
   $('say').innerHTML='Due comuni ticinesi. Quello sotto è <b>più grande</b> o <b>più piccolo</b> di quello sopra? Vai avanti finché non sbagli.';show()}
 $('up').onclick=function(){answer(true)};$('dn').onclick=function(){answer(false)};$('again').onclick=start;
