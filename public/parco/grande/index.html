@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Più grande o più piccolo? – Il parco giochi di Elvezio</title>
+<meta name="description" content="Due comuni ticinesi: quale è più grande? Indovina e vai avanti finché non sbagli. Un gioco del parco del Signor Elvezio per conoscere il Ticino.">
+<meta property="og:title" content="Più grande o più piccolo?">
+<meta property="og:description" content="Quale comune ticinese è più grande? Quanti ne indovini di fila?">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,800&family=Montserrat:wght@700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--wine:#5C1F2B;--wine2:#3E1019;--cream:#F1E6CF;--paper:#FBF5E8;--ink:#2A1A12;--brown:#6B4A32;--gold:#C9962E;--gold2:#FFD24A;--line:#DCC9A4;--ok:#3E8E5A;--bad:#D2412F;--land:#C9D6A3;--lake:#7DB4D6;color-scheme:light}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font:16px/1.45 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;min-height:56px;padding:calc(6px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 6px max(12px,env(safe-area-inset-left,0px));background:var(--wine2);color:var(--cream)}
+.bar h1{flex:1;min-width:0;margin:0;font:800 15px Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ib{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:42px;height:42px;padding:0 12px;border-radius:999px;border:1.5px solid rgba(241,230,207,.35);background:transparent;color:var(--cream);font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+main{width:min(520px,100%);margin:0 auto;padding:14px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;gap:12px}
+.score{display:flex;justify-content:center;gap:10px}
+.score span{background:var(--wine2);color:#fff;font:800 15px Montserrat,sans-serif;padding:7px 14px;border-radius:999px}
+.score b{color:var(--gold2)}
+.card{position:relative;display:grid;grid-template-columns:1fr 112px;gap:12px;align-items:center;background:#fff;border:2px solid var(--line);border-radius:22px;padding:14px 14px 14px 16px;box-shadow:0 8px 18px rgba(62,16,25,.08);transition:border-color .2s,transform .3s}
+.card.ok{border-color:var(--ok)}.card.bad{border-color:var(--bad);animation:sh .45s}
+@keyframes sh{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.card small{font:800 11px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--brown)}
+.card h2{margin:2px 0 4px;font:800 clamp(24px,7vw,30px)/1.05 Fraunces,Georgia,serif;color:var(--wine);text-wrap:balance}
+.val{font:900 clamp(26px,8vw,34px) Montserrat,sans-serif;color:var(--wine2)}
+.val i{font-style:normal;font-size:.5em;color:var(--brown);margin-left:4px}
+.val.q{color:#C8B898}
+.loc{width:112px;height:150px}
+.loc svg{width:100%;height:100%;display:block}
+.vs{justify-self:center;margin:-22px 0;z-index:2;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--wine2);display:grid;place-items:center;font:900 16px Montserrat,sans-serif;box-shadow:0 4px 0 #8f6a1c,0 0 0 5px var(--paper)}
+.ask{margin:0;text-align:center;font-weight:700;color:var(--brown)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{min-height:58px;border-radius:18px;border:0;font:800 17px 'DM Sans',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.up{background:var(--ok);color:#fff;box-shadow:0 4px 0 #26603b}
+.btn.dn{background:var(--wine);color:#fff;box-shadow:0 4px 0 var(--wine2)}
+.btn:active{transform:translateY(2px);box-shadow:none}
+.btn:disabled{opacity:.5}
+.say{display:flex;gap:10px;align-items:flex-start}
+.say>b{flex:0 0 40px;height:40px;border-radius:50%;background:var(--wine);color:var(--gold2);display:grid;place-items:center;font:900 17px Fraunces,serif}
+.say>p{margin:0;background:#fff;border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:9px 13px;min-width:0;font-size:15px}
+.over{position:fixed;inset:0;z-index:20;background:rgba(23,9,12,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:min(520px,100%);background:var(--paper);border-radius:24px 24px 0 0;padding:22px max(18px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));display:grid;gap:12px;text-align:center}
+.sheet h3{margin:0;font:800 28px/1.05 Fraunces,serif;color:var(--wine)}
+.big{font:900 64px/1 Montserrat,sans-serif;color:var(--wine2)}
+.sheet p{margin:0;color:var(--brown)}
+.sbtn{display:flex;flex-wrap:wrap;gap:10px}
+.sbtn .btn{flex:1 1 140px;min-height:50px;border-radius:999px;font-size:16px}
+.btn.gold{background:var(--gold);color:var(--wine2);box-shadow:0 4px 0 #8f6a1c}
+.btn.ghost{background:transparent;border:2px solid var(--line);color:var(--wine)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);opacity:0;background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-weight:700;z-index:30;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<header class="bar"><a class="ib" href="/parco/" aria-label="Torna al parco giochi">← Parco</a><h1>Più grande o più piccolo?</h1></header>
+<main>
+  <div class="say"><b aria-hidden="true">E</b><p id="say">Due comuni ticinesi. Quello sotto è <b>più grande</b> o <b>più piccolo</b> di quello sopra? Vai avanti finché non sbagli.</p></div>
+  <div class="score"><span>Di fila <b id="sc">0</b></span><span>Record <b id="rec">0</b></span></div>
+  <article class="card" id="cA"><div><small>Comune</small><h2 id="nA">…</h2><div class="val" id="vA">…</div></div><div class="loc" id="lA"></div></article>
+  <div class="vs" aria-hidden="true">VS</div>
+  <article class="card" id="cB"><div><small>Comune</small><h2 id="nB">…</h2><div class="val q" id="vB">? <i>km²</i></div></div><div class="loc" id="lB"></div></article>
+  <p class="ask" id="ask">È più grande o più piccolo?</p>
+  <div class="btns"><button class="btn up" id="up" type="button" disabled>▲ Più grande</button><button class="btn dn" id="dn" type="button" disabled>▼ Più piccolo</button></div>
+</main>
+<div class="over" id="end" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="eT">
+  <h3 id="eT">Peccato!</h3><div class="big" id="eN">0</div><p id="eP">di fila</p><p id="eV"></p>
+  <div class="sbtn"><button class="btn gold" id="again" type="button">Rigioca</button><button class="btn ghost" id="shareB" type="button">Condividi</button></div>
+  <a class="btn ghost" href="/parco/" style="border-radius:999px;min-height:46px">Altri giochi</a>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function $(i){return document.getElementById(i)}
+function ev(t,n,v){try{navigator.sendBeacon('/api/e',JSON.stringify({sid:LS.get('elv_sid','x'),dev:innerWidth<760?'mob':'desk',ref:document.referrer?'ref':'dir',t:t,n:n,v:v||0}))}catch(e){}}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var D,M=[],A,B,streak=0,rec=LS.get('grande_best',0),busy=false;$('rec').textContent=rec;
+// superficie dal disegno del comune: sulla mappa 1 pixel = 111,32/K km in tutte e due le direzioni
+function area(d,K){var tot=0,pts=[],re=/([MLZ])([^MLZ]*)/gi,m;
+  function ring(){if(pts.length>2){var s=0;for(var i=0;i<pts.length;i++){var p=pts[i],q=pts[(i+1)%pts.length];s+=p[0]*q[1]-q[0]*p[1]}tot+=s/2}pts=[]}
+  while((m=re.exec(d))){var c=m[1].toUpperCase(),n=m[2].trim().split(/[\s,]+/).filter(Boolean).map(Number);if(c==='M'){ring()}if(c==='Z'){ring();continue}for(var i=0;i+1<n.length;i+=2)pts.push([n[i],n[i+1]])}
+  ring();var u=111.32/K;return Math.abs(tot)*u*u}
+function fmt(a){return a>=10?Math.round(a).toLocaleString('it-CH'):a.toFixed(1).replace('.',',')}
+function loc(m){var g='<svg viewBox="0 0 '+D.W+' '+D.H+'" aria-hidden="true"><path d="'+D.ti+'" fill="#E7DDC4" stroke="#B9A985" stroke-width="5"/>'+D.lakes.map(function(l){return '<path d="'+l.d+'" fill="#9CC6E0"/>'}).join('')+'<path d="'+m.d+'" fill="#C0392B" stroke="#7A1E14" stroke-width="3"/></svg>';return g}
+function pickB(){var tries=0,minR=Math.max(1.12,2.2-streak*.08);while(tries++<400){var c=M[Math.floor(Math.random()*M.length)];if(c===A)continue;var r=Math.max(c.a,A.a)/Math.min(c.a,A.a);if(r>=minR&&r<minR*6)return c}return M[Math.floor(Math.random()*M.length)]}
+function show(){$('nA').textContent=A.n;$('vA').innerHTML=fmt(A.a)+'<i>km²</i>';$('lA').innerHTML=loc(A);
+  $('nB').textContent=B.n;$('vB').className='val q';$('vB').innerHTML='?<i>km²</i>';$('lB').innerHTML=loc(B);
+  $('cA').className='card';$('cB').className='card';$('up').disabled=false;$('dn').disabled=false;busy=false}
+function countUp(el,to,cb){var t0=performance.now(),d=650;(function f(t){var k=Math.min(1,(t-t0)/d);k=1-Math.pow(1-k,3);el.innerHTML=fmt(to*k)+'<i>km²</i>';if(k<1)requestAnimationFrame(f);else cb&&cb()})(t0)}
+function answer(bigger){if(busy)return;busy=true;$('up').disabled=true;$('dn').disabled=true;if(!streak)ev('game_start','grande');
+  var ok=bigger?B.a>=A.a:B.a<=A.a;$('vB').className='val';
+  countUp($('vB'),B.a,function(){
+    if(ok){streak++;$('sc').textContent=streak;$('cB').classList.add('ok');if(streak>rec){rec=streak;LS.set('grande_best',rec);$('rec').textContent=rec}
+      $('say').innerHTML=LINES_OK[Math.floor(Math.random()*LINES_OK.length)].replace('{a}',esc(B.n));
+      setTimeout(function(){A=B;B=pickB();show()},900)}
+    else{$('cB').classList.add('bad');ev('game_end','grande',streak);setTimeout(gameOver,900)}})}
+var LINES_OK=['Giusto! {a} lo conoscevi, eh?','Brava testa! Il sindaco di {a} ti saluta.','Esatto! Sei più preciso dell\'ufficio del catasto.','Giusto! Vai avanti così.','Perfetto! Dove hai studiato, al Liceo di Lugano?'];
+function gameOver(){$('eN').textContent=streak;$('eP').textContent=streak===1?'giusto di fila':'giusti di fila';
+  $('eT').textContent=streak>=15?'Sei un geometra cantonale!':streak>=8?'Bravissimo!':streak>=4?'Niente male!':'Peccato!';
+  $('eV').textContent=B.n+' misura '+fmt(B.a)+' km², '+A.n+' '+fmt(A.a)+' km². Il tuo record è '+rec+'.';$('end').hidden=false}
+function start(){streak=0;$('sc').textContent=0;$('end').hidden=true;A=M[Math.floor(Math.random()*M.length)];B=pickB();
+  $('say').innerHTML='Due comuni ticinesi. Quello sotto è <b>più grande</b> o <b>più piccolo</b> di quello sopra? Vai avanti finché non sbagli.';show()}
+$('up').onclick=function(){answer(true)};$('dn').onclick=function(){answer(false)};$('again').onclick=start;
+document.addEventListener('keydown',function(e){if(!$('end').hidden)return;if(e.key==='ArrowUp')answer(true);if(e.key==='ArrowDown')answer(false)});
+$('shareB').onclick=function(){var txt='Più grande o più piccolo? Ho indovinato '+streak+' comuni ticinesi di fila. Riesci a battermi?\n'+location.origin+'/parco/grande/';ev('share','grande');
+  if(navigator.share)navigator.share({text:txt}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){var t=$('toast');t.textContent='Copiato!';t.classList.add('on');setTimeout(function(){t.classList.remove('on')},1500)},function(){})};
+fetch('/parco/ticino.json').then(function(r){return r.json()}).then(function(j){D=j;var K=j.k[1];M=j.m.map(function(m){return {n:m.n,d:m.d,a:area(m.d,K)}}).filter(function(m){return m.a>.2});start()})
+  .catch(function(){$('say').textContent='La mappa non si è caricata. Ricarica la pagina.'});
+})();
+</script>
+</body>
+</html>

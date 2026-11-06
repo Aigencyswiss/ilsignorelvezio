@@ -178,6 +178,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 // n = posizione nel foglio delle icone (4 x 3)
 var G={
   parola:{t:'La parola del giorno',pl:'Cinque lettere, sei tentativi',n:-1,href:'/parco/parola/',tiles:1},
+  grande:{t:'Più grande o più piccolo?',pl:'Quale comune è più grande?',n:3,href:'/parco/grande/',bg:'linear-gradient(150deg,#8E6BB8,#4B2E73)',bd:'Senza fine'},
   paese:{t:'Il paese del giorno',pl:'Un comune al giorno',n:3,href:'/parco/paese/',bg:'linear-gradient(150deg,#E7B04A,#9E5F12)'},
   dove:{t:'Dov\'è?',pl:'Dieci comuni sulla mappa',n:2,href:'/parco/dove/',bg:'linear-gradient(150deg,#3AA0A0,#155A63)'},
   quiz:{t:'Quanto sei ticinese?',pl:'Dieci domande, verdetto in caschetti',n:1,href:SHOP+'/pages/quiz-ticinese',bg:'linear-gradient(150deg,#C04A5A,#5C1F2B)',ext:1},
@@ -192,17 +193,17 @@ var G={
   vendemmia:{t:'Vendemmia',pl:'Novazzano, Mendrisiotto',n:8,href:'/parco/vendemmia/',th:'871c1fb4-311c-48f3-8a50-c346bf56c416',lv:1}
 };
 var THEMES=[
-  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['parola','paese','dove','quiz']},
+  {e:'🧠',t:'Conosci il Ticino',d:'Comuni, mappe e domande: qui vince chi conosce il cantone.',g:['parola','paese','grande','dove','quiz']},
   {e:'🏔️',t:'Montagne e valli',d:'Dighe, rustici di sasso, slitte e postali di montagna.',g:['diga','piode','slitta','autopostale']},
   {e:'🌊',t:'Sui laghi',d:'Il Verbano e il Ceresio, tra pedalò, cigni e scalinate.',g:['pedalo','scale']},
   {e:'🏰',t:'Città e tradizioni',d:'Castelli, il festival di Locarno e la vendemmia.',g:['catapulta','pardo','vendemmia']},
-  {e:'♾️',t:'Sfide senza fine',d:'Non finiscono mai: conta solo il tuo record.',g:['scale','slitta']}
+  {e:'♾️',t:'Sfide senza fine',d:'Non finiscono mai: conta solo il tuo record.',g:['scale','slitta','grande']}
 ];
 function pos(n){return (n%4)*100/3+'% '+Math.floor(n/4)*50+'%'}
 function stars(n){var h='<span class="sts" aria-label="'+n+' stelle su 3">';for(var i=0;i<3;i++)h+='<i class="'+(i<n?'on':'')+'">★</i>';return h+'</span>'}
 function card(id){var g=G[id],s=g.lv?LS.get('stars_'+id,0):0,played=g.lv&&LS.get('best_'+id+'_facile',null)!=null;
   var cv=g.tiles?'<div class="cv tiles"><span class="tl"><i class="o">g</i><i>e</i><i class="n">r</i><i>l</i><i class="o">a</i></span></div>':g.th?'<div class="cv" style="background-image:url('+C+g.th+'.webp)"><span class="md" style="background-position:'+pos(g.n)+'"></span>'+(g.bd?'<span class="bd'+(g.nw?' new':'')+'">'+g.bd+'</span>':'')+'</div>'
-    :'<div class="cv ic" style="background:'+g.bg+'"><span class="md big" style="background-position:'+pos(g.n)+'"></span></div>';
+    :'<div class="cv ic" style="background:'+g.bg+'"><span class="md big" style="background-position:'+pos(g.n)+'"></span>'+(g.bd?'<span class="bd">'+g.bd+'</span>':'')+'</div>';
   var ft=g.lv?(played?stars(s):'<span class="try">Da provare</span>'+stars(0)):(g.ext?'<span class="ext">Sul sito di Elvezio ↗</span>':'<span class="try">Gioca</span>');
   return '<a class="gc" href="'+g.href+'">'+cv+'<div class="gi"><b>'+esc(g.t)+'</b><span class="pl">📍 '+esc(g.pl)+'</span><div class="ft">'+ft+'</div></div></a>'}
 document.getElementById('themes').innerHTML=THEMES.map(function(t){return '<section class="sec"><div class="sh"><span class="e" aria-hidden="true">'+t.e+'</span><div><h2>'+t.t+'</h2><p>'+t.d+'</p></div></div><div class="row">'+t.g.map(card).join('')+'</div></section>'}).join('');
