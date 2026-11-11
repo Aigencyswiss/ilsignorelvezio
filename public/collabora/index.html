@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Collabora con Il Signor Elvezio</title>
+<meta name="description" content="Un reel su misura con Il Signor Elvezio per la tua attività in Ticino. Scegli il pacchetto e conferma l'offerta.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#3E1019">
+<link rel="icon" href="https://cdn.shopify.com/s/files/1/1109/0916/1797/files/elvezio-favicon_c93d7c97-d547-4b43-ba6a-5539fa708602.png?v=1793445822&width=64">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,600&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bord:#3E1019;--red:#A01C30;--yel:#FFD24A;--cream:#F6EFE4;--ink:#2A0B11;--muted:#5E3F44;--line:#E6D6C3}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 Montserrat,Helvetica,Arial,sans-serif}
+.pole{height:12px;background:repeating-linear-gradient(-45deg,#A01C30 0 14px,#F6EFE4 14px 28px,#3E1019 28px 42px,#F6EFE4 42px 56px)}
+.wrap{max-width:960px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left))}
+header{background:var(--bord);color:var(--cream)}
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:center;padding:48px 0}
+.kick{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--yel);margin:0 0 10px}
+h1{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:clamp(38px,6vw,60px);line-height:1;margin:0 0 16px}
+.hero p{margin:0;font-size:18px;color:#EBDCCB;max-width:520px}
+.hero img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;border-radius:24px;border:3px solid var(--yel);display:block}
+section{padding:44px 0}
+h2{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:clamp(28px,4vw,38px);line-height:1.1;color:var(--bord);margin:0 0 20px}
+.gains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gain{background:#fff;border:2px solid var(--line);border-radius:18px;padding:18px}
+.gain b{display:block;color:var(--bord);font-size:16px;margin-bottom:4px}
+.gain span{font-size:14px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.stat{border-top:3px solid var(--bord);padding-top:10px}
+.stat strong{display:block;font-family:Fraunces,Georgia,serif;font-size:36px;color:var(--red);line-height:1.1}
+.stat span{font-size:14px;color:var(--muted)}
+form{display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;padding:0}
+.packs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:14px}
+.pack{position:relative;display:block;cursor:pointer;background:#fff;border:2px solid var(--line);border-radius:20px;padding:20px;transition:border-color .15s}
+.pack input{position:absolute;opacity:0;pointer-events:none}
+.pack:has(input:checked){border-color:var(--bord);box-shadow:0 0 0 3px var(--yel)}
+.pack:has(input:focus-visible){outline:3px solid var(--red);outline-offset:3px}
+.pack .nm{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:22px;color:var(--bord)}
+.pack .pr{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:40px;color:var(--red);line-height:1.1;margin:4px 0 8px}
+.pack .pr small{font-size:20px}
+.pack p{margin:0;font-size:14px;color:var(--muted)}
+.pack ul{list-style:none;margin:10px 0 0;padding:0;font-size:14px}
+.pack li{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding:5px 0}
+.tick{position:absolute;top:16px;right:16px;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center}
+.pack:has(input:checked) .tick{background:var(--bord);border-color:var(--bord)}
+.pack:has(input:checked) .tick::after{content:"";width:10px;height:6px;border:solid var(--yel);border-width:0 0 3px 3px;transform:rotate(-45deg) translate(1px,-1px)}
+.badge{display:inline-block;background:var(--yel);color:var(--bord);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:99px;padding:3px 10px;margin-bottom:6px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.f{display:flex;flex-direction:column;gap:6px}
+.f.full{grid-column:1/-1}
+label.l{font-size:14px;font-weight:700;color:var(--bord)}
+input[type=text],input[type=email],input[type=tel],textarea{font:inherit;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px;width:100%}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--bord)}
+.opt{font-weight:500;color:var(--muted)}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:15px;cursor:pointer}
+.check input{width:22px;height:22px;margin:2px 0 0;flex:none;accent-color:var(--bord)}
+.terms{background:#fff;border:2px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:14px}
+.terms ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted)}
+button{font:inherit;font-weight:800;font-size:18px;background:var(--bord);color:var(--yel);border:0;border-radius:999px;padding:16px 28px;min-height:56px;cursor:pointer;justify-self:start}
+button:hover{background:#2A0B11}
+button:disabled{opacity:.6;cursor:wait}
+.err{color:var(--red);font-weight:700;margin:0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.small{font-size:13px;color:var(--muted);margin:0}
+.done{background:var(--bord);color:var(--cream);border-radius:24px;padding:36px;text-align:center}
+.done h2{color:var(--yel)}
+footer{padding:30px 0 48px;font-size:14px;color:var(--muted)}
+footer a{color:var(--red)}
+@media (max-width:720px){
+  .hero{grid-template-columns:1fr;padding:32px 0}
+  .hero img{max-width:340px}
+  .gains,.stats,.packs,.fields{grid-template-columns:1fr}
+  button{justify-self:stretch}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="pole" aria-hidden="true"></div>
+  <div class="wrap hero">
+    <div>
+      <p class="kick">Collabora con Il Signor Elvezio</p>
+      <h1>Tu pensi al tuo lavoro. Al reel pensiamo noi.</h1>
+      <p>Elvezio, il signore ticinese col caschetto, viene nella tua attività e la racconta con ironia, davanti a migliaia di persone in Ticino.</p>
+    </div>
+    <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3JsTmrBr43PtdGFpI9bsELoimP7/db258eec-886c-401a-ac9e-4e86e99270dd.webp" alt="Il Signor Elvezio in un salone con pettine e forbici" width="720" height="900">
+  </div>
+</header>
+
+<main class="wrap">
+  <section aria-labelledby="cosa">
+    <h2 id="cosa">Cosa facciamo per te</h2>
+    <div class="gains">
+      <div class="gain"><b>Ti portiamo clienti nuovi</b><span>Il reel gira tra chi non ti conosce ancora.</span></div>
+      <div class="gain"><b>Mostriamo il tuo lavoro</b><span>Riprese vere della tua attività: si vede la tua mano, non solo la battuta.</span></div>
+      <div class="gain"><b>Facciamo tutto noi</b><span>Idea, copione, riprese, montaggio, voce, sottotitoli e musica originale.</span></div>
+      <div class="gain"><b>Esci anche sul tuo profilo</b><span>Il reel esce in collaborazione: sul profilo di Elvezio e sul tuo.</span></div>
+      <div class="gain"><b>Decidi tu prima che esca</b><span>Copione e video da approvare, una modifica ciascuno compresa.</span></div>
+      <div class="gain"><b>Il video resta tuo</b><span>Lo tieni sul tuo profilo e lo mostri ai clienti.</span></div>
+    </div>
+    <div class="stats" aria-label="Risultati del reel al ristorante Isolino di Locarno">
+      <div class="stat"><strong>12'272</strong><span>visualizzazioni in 3 giorni, reel Isolino (Locarno)</span></div>
+      <div class="stat"><strong>82%</strong><span>da persone che non ci seguivano ancora</span></div>
+      <div class="stat"><strong>147</strong><span>condivisioni nelle prime 24 ore</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="conf" id="conferma">
+    <h2 id="conf">Conferma la tua collaborazione</h2>
+    <form id="form" novalidate>
+      <fieldset>
+        <legend>1 · Scegli il pacchetto</legend>
+        <div class="packs">
+          <label class="pack">
+            <input type="radio" name="pacchetto" value="reel">
+            <span class="tick" aria-hidden="true"></span>
+            <span class="nm">Reel</span>
+            <div class="pr">180 <small>fr</small></div>
+            <p>Il reel in collaborazione con il tuo profilo, su Instagram e Facebook.</p>
+          </label>
+          <label class="pack">
+            <input type="radio" name="pacchetto" value="reel_storie" checked>
+            <span class="tick" aria-hidden="true"></span>
+            <span class="badge">Consigliato</span><br>
+            <span class="nm">Reel + storie</span>
+            <div class="pr">250 <small>fr</small></div>
+            <p>Il reel, più una storia divertente di Elvezio e la ricondivisione su tre pagine:</p>
+            <ul>
+              <li><span>@fame_di_cose_belle</span><b>10'200 follower</b></li>
+              <li><span>@ho_fame_di_cose_belle</span><b>4'212 follower</b></li>
+              <li><span>@michelbetrisey</span><b>1'905 follower</b></li>
+            </ul>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>2 · I tuoi dati</legend>
+        <div class="fields">
+          <div class="f"><label class="l" for="nome">Nome</label><input id="nome" name="nome" type="text" autocomplete="given-name" required maxlength="60"></div>
+          <div class="f"><label class="l" for="cognome">Cognome</label><input id="cognome" name="cognome" type="text" autocomplete="family-name" required maxlength="60"></div>
+          <div class="f"><label class="l" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+          <div class="f"><label class="l" for="telefono">Telefono <span class="opt">(facoltativo)</span></label><input id="telefono" name="telefono" type="tel" autocomplete="tel" maxlength="40"></div>
+          <div class="f full"><label class="l" for="attivita">Nome della tua attività <span class="opt">(facoltativo)</span></label><input id="attivita" name="attivita" type="text" autocomplete="organization" maxlength="120"></div>
+          <div class="f full"><label class="l" for="nota">Una nota per noi <span class="opt">(facoltativo)</span></label><textarea id="nota" name="nota" maxlength="1000" placeholder="Giorni migliori per le riprese, cosa vuoi mettere in evidenza…"></textarea></div>
+        </div>
+        <div class="hp" aria-hidden="true"><label>Sito web <input type="text" name="sito" tabindex="-1" autocomplete="off"></label></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>3 · Conferma</legend>
+        <div class="terms">
+          <ul>
+            <li>Acconto del 50% alla conferma, saldo alla pubblicazione del reel.</li>
+            <li>Dal sì all'uscita del reel: 7–10 giorni.</li>
+            <li>Su Instagram il reel porta l'etichetta "Partnership retribuita".</li>
+            <li>Elvezio è un personaggio creato con l'intelligenza artificiale; le riprese della tua attività sono vere.</li>
+          </ul>
+          <label class="check"><input type="checkbox" id="termini" required><span>Confermo l'offerta e le condizioni qui sopra.</span></label>
+          <label class="check"><input type="checkbox" id="marketing"><span>Voglio ricevere via email novità e proposte di Il Signor Elvezio. Facoltativo, puoi disiscriverti quando vuoi.</span></label>
+        </div>
+      </fieldset>
+
+      <p class="err" id="err" role="alert" hidden></p>
+      <button type="submit" id="send">Confermo questa offerta</button>
+      <p class="small">Usiamo i tuoi dati solo per organizzare la collaborazione e, se lo hai scelto, per inviarti novità. Non li cediamo a nessuno. Per farli cancellare scrivici su Instagram.</p>
+    </form>
+    <div class="done" id="done" hidden tabindex="-1">
+      <h2>Grazie, ci siamo!</h2>
+      <p>Abbiamo ricevuto la tua conferma e ti abbiamo mandato un'email di riepilogo. Ti scriviamo noi nei prossimi giorni per l'acconto e il giorno delle riprese.</p>
+      <p>Il Signor Elvezio 🎩</p>
+    </div>
+  </section>
+</main>
+<footer class="wrap">Il Signor Elvezio · <a href="https://www.instagram.com/ilsignorelvezio/" rel="noopener">@ilsignorelvezio</a> su Instagram</footer>
+
+<script>
+(function(){
+  var q=new URLSearchParams(location.search),f=document.getElementById('form'),err=document.getElementById('err'),btn=document.getElementById('send');
+  var p=q.get('p');if(p){var r=f.querySelector('input[name=pacchetto][value="'+p+'"]');if(r)r.checked=true}
+  var MSG={nome:'Scrivi nome e cognome.',email:'Controlla l’email: sembra sbagliata.',pacchetto:'Scegli un pacchetto.',termini:'Per confermare spunta la casella delle condizioni.',troppi:'Troppe richieste in poco tempo, riprova tra un’ora.',server:'Qualcosa non ha funzionato. Riprova tra poco o scrivici su Instagram.'};
+  function show(k){err.textContent=MSG[k]||MSG.server;err.hidden=false}
+  f.addEventListener('submit',function(e){
+    e.preventDefault();err.hidden=true;
+    var v=function(id){return document.getElementById(id).value.trim()};
+    var pk=(f.querySelector('input[name=pacchetto]:checked')||{}).value;
+    var d={nome:v('nome'),cognome:v('cognome'),email:v('email'),telefono:v('telefono'),attivita:v('attivita'),nota:v('nota'),pacchetto:pk,
+      offerta:(q.get('offerta')||'').slice(0,40),termini:document.getElementById('termini').checked,marketing:document.getElementById('marketing').checked,sito:f.sito.value};
+    if(!d.nome||!d.cognome)return show('nome');
+    if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(d.email))return show('email');
+    if(!d.pacchetto)return show('pacchetto');
+    if(!d.termini)return show('termini');
+    btn.disabled=true;btn.textContent='Invio in corso…';
+    fetch('/api/collabora',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)})
+      .then(function(r){return r.json().catch(function(){return{error:'server'}})})
+      .then(function(j){
+        if(j&&j.ok){f.hidden=true;var dn=document.getElementById('done');dn.hidden=false;dn.focus();try{window.elvTrack&&elvTrack('signup',{n:'collabora'})}catch(x){}return}
+        show(j&&j.error);btn.disabled=false;btn.textContent='Confermo questa offerta';
+      })
+      .catch(function(){show('server');btn.disabled=false;btn.textContent='Confermo questa offerta'});
+  });
+})();
+</script>
+</body>
+</html>

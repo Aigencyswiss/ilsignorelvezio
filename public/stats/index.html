@@ -81,6 +81,7 @@ td:first-child{max-width:0;width:42%;overflow:hidden;text-overflow:ellipsis;whit
   <div class="card"><h2>Telefono o computer</h2><div id="devices"></div></div>
   <div class="card"><h2>Paesi</h2><div id="countries"></div></div>
   <div class="card"><h2>Campagne (link con utm)</h2><div id="campaigns"></div></div>
+  <div class="card wide"><h2>Richieste di collaborazione</h2><div id="leads"></div></div>
 </section>
 <div class="note">
   <strong>Per non contare le tue visite:</strong> apri una volta <code>ilsignorelvezio.com/?noi=1</code> da ogni telefono e computer che usi.
@@ -135,6 +136,8 @@ function render(j){
   document.getElementById('devices').innerHTML=table((j.devices||[]).map(function(r){r.name=DEV[r.k]||r.k;return r}),[['c','Persone']],'Dispositivo');
   document.getElementById('countries').innerHTML=table((j.countries||[]).map(function(r){r.name=r.k;return r}),[['c','Persone']],'Paese');
   document.getElementById('campaigns').innerHTML=table((j.campaigns||[]).map(function(r){r.name=r.k;return r}),[['c','Persone']],'Campagna');
+  var PK={reel:'Reel',reel_storie:'Reel + storie'};
+  var L=j.leads||[];document.getElementById('leads').innerHTML=!L.length?'<p class="empty">Ancora nessuna richiesta.</p>':'<div style="overflow-x:auto"><table><thead><tr><th>Data</th><th>Nome</th><th>Attività</th><th>Email</th><th>Telefono</th><th>Pacchetto</th><th>Marketing</th></tr></thead><tbody>'+L.map(function(r){return '<tr><td>'+esc(r.d)+'</td><td>'+esc(r.nome+' '+r.cognome)+'</td><td>'+esc(r.attivita||'–')+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.telefono||'–')+'</td><td>'+esc(PK[r.pacchetto]||r.pacchetto)+'</td><td>'+(r.marketing?'sì':'no')+'</td></tr>'}).join('')+'</tbody></table></div>';
   document.getElementById('upd').textContent='Aggiornato alle '+new Date(j.at).toLocaleTimeString('it-CH',{hour:'2-digit',minute:'2-digit'})+' · si aggiorna da solo ogni minuto';
 }
 function load(){
