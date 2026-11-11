@@ -16,11 +16,11 @@ body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 Montserrat
 .pole{height:12px;background:repeating-linear-gradient(-45deg,#A01C30 0 14px,#F6EFE4 14px 28px,#3E1019 28px 42px,#F6EFE4 42px 56px)}
 .wrap{max-width:960px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-left))}
 header{background:var(--bord);color:var(--cream)}
-.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:center;padding:48px 0}
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:48px}
 .kick{font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--yel);margin:0 0 10px}
 h1{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:clamp(38px,6vw,60px);line-height:1;margin:0 0 16px}
 .hero p{margin:0;font-size:18px;color:#EBDCCB;max-width:520px}
-.hero img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;border-radius:24px;border:3px solid var(--yel);display:block}
+.hero img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;border-radius:24px;border:3px solid var(--yel);display:block}
 section{padding:44px 0}
 h2{font-family:Fraunces,Georgia,serif;font-weight:800;font-size:clamp(28px,4vw,38px);line-height:1.1;color:var(--bord);margin:0 0 20px}
 .gains{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -71,11 +71,44 @@ button:disabled{opacity:.6;cursor:wait}
 .done h2{color:var(--yel)}
 footer{padding:30px 0 48px;font-size:14px;color:var(--muted)}
 footer a{color:var(--red)}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width:720px){
-  .hero{grid-template-columns:1fr;padding:32px 0}
-  .hero img{max-width:340px}
-  .gains,.stats,.packs,.fields{grid-template-columns:1fr}
-  button{justify-self:stretch}
+  body{font-size:15px}
+  .pole{height:8px}
+  .hero{grid-template-columns:minmax(0,1fr) 96px;gap:14px;padding-block:22px 24px;align-items:start}
+  .kick{font-size:10.5px;margin-bottom:6px}
+  h1{font-size:26px;line-height:1.08;margin-bottom:10px}
+  .hero p{font-size:14px;line-height:1.5;grid-column:1/-1}
+  .hero>div{display:contents}
+  .hero .kick,.hero h1{grid-column:1}
+  .hero img{grid-column:2;grid-row:1/3;width:96px;border-radius:14px;border-width:2px}
+  section{padding:26px 0}
+  h2{font-size:23px;margin-bottom:14px}
+  .gains{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .gain{padding:11px 12px;border-radius:14px}
+  .gain b{font-size:13.5px;line-height:1.3}
+  .gain span{font-size:12px;line-height:1.4;display:block}
+  .stats{gap:10px;margin-top:14px}
+  .stat strong{font-size:21px}
+  .stat span{font-size:11px;line-height:1.35;display:block}
+  form{gap:18px}
+  legend{font-size:11px;margin-bottom:8px}
+  .packs{grid-template-columns:1fr;gap:10px}
+  .pack{padding:14px 16px;border-radius:16px}
+  .pack .nm{font-size:19px}
+  .pack .pr{font-size:28px;margin:2px 0 6px}
+  .pack .pr small{font-size:15px}
+  .pack p,.pack ul{font-size:13px}
+  .tick{top:12px;right:12px;width:22px;height:22px}
+  .fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  label.l{font-size:13px}
+  input[type=text],input[type=email],input[type=tel],textarea{padding:10px 12px;min-height:44px;border-radius:10px}
+  .f:has(#email),.f:has(#telefono){grid-column:1/-1}
+  .terms{padding:14px;gap:12px}
+  .terms ul{font-size:12.5px}
+  .check{font-size:13.5px}
+  button{justify-self:stretch;font-size:16px;min-height:50px;padding:12px 20px}
+  .small,footer{font-size:12px}
 }
 </style>
 </head>
